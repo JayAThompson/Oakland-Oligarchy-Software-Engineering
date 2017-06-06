@@ -2,7 +2,7 @@
  */
 apply plugin: 'java'
 apply plugin: 'application'
-mainClassName = "3SM.oakOligarchy"
+mainClassName = "TSM.oakOligarchy"
 repositories{
 	mavenCentral()
 }
