@@ -4,23 +4,22 @@ public class Player{
 	int money;
 
 	Player(String n, int m){
-		this.name = name;
-		this.setMoney(money);
+		this.name = n;
+		this.setMoney(m);
 	}
 
 	public int getMoney(){
 		return this.money;	
 	}
 	public void setMoney(int m){
-		if (money < 0)
-			money = 0;
-		this.money = money;
+		if (m < 0) money = 0;
+		this.money = m;
 	}
 	public String getName(){
 		return this.name;
 	}
 	
-	public void setMoney(String n){
-		this.name = name;
+	public void setName(String n){
+		this.name = n;
 	}
 }

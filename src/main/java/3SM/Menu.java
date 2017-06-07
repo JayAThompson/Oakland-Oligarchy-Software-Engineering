@@ -20,7 +20,7 @@ public class Menu extends JPanel{
 		this.setLayout(new GridLayout(0, 7));
 
 		//Oakland Oligarchy title.
-		JLabel title = new JLabel("<html> OAKLAND<br> OLIGARCHY</html>");
+		JLabel title = new JLabel("<html>OAKLAND<br>OLIGARCHY</html>", SwingConstants.CENTER);
 		title.setFont(new Font("Calibri", Font.BOLD, 18));
 		this.add(title, 0, 0);
 		
