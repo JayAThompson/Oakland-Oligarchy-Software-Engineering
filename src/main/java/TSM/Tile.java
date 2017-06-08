@@ -1,6 +1,6 @@
 public class Tile{
 	
-	boolean isActionTile
+	boolean isActionTile;
 	String propertyName;
 	int PropertyValue;
 	String owner;

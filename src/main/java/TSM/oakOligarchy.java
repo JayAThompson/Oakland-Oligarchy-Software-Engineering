@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 package TSM;
 
-=======
->>>>>>> workingDr
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -42,13 +39,11 @@ public class oakOligarchy{
 		Information playerInfo = new Information(players);
 		window.add(playerInfo, BorderLayout.WEST);
 		
-<<<<<<< HEAD
-=======
 		GameBoard board = new GameBoard();
 		window.add(board.getBoard(), BorderLayout.CENTER);
 		
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
->>>>>>> workingDr
+
 		window.setVisible(true);
 	}
 	
