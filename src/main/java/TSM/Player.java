@@ -1,3 +1,6 @@
+package TSM;
+
+
 public class Player{
 	
 	String name;
