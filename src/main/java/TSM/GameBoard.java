@@ -1,5 +1,3 @@
-
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -125,6 +123,15 @@ public class GameBoard extends JPanel{
 				panel.add(label, i, 0); 
 			}
 		}
+	}
+	
+
+	public void paint(Graphics g) {
+		super.paint(g);
+		g.setColor(Color.red);
+		g.fillRect(100, 100, 1000, 1000);
+		g.setColor(Color.black);
+		g.drawRect(100, 100, 1000, 1000);
 	}
 	
 	public static void main(String[] args) {
