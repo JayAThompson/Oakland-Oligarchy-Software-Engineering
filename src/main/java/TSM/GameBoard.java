@@ -47,7 +47,7 @@ public class GameBoard extends JPanel{
 		g.gridy = 0;
 		g.gridwidth = 8;
 		g.gridheight = 1;
-		g.ipadx = 0;
+		g.ipadx = 50;
 		g.ipady = 80;
 		g.fill = GridBagConstraints.BOTH;
 		board.add(north, g);
