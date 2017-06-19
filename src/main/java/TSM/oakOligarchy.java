@@ -14,21 +14,14 @@ public class oakOligarchy{
 	
 	ArrayList<Player> players = new ArrayList<>();
 	
-	//The "whole squad"
-	Player atta = new Player("Atta", 10000);
-	Player jay = new Player ("Jay", 12500);
-	Player anastasia = new Player("Anastasia", 15000);
-	Player stephen = new Player("Stephen", 17500);
-		
 	oakOligarchy(){
 		System.out.println("got here");
 
 		//default size or the JFrame
-		window.setSize(1000, 720);
+		window.setSize(1300, 720);
 		
-		//Find current player and add to menu
-		//current = players.get(getIndexOfCurrentPlayer());
-		Menu menu = new Menu(new Player("no one",0));
+		//adding dummy data into the menu
+		Menu menu = new Menu(new Player("no one",0,"yo"));
 		window.add(menu, BorderLayout.NORTH);
 		
 		Information playerInfo = new Information();
@@ -47,11 +40,8 @@ public class oakOligarchy{
 			}
 		}
 		this.players=playerInfo.players;
-		playerInfo.removeAll();
 		playerInfo.drawPlayerInfo();
-		playerInfo.validate();
-		playerInfo.repaint();
-		System.out.println("got here");
+		//System.out.println("got here");
 	}
 	
 	public int getIndexOfCurrentPlayer(){

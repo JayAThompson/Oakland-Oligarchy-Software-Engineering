@@ -20,6 +20,7 @@ public class Information extends JPanel {
 	public void drawPlayerInfo(){
 		JSeparator seperator;
 		JLabel name;
+		this.removeAll();
 		this.add(new JLabel("<html><h1>Player Information</h1></html>",SwingConstants.CENTER));
 		for(Player player : players){
 				seperator = new JSeparator(SwingConstants.HORIZONTAL);
@@ -32,6 +33,8 @@ public class Information extends JPanel {
 				this.add(new JLabel("PROPERTIES: ", SwingConstants.CENTER));
 				this.add(Box.createRigidArea(new Dimension(0,10)));
 		}
+		this.validate();
+		this.repaint();
 	}
 	
 	//this method is to be called if the new game button is selected, or by default when oakOli runs
@@ -104,20 +107,20 @@ public class Information extends JPanel {
 				int count=0;
 				if(!p1Field.getText().trim().equals("")){
 					count++;
-					players.add(new Player(p1Field.getText(),START_MONEY));
+					players.add(new Player(p1Field.getText(),START_MONEY,"yellow"));
 
 				}
 				if(!p2Field.getText().trim().equals("")){
 					count++;
-					players.add(new Player(p2Field.getText(),START_MONEY));
+					players.add(new Player(p2Field.getText(),START_MONEY,"green"));
 
 				}
 				if(!p3Field.getText().trim().equals("")){
-					players.add(new Player(p3Field.getText(),START_MONEY));
+					players.add(new Player(p3Field.getText(),START_MONEY,"black"));
 					count++;
 				}
 				if(!p4Field.getText().trim().equals("")){
-					players.add(new Player(p4Field.getText(),START_MONEY));
+					players.add(new Player(p4Field.getText(),START_MONEY,"blue"));
 					count++;
 				}
 				if(count<2){
