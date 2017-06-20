@@ -179,6 +179,11 @@ public class GameBoard extends JPanel{
 
 	}
 
+
+	/*
+	 * Attempt to draw game markers
+	 * Will need to be fixed
+	 */
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.setColor(Color.red);
@@ -186,7 +191,9 @@ public class GameBoard extends JPanel{
 		g.setColor(Color.black);
 		g.drawRect(100, 100, 1000, 1000);
 	}
-	
+	/*
+	 * Main method for testing purposes
+	 */
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
