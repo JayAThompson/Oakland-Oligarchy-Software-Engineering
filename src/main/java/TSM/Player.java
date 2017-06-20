@@ -1,11 +1,15 @@
+
+
 public class Player{
 	
 	String name;
 	int money;
-
-	Player(String n, int m){
+	String color;
+	
+	Player(String n, int m, String color){
 		this.name = n;
 		this.setMoney(m);
+		this.color=color;
 	}
 
 	public int getMoney(){

@@ -178,6 +178,8 @@ public class GameBoard extends JPanel{
 
 
 	}
+
+
 	/*
 	 * Attempt to draw game markers
 	 * Will need to be fixed
