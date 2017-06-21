@@ -23,14 +23,19 @@ public class Information extends JPanel {
 		this.removeAll();
 		this.add(new JLabel("<html><h1>Player Information</h1></html>",SwingConstants.CENTER));
 		for(Player player : players){
-				JPanel outerPanel = new JPanel(new GridLayout(1,2));
-				JPanel innerPanel = new JPanel();
-				innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
-				outerPanel.add(innerPanel);
+				//adding a separator to tell the players apart
 				seperator = new JSeparator(SwingConstants.HORIZONTAL);
 				seperator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 20) );
 				this.add(seperator);
+				//outerpanel houses two other panels. one panel has the text info about the player and the other has the player color
+				JPanel outerPanel = new JPanel(new GridLayout(1,2));
+				//innerPanel houses the player info
+				JPanel innerPanel = new JPanel();
+				innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
+				//info goes in first spot in grid
+				outerPanel.add(innerPanel);
 				this.add(outerPanel);
+				//tmpPanel houses the player color info
 				JPanel tmpPanel = new JPanel();
 				tmpPanel.setOpaque(true);
 				try{
