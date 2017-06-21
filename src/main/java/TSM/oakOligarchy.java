@@ -18,7 +18,7 @@ public class oakOligarchy{
 		System.out.println("got here");
 
 		//default size or the JFrame
-		window.setSize(1300, 720);
+		window.setSize(1500, 1080);
 		
 		//adding dummy data into the menu
 		Menu menu = new Menu(new Player("no one",0,"yo"));
