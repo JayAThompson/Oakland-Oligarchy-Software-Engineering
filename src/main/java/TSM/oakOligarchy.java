@@ -42,6 +42,25 @@ public class oakOligarchy{
 		this.players=playerInfo.players;
 		playerInfo.drawPlayerInfo();
 		//System.out.println("got here");
+		//board.drawPlayer(players.get(0));
+		for(int i=0;i<36;i++){			
+			for(Player player : players){	
+				
+				board.drawPlayer(player);
+				try {
+			  		Thread.sleep(25);
+				} catch(InterruptedException e) {}
+			}
+			for(Player player : players){	
+				board.erasePlayer(player);
+				try {
+			  		Thread.sleep(25);
+				} catch(InterruptedException e) {}
+				player.tile++;
+			}
+
+			
+		}
 	}
 	
 	public int getIndexOfCurrentPlayer(){
@@ -53,6 +72,7 @@ public class oakOligarchy{
 	
 	public static void main(String[] args){
 		new oakOligarchy();
+		
 		
 	}
 

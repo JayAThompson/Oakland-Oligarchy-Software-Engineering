@@ -23,14 +23,26 @@ public class Information extends JPanel {
 		this.removeAll();
 		this.add(new JLabel("<html><h1>Player Information</h1></html>",SwingConstants.CENTER));
 		for(Player player : players){
+				JPanel outerPanel = new JPanel(new GridLayout(1,2));
+				JPanel innerPanel = new JPanel();
+				innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
+				outerPanel.add(innerPanel);
 				seperator = new JSeparator(SwingConstants.HORIZONTAL);
 				seperator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 20) );
 				this.add(seperator);
+				this.add(outerPanel);
+				JPanel tmpPanel = new JPanel();
+				tmpPanel.setOpaque(true);
+				try{
+				tmpPanel.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
+				//tmpPanel.setBackground(Color.GREEN);
+				}catch(Exception e){}
+				outerPanel.add(tmpPanel);
 			 	name = new JLabel("<html><u>"+player.getName()+"</u></html>");
 				name.setFont(new Font("Calibri", Font.BOLD, 15));
-				this.add(name);
-				this.add( new JLabel("MONEY: "+ player.getMoney(), SwingConstants.CENTER));
-				this.add(new JLabel("PROPERTIES: ", SwingConstants.CENTER));
+				innerPanel.add(name);
+				innerPanel.add( new JLabel("MONEY: "+ player.money, SwingConstants.CENTER));
+				innerPanel.add(new JLabel("PROPERTIES: ", SwingConstants.CENTER));
 				this.add(Box.createRigidArea(new Dimension(0,10)));
 		}
 		this.validate();

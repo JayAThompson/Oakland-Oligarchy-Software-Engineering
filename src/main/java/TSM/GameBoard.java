@@ -46,7 +46,7 @@ public class GameBoard extends JPanel{
 											{"name35","3500"},
 											{"name36","3600"}};
 	
-	private static ArrayList<Tile> tiles = new ArrayList<Tile>();
+	public static ArrayList<Tile> tiles = new ArrayList<Tile>();
 	Center center = new Center();
 	
 	JPanel north;
@@ -145,9 +145,7 @@ public class GameBoard extends JPanel{
 		g.ipady = 0;
 		g.fill = GridBagConstraints.BOTH;
 		board.add(west, g);
-		
-
-		
+				
 	}
 	
 	public JPanel getBoard() {
@@ -161,7 +159,7 @@ public class GameBoard extends JPanel{
 		int textSize=10;
 			for(int i=0;i<36;i++){
 				JPanel tilePanel = new JPanel();
-				tilePanel.setLayout(new GridLayout(2,1));
+				tilePanel.setLayout(new GridLayout(1,2));
 				JLabel label = new JLabel("<html><b>"+tileInfo[tiles.size()][0]+"</b><br>$"+tileInfo[tiles.size()][1]); 
 				label.setFont(new Font("Calibri", Font.PLAIN, textSize));
 				tilePanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -179,13 +177,14 @@ public class GameBoard extends JPanel{
 
 	}
 
-	public void paint(Graphics g) {
-		super.paint(g);
-		g.setColor(Color.red);
-		g.fillRect(100, 100, 1000, 1000);
-		g.setColor(Color.black);
-		g.drawRect(100, 100, 1000, 1000);
+	public void drawPlayer(Player player){
+		tiles.get(player.tile).addPlayer(player);
 	}
+	public void erasePlayer(Player player){
+		tiles.get(player.tile).removePlayer(player);
+	}
+	
+	//public void addPlayerToTile()
 	
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Test");

@@ -3,13 +3,15 @@
 public class Player{
 	
 	String name;
-	int money;
+	public int money;
 	String color;
+	public int tile;
 	
 	Player(String n, int m, String color){
 		this.name = n;
 		this.setMoney(m);
 		this.color=color;
+		this.tile = 0;
 	}
 
 	public int getMoney(){
