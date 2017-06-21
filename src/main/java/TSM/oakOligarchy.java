@@ -17,7 +17,9 @@ public class oakOligarchy{
 	oakOligarchy(){
 		window = new JFrame("Oakland Oligarchy");
 		//default size or the JFrame
-		window.setSize(1300, 720);
+
+		window.setSize(1500, 1080);
+		
 		//adding dummy data into the menu
 		menu = new Menu(new Player("no one",0,"yo"));
 		board = new GameBoard();

@@ -185,7 +185,7 @@ public class GameBoard extends JPanel{
 	}
 	
 	//public void addPlayerToTile()
-	
+
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

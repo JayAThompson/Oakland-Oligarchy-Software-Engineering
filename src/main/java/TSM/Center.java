@@ -1,4 +1,9 @@
 
+/*
+ * Center piece of the gameboard for the oakland oligarchy computer gameboard
+ * In future this will need to be connected to the implementation of the bank
+ * And the dice rolling, as well as the action card system
+ */
 
 import java.awt.*;
 import java.awt.event.*;
@@ -41,6 +46,9 @@ public class Center extends JPanel{
 		
 	}
 	
+	/*
+	 *Main method for testing purposes
+	 */
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
