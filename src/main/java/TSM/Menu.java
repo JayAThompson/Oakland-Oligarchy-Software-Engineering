@@ -57,11 +57,8 @@ public class Menu extends JPanel implements ActionListener{
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-				System.out.println("3");
-
 		if(e.getSource() == roll){
 			this.lastEvent = MenuEvent.ROLL;
-					System.out.println("1");
 
 		}
 	}

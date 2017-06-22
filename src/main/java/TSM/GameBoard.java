@@ -47,7 +47,7 @@ public class GameBoard extends JPanel{
 											{"name36","3600"}};
 	
 	public static ArrayList<Tile> tiles = new ArrayList<Tile>();
-	Center center = new Center();
+	Center center = new Center(new Dimension(640, 400));
 	
 	JPanel north;
 	JPanel south;
@@ -68,48 +68,92 @@ public class GameBoard extends JPanel{
 		this.east  = new JPanel();
 		this.west = new JPanel();
 	    
-		this.north.setLayout(new GridLayout(1, 9));
-		this.south.setLayout(new GridLayout(1, 9));
-		this.east.setLayout (new GridLayout(9, 1));
-		this.west.setLayout(new GridLayout(9, 1));
+		this.north.setLayout(new GridLayout(1, 8));
+		this.south.setLayout(new GridLayout(1, 8));
+		this.east.setLayout (new GridLayout(8, 1));
+		this.west.setLayout(new GridLayout(8, 1));
 		
-		 this.board.setPreferredSize(new Dimension(1000, 600));
-		 this.north.setPreferredSize(new Dimension(900, 60));
-		 this.south.setPreferredSize(new Dimension(900, 60));
-		 this.east.setPreferredSize(new Dimension(100, 540));
-		 this.west.setPreferredSize(new Dimension(100, 540));
+		 this.board.setPreferredSize(new Dimension(960, 600));
+		 this.north.setPreferredSize(new Dimension(640, 100));
+		 this.south.setPreferredSize(new Dimension(640, 100));
+		 this.east.setPreferredSize(new Dimension(160, 400));
+		 this.west.setPreferredSize(new Dimension(160, 400));
 		 //this.west.setMaximumSize(new Dimension(72, 500));
 		
 		createTiles();
 		
 		//these for loops set the tile locations on the gameboard
-		for(int i=0;i<9;i++){
+		for(int i=1;i<9;i++){
 			north.add(tiles.get(i).getPanel());
 		}
-		for(int i=9;i<18;i++){
+		
+		for(int i=10;i<19;i++){
 			east.add(tiles.get(i).getPanel());
 		}
-		for(int i=26;i>=18;i--){
+		for(int i=26;i>=20;i--){
 			south.add(tiles.get(i).getPanel());
 		}
-		for(int i=35;i>=27;i--){
+		for(int i=35;i>=28;i--){
 			west.add(tiles.get(i).getPanel());
 		}
 	
-		//north
 		GridBagConstraints g = new GridBagConstraints();
+		//northwest corner
 		g.gridx = 0;
 		g.gridy = 0;
-		g.gridwidth = 9;
-		g.gridheight = 1;
+		g.gridwidth = 2;
+		g.gridheight = 2;
+		g.ipadx = 0;
+		g.ipady = 0;
+		g.fill = GridBagConstraints.BOTH;
+		board.add(tiles.get(0).namePanel, g);
+		
+		//northeast corner
+		g.gridx = 10;
+		g.gridy = 0;
+		g.gridwidth = 2;
+		g.gridheight = 2;
+		g.ipadx = 0;
+		g.ipady = 0;
+		g.fill = GridBagConstraints.BOTH;
+		board.add(tiles.get(9).namePanel, g);
+		
+		//southeast corner
+		g.gridx = 10;
+		g.gridy = 10;
+		g.gridwidth = 2;
+		g.gridheight = 2;
+		g.ipadx = 0;
+		g.ipady = 0;
+		g.fill = GridBagConstraints.BOTH;
+		board.add(tiles.get(18).namePanel, g);
+		
+		//southwest corner
+		g.gridx = 0;
+		g.gridy = 10;
+		g.gridwidth = 2;
+		g.gridheight = 2;
+		g.ipadx = 0;
+		g.ipady = 0;
+		g.fill = GridBagConstraints.BOTH;
+		board.add(tiles.get(27).namePanel, g);
+		
+		//north		
+		g.gridx = 2;
+		g.gridy = 0;
+		g.gridwidth = 8;
+		g.gridheight = 2;
 		g.ipadx = 0;
 		g.ipady = 0;
 		g.fill = GridBagConstraints.BOTH;
 		board.add(north, g);
 		
+		
+		
+		
 		//center
-		g.gridx = 1;
-		g.gridy = 1;
+		g.gridx = 2;
+		g.gridy = 2;
 		g.gridwidth = 8;
 		g.gridheight = 8;
 		g.ipadx = 0;
@@ -118,19 +162,19 @@ public class GameBoard extends JPanel{
 		board.add(center, g);
 		
 		//south
-		g.gridx = 1;
-		g.gridy = 9;
-		g.gridwidth = 9;
-		g.gridheight = 1;
+		g.gridx = 2;
+		g.gridy = 10;
+		g.gridwidth = 8;
+		g.gridheight = 2;
 		g.ipadx = 0;
 		g.ipady = 0;
 		board.add(south, g);
 		
 		//east
-		g.gridx = 9;
-		g.gridy = 0;
-		g.gridwidth = 1;
-		g.gridheight = 9;
+		g.gridx = 10;
+		g.gridy = 2;
+		g.gridwidth = 2;
+		g.gridheight = 8;
 		g.ipadx = 0;
 		g.ipady = 0;
 		g.fill = GridBagConstraints.BOTH;
@@ -138,9 +182,9 @@ public class GameBoard extends JPanel{
 		
 		//west
 		g.gridx = 0;
-		g.gridy = 1;
-		g.gridwidth = 1;
-		g.gridheight = 9;
+		g.gridy = 2;
+		g.gridwidth = 2;
+		g.gridheight = 8;
 		g.ipadx = 0;
 		g.ipady = 0;
 		g.fill = GridBagConstraints.BOTH;
@@ -159,7 +203,17 @@ public class GameBoard extends JPanel{
 		int textSize=10;
 			for(int i=0;i<36;i++){
 				JPanel tilePanel = new JPanel();
-				tilePanel.setLayout(new GridLayout(1,2));
+				
+				if(i==0 || i==9 || i==19 || i==28){
+					tilePanel.setPreferredSize(new Dimension(160, 100));
+					tilePanel.setLayout(new GridLayout(1,2));
+
+				}
+				if((i>=1 && i<=8)||(i>=20 && i<=26)){
+					tilePanel.setLayout(new GridLayout(2,1));
+				}else{
+					tilePanel.setLayout(new GridLayout(1,2));
+				}
 				JLabel label = new JLabel("<html><b>"+tileInfo[tiles.size()][0]+"</b><br>$"+tileInfo[tiles.size()][1]); 
 				label.setFont(new Font("Calibri", Font.PLAIN, textSize));
 				tilePanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -182,6 +236,9 @@ public class GameBoard extends JPanel{
 	}
 	public void erasePlayer(Player player){
 		tiles.get(player.tile).removePlayer(player);
+	}
+	public void drawDiceRoll(Player player,int dice1,int dice2){
+		center.drawDiceRoll(player,dice1,dice2);
 	}
 	
 	//public void addPlayerToTile()
