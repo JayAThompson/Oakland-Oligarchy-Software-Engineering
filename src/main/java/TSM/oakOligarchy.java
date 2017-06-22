@@ -44,7 +44,7 @@ public class oakOligarchy{
 	 * @return int The integer value of the dice roll
 	 */
 	public static int rollDice(){
-		return (int)((Math.random()%6+1)+(Math.random()%6+1));
+		return (int)(Math.random()*6+1);
 	}
 
 	/**
@@ -63,6 +63,7 @@ public class oakOligarchy{
 	static void movePlayer(Player player,int spaces){
 		board.erasePlayer(currPlayer);
 		player.tile = (player.tile+spaces)%36;
+		
 		board.drawPlayer(currPlayer);
 	}
 
@@ -71,14 +72,14 @@ public class oakOligarchy{
 	 */
 	public static void waitForEvent(){
 		if(menu.lastEvent != Menu.MenuEvent.NONE){
-			System.out.println("4");
 			if(menu.lastEvent == Menu.MenuEvent.ROLL){
-				int roll = rollDice();
-				movePlayer(currPlayer,roll);
+				int roll1 = rollDice();
+				int roll2 = rollDice();
+				movePlayer(currPlayer,roll1+roll2);
+				board.drawDiceRoll(currPlayer,roll1,roll2);
 				currPlayerIndex = (currPlayerIndex+1)%players.size();
 				currPlayer = players.get(currPlayerIndex);
 				menu.drawPlayer(currPlayer);
-				System.out.println("2");
 			}
 			menu.lastEvent = Menu.MenuEvent.NONE;
 		}
