@@ -4,7 +4,7 @@ import java.awt.*;
 
 
 public class Tile{
-	
+
 	boolean isActionTile;
 	String propertyName;
 	int propertyValue;
@@ -12,7 +12,7 @@ public class Tile{
 	//String players;
 	ArrayList<Player> players = new ArrayList<Player>();
 	JPanel namePanel,markerPanel;
-	
+
 	Tile(JPanel panel, String name, int value) {
 		this.namePanel=panel;
 		this.propertyName=name;
@@ -20,7 +20,7 @@ public class Tile{
 		this.markerPanel = new JPanel();
 		this.namePanel.add(markerPanel);
 	}
-	
+
 	public JPanel getPanel(){
 		return namePanel;
 	}
@@ -34,13 +34,13 @@ public class Tile{
 		players.remove(player);
 		drawMarkers();
 	}
-	
+
 	private void drawMarkers(){
 		int markersToDraw = players.size();
 		this.namePanel.remove(markerPanel);
 		//this.markerPanel.removeAll();
 		this.markerPanel = new JPanel(new GridLayout(markersToDraw,1));
-		for(Player player : players){	
+		for(Player player : players){
 			JPanel tmpPanel = new JPanel();
 			tmpPanel.setOpaque(true);
 			try{
@@ -58,5 +58,5 @@ public class Tile{
 		this.namePanel.validate();
 		this.namePanel.repaint();
 	}
-	
+
 }

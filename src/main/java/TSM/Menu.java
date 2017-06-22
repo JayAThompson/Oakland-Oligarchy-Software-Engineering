@@ -1,5 +1,3 @@
-
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -8,18 +6,18 @@ public class Menu extends JPanel implements ActionListener{
 	public enum MenuEvent{
 		ROLL,TRADE,NEW_GAME,END_GAME,HELP,NONE
 	}
-	
+
 	public MenuEvent lastEvent;
 	//To display turn.
-	JLabel currentPlayer;
-	
+	private JLabel currentPlayer;
+
 	//Buttons that will be needed.
 	JButton trade = new JButton("TRADE");
 	JButton roll = new JButton("ROLL");
 	JButton newGame = new JButton("NEW GAME");
 	JButton endGame = new JButton("END GAME");
 	JButton help  = new JButton("HELP");
-	
+
 	public void drawPlayer(Player player){
 		currentPlayer.setText("<html><b>TURN:</b><em>" + player.getName() + "</em></html>");
 		this.validate();
@@ -35,12 +33,12 @@ public class Menu extends JPanel implements ActionListener{
 		JLabel title = new JLabel("<html>OAKLAND<br>OLIGARCHY</html>", SwingConstants.CENTER);
 		title.setFont(new Font("Calibri", Font.BOLD, 18));
 		this.add(title, 0, 0);
-		
+
 		//Get current player for label.
 		currentPlayer = new JLabel("<html><b>TURN:</b><em>" + current.getName() + "</em></html>", SwingConstants.CENTER);
 		currentPlayer.setFont(new Font("Courier", Font.PLAIN, 15));
 		this.add(currentPlayer, 0, 1);
-		
+
 		//Font for all the buttons, display them.
 		trade.setFont(new Font("Calibri", Font.PLAIN, 15));
 		this.add(trade, 0, 2);
@@ -55,7 +53,7 @@ public class Menu extends JPanel implements ActionListener{
 		this.add(help, 0, 6);
 
 	}
-	
+
 	public void actionPerformed(ActionEvent e) {
 				System.out.println("3");
 
@@ -66,5 +64,5 @@ public class Menu extends JPanel implements ActionListener{
 		}
 	}
 
-	
+
 }

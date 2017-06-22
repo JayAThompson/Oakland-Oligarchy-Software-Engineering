@@ -12,14 +12,14 @@ public class oakOligarchy{
 	static ArrayList<Player> players;
 	static Player currPlayer;
 	static int currPlayerIndex;
-	
+
 	//constructor initializes our JFrame
 	oakOligarchy(){
 		window = new JFrame("Oakland Oligarchy");
 		//default size or the JFrame
 
 		window.setSize(1500, 1080);
-		
+
 		//adding dummy data into the menu
 		menu = new Menu(new Player("no one",0,"yo"));
 		board = new GameBoard();
@@ -29,13 +29,13 @@ public class oakOligarchy{
 		window.add(board.getBoard(), BorderLayout.CENTER);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
-		
-	}	
+
+	}
 	//
 	public static int rollDice(){
 		return (int)((Math.random()%6+1)+(Math.random()%6+1));
 	}
-	
+
 	void takeTurn(Player player){
 		menu.drawPlayer(player);
 	}
@@ -44,8 +44,8 @@ public class oakOligarchy{
 		player.tile = (player.tile+spaces)%36;
 		board.drawPlayer(currPlayer);
 	}
-	
-	
+
+
 	public static void waitForEvent(){
 		if(menu.lastEvent != Menu.MenuEvent.NONE){
 			System.out.println("4");
@@ -59,13 +59,13 @@ public class oakOligarchy{
 			}
 			menu.lastEvent = Menu.MenuEvent.NONE;
 		}
-		
+
 	}
-	
+
 	//main houses the highest layer of our application logic
 	public static void main(String[] args){
 		new oakOligarchy();
-		
+
 		//sleeping while the player info is collected
 		while(playerInfo.playerDataFlag == false){
 			try {
@@ -75,7 +75,7 @@ public class oakOligarchy{
 		}
 		players=playerInfo.players;
 		playerInfo.drawPlayerInfo();
-		for(Player player : players){	
+		for(Player player : players){
 			board.drawPlayer(player);
 		}
 		currPlayerIndex=0;
@@ -88,8 +88,8 @@ public class oakOligarchy{
 			} catch(InterruptedException e) {
 			}
 		}
-		
+
 	}
 
-	
+
 }

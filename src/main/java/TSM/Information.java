@@ -1,5 +1,3 @@
-
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -10,13 +8,13 @@ import javax.swing.text.PlainDocument;
 import java.util.ArrayList;
 
 public class Information extends JPanel {
-	
+
 	public ArrayList<Player> players = new ArrayList<>();
 	private int START_MONEY=1000;
 	private int MAX_NAME_LEN = 20;
 	//this flag is to be set by the the form to submit new player names
 	public boolean playerDataFlag = false;
-	
+
 	public void drawPlayerInfo(){
 		JSeparator seperator;
 		JLabel name;
@@ -53,12 +51,12 @@ public class Information extends JPanel {
 		this.validate();
 		this.repaint();
 	}
-	
+
 	//this method is to be called if the new game button is selected, or by default when oakOli runs
 	//it collects player names from the user
 	public void collectPlayerInfo(){
 		int numberOfPlayers=0;
-	
+
 		playerDataFlag=false;
 		//adding the prompt for the user
 		JLabel prompt = new JLabel("<html><body style='text-align=center; width: 200 px'>Please enter the names of the players to start the game <br>(minium of two players)");
@@ -72,29 +70,29 @@ public class Information extends JPanel {
 		seperator = new JSeparator(SwingConstants.HORIZONTAL);
 		seperator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 20) );
 		this.add(seperator);
-		
+
 		//adding in the textfields to get player names
 		JTextField p1Field = new JTextField();
 		p1Field.setPreferredSize(new Dimension(285,30));
 		p1Field.setMaximumSize( p1Field.getPreferredSize() );
 		p1Field.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
-		
+
 		JTextField p2Field = new JTextField();
 		p2Field.setPreferredSize(new Dimension(285,30));
 		p2Field.setMaximumSize( p1Field.getPreferredSize() );
 		p2Field.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
 
-		
+
 		JTextField p3Field = new JTextField();
 		p3Field.setPreferredSize(new Dimension(285,30));
 		p3Field.setMaximumSize( p1Field.getPreferredSize() );
 		p3Field.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
-		
+
 		JTextField p4Field = new JTextField();
 		p4Field.setPreferredSize(new Dimension(285,30));
 		p4Field.setMaximumSize( p1Field.getPreferredSize() );
 		p4Field.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
-		
+
 		this.add(new JLabel("Player 1:"));
 		this.add(p1Field);
 		this.add(Box.createRigidArea(new Dimension(0,10)));
@@ -106,21 +104,21 @@ public class Information extends JPanel {
 		this.add(new JLabel("Player 3:"));
 		this.add(p3Field);
 		this.add(Box.createRigidArea(new Dimension(0,10)));
-		
+
 		this.add(new JLabel("Player 4:"));
 		this.add(p4Field);
 		this.add(Box.createRigidArea(new Dimension(0,10)));
-		
+
 		//adding a button that alows to collect the user names
 		JSeparator seperator2 = new JSeparator(SwingConstants.HORIZONTAL);
 		seperator2.setMaximumSize( new Dimension(Integer.MAX_VALUE, 5) );
 		this.add(seperator2);
 		JButton submitButton = new JButton("Submit player names");
-		
+
 		//this is the button listener for the submit button
 		//the text fields must meet the conditions
-		submitButton.addActionListener(new ActionListener() { 
-  			public void actionPerformed(ActionEvent e) { 
+		submitButton.addActionListener(new ActionListener() {
+  			public void actionPerformed(ActionEvent e) {
 				int count=0;
 				if(!p1Field.getText().trim().equals("")){
 					count++;
@@ -145,11 +143,11 @@ public class Information extends JPanel {
 				}else{
 					playerDataFlag=true;
 				}
-			} 
+			}
 		} );
 		this.add(submitButton);
 		}
-	
+
 
 
 	//this internal class is here to enforce a max player name len
@@ -170,10 +168,10 @@ public class Information extends JPanel {
 	  }
 	}
 	Information(){
-		
-	/*	
+
+	/*
 		this.players=players;
-		
+
 		for(Player player : players){
 			JLabel name = new JLabel("<html><u>"+player.getName()+"</u></html>", SwingConstants.CENTER);
 			name.setFont(new Font("Calibri", Font.BOLD, 15));
@@ -184,8 +182,8 @@ public class Information extends JPanel {
 			labels.add(owned);
 		}
 		*/
-		//getting all of the player info 
-		
+		//getting all of the player info
+
 		this.setBorder(BorderFactory.createLoweredBevelBorder());
 		this.setPreferredSize(new Dimension(285, 1000));
 		//this.setBounds(0,0,285,1000);
