@@ -1,14 +1,43 @@
+<<<<<<< HEAD
+import java.util.ArrayList;
+
+=======
 
 /**
  * Contains player information, such as name, amount of money, color of marker,
  * and current location on the board
  */
+>>>>>>> 6f1f4ff59d7c0a504536e2bf59fa93f464073675
 
 public class Player{
 
 	String name;
+	public String propertyString;
 	public int money;
 	String color;
+<<<<<<< HEAD
+	public int tileIndex;
+	ArrayList<Tile> properties;
+	
+	/*this is only to be called if the player is on the tile*/
+	public void purchaseProperty(Tile tile){
+		this.money -= tile.propertyValue;
+		properties.add(tile);
+		propertyString = "";
+		for(Tile tmp : properties){
+			/*
+			if(properties.indexOf(tmp) != properties.size()-1){
+				propertyString+=tmp.propertyName+" ";
+			}
+			*/
+			propertyString+=tmp.propertyName+"\n";
+		}
+	}
+	
+	Player(String name, int dollaz, String color){
+		this.name = name;
+		this.setMoney(dollaz);
+=======
 	public int tile;
 
 	/**
@@ -20,8 +49,10 @@ public class Player{
 	Player(String n, int m, String color){
 		this.name = n;
 		this.setMoney(m);
+>>>>>>> 6f1f4ff59d7c0a504536e2bf59fa93f464073675
 		this.color=color;
-		this.tile = 0;
+		this.tileIndex = 0;
+		this.properties = new ArrayList<Tile>();
 	}
 
 	/**

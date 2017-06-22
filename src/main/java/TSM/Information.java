@@ -14,46 +14,84 @@ import java.util.ArrayList;
 
 public class Information extends JPanel {
 
-	public ArrayList<Player> players = new ArrayList<>();
+	public ArrayList<Player> players = new ArrayList<Player>();
+	private ArrayList<JTextArea> propertyText = new ArrayList<JTextArea>();
+	private ArrayList<JLabel> moneyLabels = new ArrayList<JLabel>();
+	
 	private int START_MONEY=1000;
 	private int MAX_NAME_LEN = 20;
 	//this flag is to be set by the the form to submit new player names
 	public boolean playerDataFlag = false;
 
 	/**
-	 * This method draws the information for the players (name, information, and marker color) in the panel.
+	 * Class constructor
+	 * Set border, preferred size, and layout
+	 * Collect player info
 	 */
+	Information(){
+		this.setBorder(BorderFactory.createLoweredBevelBorder());
+		this.setPreferredSize(new Dimension(285, 1000));
+		//this.setBounds(0,0,285,1000);
+		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
+		this.collectPlayerInfo();
+	}
+	
+	public void drawPlayerInfo(Player player){
+		propertyText.get(players.indexOf(player)).setText(player.propertyString);
+		moneyLabels.get(players.indexOf(player)).setText("MONEY: $" +player.getMoney());
+		//this.revalidate();
+		//this.repaint();
+	}
+	/**
+	 * This method draws the information for the players (name, information, and marker color) in the panel.
+	 */	
+	public void initPlayerInfo(){
+		JSeparator separator;
+
+
 	public void drawPlayerInfo(){
 		JSeparator seperator;
 		JLabel name;
 		this.removeAll();
-		this.add(new JLabel("<html><h1>Player Information</h1></html>",SwingConstants.CENTER));
+		this.add(new JLabel("<html><h1>Player Information</h1></html>",SwingConstants.LEFT));
 		for(Player player : players){
 				//adding a separator to tell the players apart
-				seperator = new JSeparator(SwingConstants.HORIZONTAL);
-				seperator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 20) );
-				this.add(seperator);
+				separator = new JSeparator(SwingConstants.HORIZONTAL);
+				separator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 20) );
+				this.add(separator);
 				//outerpanel houses two other panels. one panel has the text info about the player and the other has the player color
-				JPanel outerPanel = new JPanel(new GridLayout(1,2));
+				//JPanel outerPanel = new JPanel(new GridLayout(1,2));
 				//innerPanel houses the player info
 				JPanel innerPanel = new JPanel();
+				this.add(innerPanel);
 				innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
 				//info goes in first spot in grid
-				outerPanel.add(innerPanel);
-				this.add(outerPanel);
+				//outerPanel.add(innerPanel);
+				//this.add(outerPanel);
 				//tmpPanel houses the player color info
-				JPanel tmpPanel = new JPanel();
-				tmpPanel.setOpaque(true);
+				//JPanel tmpPanel = new JPanel();
+				//tmpPanel.setOpaque(true);
 				try{
-				tmpPanel.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
+//				tmpPanel.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
 				//tmpPanel.setBackground(Color.GREEN);
 				}catch(Exception e){}
-				outerPanel.add(tmpPanel);
-			 	name = new JLabel("<html><u>"+player.getName()+"</u></html>");
+			
+			 	name = new JLabel("<html><u>"+player.getName()+"</u></html>",SwingConstants.LEFT);
 				name.setFont(new Font("Calibri", Font.BOLD, 15));
+				
 				innerPanel.add(name);
-				innerPanel.add( new JLabel("MONEY: "+ player.money, SwingConstants.CENTER));
-				innerPanel.add(new JLabel("PROPERTIES: ", SwingConstants.CENTER));
+				JLabel tmpLabel = new JLabel("MONEY: "+ player.money, SwingConstants.LEFT); 
+				innerPanel.add( tmpLabel );
+				moneyLabels.add(tmpLabel);
+				innerPanel.add(new JLabel("<html>PROPERTIES:</html>", SwingConstants.LEFT));
+				JTextArea tmp = new JTextArea();
+				tmp.setLineWrap(true);
+				tmp.setMaximumSize(new Dimension(200,1000));
+				try{
+					tmp.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
+				}catch(Exception e){}
+				innerPanel.add(tmp);
+				propertyText.add(tmp);
 				this.add(Box.createRigidArea(new Dimension(0,10)));
 		}
 		this.validate();
@@ -140,7 +178,7 @@ public class Information extends JPanel {
 
 				}
 				if(!p3Field.getText().trim().equals("")){
-					players.add(new Player(p3Field.getText(),START_MONEY,"black"));
+					players.add(new Player(p3Field.getText(),START_MONEY,"red"));
 					count++;
 				}
 				if(!p4Field.getText().trim().equals("")){
@@ -187,32 +225,4 @@ public class Information extends JPanel {
 	  }
 	}
 
-	/**
-	 * Class constructor
-	 * Set border, preferred size, and layout
-	 * Collect player info
-	 */
-	Information(){
-
-	/*
-		this.players=players;
-
-		for(Player player : players){
-			JLabel name = new JLabel("<html><u>"+player.getName()+"</u></html>", SwingConstants.CENTER);
-			name.setFont(new Font("Calibri", Font.BOLD, 15));
-			labels.add(name);
-			JLabel money = new JLabel("MONEY: "+ player.getMoney(), SwingConstants.CENTER);
-			labels.add(money);
-			JLabel owned = new JLabel("PROPERTIES: ", SwingConstants.CENTER);
-			labels.add(owned);
-		}
-		*/
-		//getting all of the player info
-
-		this.setBorder(BorderFactory.createLoweredBevelBorder());
-		this.setPreferredSize(new Dimension(285, 1000));
-		//this.setBounds(0,0,285,1000);
-		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-		this.collectPlayerInfo();
-	}
 }

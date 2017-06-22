@@ -13,6 +13,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class GameBoard extends JPanel{
+	public enum Event{ ROLL,PURCHASE,END_TURN,NONE };
+
 	// 2-D array containing the title and the price for each tile on the game board
 	private static final String[][] tileInfo= new String[][]{{"Start","0"},
 															 {"Five Guys","2000"},
@@ -53,8 +55,9 @@ public class GameBoard extends JPanel{
 
 	public static ArrayList<Tile> tiles = new ArrayList<Tile>();
 
-	Center center = new Center(new Dimension(640, 400));
+	BoardCenter boardCenter = new BoardCenter(new Dimension(640, 400));
 
+	
 	JPanel north;
 	JPanel south;
 	JPanel east;
@@ -166,7 +169,7 @@ public class GameBoard extends JPanel{
 		g.ipadx = 0;
 		g.ipady = 0;
 		g.fill = GridBagConstraints.BOTH;
-		board.add(center, g);
+		board.add(boardCenter, g);
 
 		//south
 		g.gridx = 2;
@@ -215,8 +218,6 @@ public class GameBoard extends JPanel{
 		int textSize=10;
 			for(int i=0;i<36;i++){
 				JPanel tilePanel = new JPanel();
-
-				
 				if(i==0 || i==9 || i==19 || i==28){
 					tilePanel.setPreferredSize(new Dimension(160, 100));
 					tilePanel.setLayout(new GridLayout(1,2));
@@ -227,7 +228,6 @@ public class GameBoard extends JPanel{
 				}else{
 					tilePanel.setLayout(new GridLayout(1,2));
 				}
-				//JLabel label = new JLabel("<html><b>"+tileInfo[tiles.size()][0]+"</b><br>$"+tileInfo[tiles.size()][1]); 
 				StringBuilder labelText = new StringBuilder("<html><b>"+tileInfo[tiles.size()][0]+"</b><br>");
 				if (!tileInfo[tiles.size()][1].equals("0"))
 				{
@@ -244,16 +244,22 @@ public class GameBoard extends JPanel{
 				tilePanel.add(separator);
 				*/
 
-				tiles.add(new Tile(tilePanel, label.getText(), Integer.parseInt(tileInfo[tiles.size()][1]), i));
+				tiles.add(new Tile(tilePanel, tileInfo[tiles.size()][0], Integer.parseInt(tileInfo[tiles.size()][1]), i));
 			}
 	}
+
+
+	public void drawPlayersTurn(Player player){
+		boardCenter.drawPlayersTurn(player);
+	}
+	
 
 	/**
 	 * This method draws a marker for the player on their current tile location.
 	 * @param player This is the Player object for the player whose marker will be drawn.
 	 */
 	public void drawPlayer(Player player){
-		tiles.get(player.tile).addPlayer(player);
+		tiles.get(player.tileIndex).addPlayer(player);
 	}
 
 	/**
@@ -261,14 +267,52 @@ public class GameBoard extends JPanel{
 	 * @param player This is the Player object for the player whose marker will be erased.
 	 */
 	public void erasePlayer(Player player){
-		tiles.get(player.tile).removePlayer(player);
+		tiles.get(player.tileIndex).removePlayer(player);
 	}
 	public void drawDiceRoll(Player player,int dice1,int dice2){
-		center.drawDiceRoll(player,dice1,dice2);
+		boardCenter.drawDiceRoll(player,dice1,dice2);
 	}
 	
-
+	public void showRollButton(){
+		boardCenter.rollButton.setVisible(true);
+	}
+	
+	public void hideRollButton(){
+		boardCenter.rollButton.setVisible(false);	
+	}
+	
+	public void showPurchaseButton(){
+		boardCenter.purchaseButton.setVisible(true);
+	}
+	
+	public void hidePurchaseButton(){
+		boardCenter.purchaseButton.setVisible(false);	
+	}	
+	
+	public void showEndTurnButton(){
+		boardCenter.endTurnButton.setVisible(true);
+	}
+	
+	public void hideEndTurnButton(){
+		boardCenter.endTurnButton.setVisible(false);	
+	}		
+	
+	/*this method returns whether some event has happened (button)*/
+	public boolean pollForEvent(){
+		if(boardCenter.event == Event.NONE){
+			return false;
+		}
+		return true;
+	}
+	
+	/*this method returns what event happened and also clears the event*/
+	public Event getEvent(){
+		Event event = boardCenter.event;
+		boardCenter.event = Event.NONE;
+		return event;
+	}
 	//public void addPlayerToTile()
+	
 
 	/**
 	 * Main method for testing purposes

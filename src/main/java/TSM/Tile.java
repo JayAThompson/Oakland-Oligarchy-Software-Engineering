@@ -10,11 +10,16 @@ import java.util.ArrayList;
 import java.awt.*;
 
 public class Tile{
+<<<<<<< HEAD
+	int rent = 100;
+=======
 
+>>>>>>> 6f1f4ff59d7c0a504536e2bf59fa93f464073675
 	boolean isActionTile;
 	String propertyName;
+	//String pr;
 	int propertyValue;
-	String owner;
+	Player owner = null;
 	int tileIndex;
 	//String players;
 	ArrayList<Player> players = new ArrayList<Player>();
