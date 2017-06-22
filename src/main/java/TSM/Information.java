@@ -18,7 +18,7 @@ public class Information extends JPanel {
 	private ArrayList<JTextArea> propertyText = new ArrayList<JTextArea>();
 	private ArrayList<JLabel> moneyLabels = new ArrayList<JLabel>();
 	
-	private int START_MONEY=1000;
+	private int START_MONEY=750*20;
 	private int MAX_NAME_LEN = 20;
 	//this flag is to be set by the the form to submit new player names
 	public boolean playerDataFlag = false;
