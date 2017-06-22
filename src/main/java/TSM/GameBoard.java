@@ -203,8 +203,6 @@ public class GameBoard extends JPanel{
 		int textSize=10;
 			for(int i=0;i<36;i++){
 				JPanel tilePanel = new JPanel();
-
-				
 				if(i==0 || i==9 || i==19 || i==28){
 					tilePanel.setPreferredSize(new Dimension(160, 100));
 					tilePanel.setLayout(new GridLayout(1,2));
@@ -215,7 +213,6 @@ public class GameBoard extends JPanel{
 				}else{
 					tilePanel.setLayout(new GridLayout(1,2));
 				}
-				//JLabel label = new JLabel("<html><b>"+tileInfo[tiles.size()][0]+"</b><br>$"+tileInfo[tiles.size()][1]); 
 				StringBuilder labelText = new StringBuilder("<html><b>"+tileInfo[tiles.size()][0]+"</b><br>");
 				if (!tileInfo[tiles.size()][1].equals("0"))
 				{
@@ -232,21 +229,49 @@ public class GameBoard extends JPanel{
 				tilePanel.add(separator);
 				*/
 
-				tiles.add(new Tile(tilePanel, label.getText(), Integer.parseInt(tileInfo[tiles.size()][1]), i));
+				tiles.add(new Tile(tilePanel, tileInfo[tiles.size()][0], Integer.parseInt(tileInfo[tiles.size()][1]), i));
 			}
 
 
 	}
 
+	public void drawPlayersTurn(Player player){
+		boardCenter.drawPlayersTurn(player);
+	}
+	
 	public void drawPlayer(Player player){
-		tiles.get(player.tile).addPlayer(player);
+		tiles.get(player.tileIndex).addPlayer(player);
 	}
 	public void erasePlayer(Player player){
-		tiles.get(player.tile).removePlayer(player);
+		tiles.get(player.tileIndex).removePlayer(player);
 	}
 	public void drawDiceRoll(Player player,int dice1,int dice2){
 		boardCenter.drawDiceRoll(player,dice1,dice2);
 	}
+	
+	public void showRollButton(){
+		boardCenter.rollButton.setVisible(true);
+	}
+	
+	public void hideRollButton(){
+		boardCenter.rollButton.setVisible(false);	
+	}
+	
+	public void showPurchaseButton(){
+		boardCenter.purchaseButton.setVisible(true);
+	}
+	
+	public void hidePurchaseButton(){
+		boardCenter.purchaseButton.setVisible(false);	
+	}	
+	
+	public void showEndTurnButton(){
+		boardCenter.endTurnButton.setVisible(true);
+	}
+	
+	public void hideEndTurnButton(){
+		boardCenter.endTurnButton.setVisible(false);	
+	}		
 	
 	/*this method returns whether some event has happened (button)*/
 	public boolean pollForEvent(){
@@ -263,6 +288,7 @@ public class GameBoard extends JPanel{
 		return event;
 	}
 	//public void addPlayerToTile()
+	
 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Test");

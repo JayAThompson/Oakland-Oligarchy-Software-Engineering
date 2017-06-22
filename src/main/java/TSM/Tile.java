@@ -4,11 +4,12 @@ import java.awt.*;
 
 
 public class Tile{
-	
+	int rent = 100;
 	boolean isActionTile;
 	String propertyName;
+	//String pr;
 	int propertyValue;
-	String owner;
+	Player owner = null;
 	int tileIndex;
 	//String players;
 	ArrayList<Player> players = new ArrayList<Player>();

@@ -10,14 +10,15 @@ public class oakOligarchy{
 	static GameBoard board;
 	static Menu menu;
 	static ArrayList<Player> players;
+	
+	//these two variables are the player
 	static Player currPlayer;
 	static int currPlayerIndex;
 
 	//constructor initializes our JFrame
 	oakOligarchy(){
 		window = new JFrame("Oakland Oligarchy");
-		//default size or the JFrame
-
+		//default size for the JFrame
 		window.setSize(1500, 1080);
 
 		//adding dummy data into the menu
@@ -31,37 +32,92 @@ public class oakOligarchy{
 		window.setVisible(true);
 
 	}
-	//
+	
 	public static int rollDice(){
 		return (int)(Math.random()*6+1);
 	}
 
-	void takeTurn(Player player){
-		//menu.drawPlayer(player);
-	}
 	static void movePlayer(Player player,int spaces){
 		board.erasePlayer(currPlayer);
-		player.tile = (player.tile+spaces)%36;
-		
+		player.tileIndex = (player.tileIndex+spaces)%36;
 		board.drawPlayer(currPlayer);
 	}
 
-
-	public static void waitForEvent(){
-		if(board.pollForEvent()){
-			if(board.getEvent() == GameBoard.Event.ROLL){
-				int roll1 = rollDice();
-				int roll2 = rollDice();
-				movePlayer(currPlayer,roll1+roll2);
-				board.drawDiceRoll(currPlayer,roll1,roll2);
-				currPlayerIndex = (currPlayerIndex+1)%players.size();
-				currPlayer = players.get(currPlayerIndex);
-				//menu.drawPlayer(currPlayer);
+	public static void waitForBoardEvent(GameBoard.Event event){
+		while(true){
+			while(!board.pollForEvent()){
+				try {
+			   		Thread.sleep(1);
+				} catch(InterruptedException e) {}
 			}
+			if(event == board.getEvent()){
+				break;
+			}			
 		}
+	}
+	
+	public static GameBoard.Event waitForBoardEvents(GameBoard.Event event[], int numEvents){
+		GameBoard.Event tmp;
+		while(true){
+			while(!board.pollForEvent()){
+				try {
+			   		Thread.sleep(1);
+				} catch(InterruptedException e) {}
+			}
+			tmp = board.getEvent();
+			for(int i=0;i<numEvents;i++)
+				if(event[i] == tmp){
+					return tmp;
+				}
+		}
+	}
+	
+	private static void purchaseCurrentProperty(){
+		Tile tile = board.tiles.get(currPlayer.tileIndex);
+		if(tile.owner == null && tile.propertyValue>0){
+			currPlayer.purchaseProperty(tile);
+			playerInfo.drawPlayerInfo(currPlayer);
+		}
+	}
+	private static void nextTurn(){
+		final GameBoard.Event postRollEvents[] = {GameBoard.Event.END_TURN, GameBoard.Event.PURCHASE};
+		int roll1 = rollDice();
+		int roll2 = rollDice();
+		GameBoard.Event event;
+
+		board.hidePurchaseButton();
+		board.hideEndTurnButton();
+		
+		currPlayerIndex = (currPlayerIndex+1)%players.size();
+		currPlayer = players.get(currPlayerIndex);
+		menu.drawPlayersTurn(currPlayer);
+		board.drawPlayersTurn(currPlayer);
+		board.showRollButton();
+		
+		waitForBoardEvent(GameBoard.Event.ROLL);
+		board.hideRollButton();
+		movePlayer(currPlayer,roll1+roll2);
+		board.drawDiceRoll(currPlayer,roll1,roll2);
+		board.showPurchaseButton();
+		board.showEndTurnButton();
+		//getting charged that money
+		Tile tmp = board.tiles.get(currPlayer.tileIndex);
+		if(tmp.owner != null && tmp.owner != currPlayer){
+			currPlayer.money -= tmp.rent;
+			tmp.owner.money+=tmp.rent;
+			
+		}
+		
+		
+		event = waitForBoardEvents(postRollEvents,2);
+		if(event == postRollEvents[1]){
+			purchaseCurrentProperty();
+		}
+		board.hidePurchaseButton();
+		board.hideEndTurnButton();
 
 	}
-
+	
 	//main houses the highest layer of our application logic
 	public static void main(String[] args){
 		new oakOligarchy();
@@ -74,19 +130,16 @@ public class oakOligarchy{
 			}
 		}
 		players=playerInfo.players;
-		playerInfo.drawPlayerInfo();
+		playerInfo.initPlayerInfo();
 		for(Player player : players){
 			board.drawPlayer(player);
 		}
-		currPlayerIndex=0;
-		currPlayer = players.get(0);
+		currPlayerIndex=(int)(Math.random()*players.size());
+		currPlayer = players.get(currPlayerIndex);
 		//menu.drawPlayer(players.get(0));
+		//this is the start of the actual game
 		while(true){
-			waitForEvent();
-			try {
-			   Thread.sleep(100);
-			} catch(InterruptedException e) {
-			}
+			nextTurn();
 		}
 
 	}

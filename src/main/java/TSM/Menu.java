@@ -3,11 +3,11 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class Menu extends JPanel /*implements ActionListener*/{
-	public enum Event{
-		NEW_GAME,END_GAME,HELP,NONE
+	public enum MenuEvent{
+		ROLL,TRADE,NEW_GAME,END_GAME,HELP,NONE
 	}
 
-	public Event lastEvent;
+	public MenuEvent lastEvent;
 	//To display turn.
 	private JLabel currentPlayer;
 
@@ -18,18 +18,18 @@ public class Menu extends JPanel /*implements ActionListener*/{
 	JButton newGame = new JButton("NEW GAME");
 	JButton endGame = new JButton("END GAME");
 	JButton help  = new JButton("HELP");
-/*
-	public void drawPlayer(Player player){
+
+	public void drawPlayersTurn(Player player){
 		currentPlayer.setText("<html><b>TURN:</b><em>" + player.getName() + "</em></html>");
 		this.validate();
 		this.repaint();
 	}
-*/
+
 	Menu(Player current) {
-		//lastEvent = MenuEvent.NONE;
+		lastEvent = MenuEvent.NONE;
 		this.setPreferredSize(new Dimension(1000, 50));
 		this.setBorder(BorderFactory.createLineBorder(Color.black));
-		this.setLayout(new GridLayout(0,5));
+		this.setLayout(new GridLayout(0, 5));
 
 		//Oakland Oligarchy title.
 		JLabel title = new JLabel("<html>OAKLAND<br>OLIGARCHY</html>", SwingConstants.CENTER);

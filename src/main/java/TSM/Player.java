@@ -1,15 +1,36 @@
+import java.util.ArrayList;
+
+
 public class Player{
 
 	String name;
+	public String propertyString;
 	public int money;
 	String color;
-	public int tile;
-
-	Player(String n, int m, String color){
-		this.name = n;
-		this.setMoney(m);
+	public int tileIndex;
+	ArrayList<Tile> properties;
+	
+	/*this is only to be called if the player is on the tile*/
+	public void purchaseProperty(Tile tile){
+		this.money -= tile.propertyValue;
+		properties.add(tile);
+		propertyString = "";
+		for(Tile tmp : properties){
+			/*
+			if(properties.indexOf(tmp) != properties.size()-1){
+				propertyString+=tmp.propertyName+" ";
+			}
+			*/
+			propertyString+=tmp.propertyName+"\n";
+		}
+	}
+	
+	Player(String name, int dollaz, String color){
+		this.name = name;
+		this.setMoney(dollaz);
 		this.color=color;
-		this.tile = 0;
+		this.tileIndex = 0;
+		this.properties = new ArrayList<Tile>();
 	}
 
 	public int getMoney(){
