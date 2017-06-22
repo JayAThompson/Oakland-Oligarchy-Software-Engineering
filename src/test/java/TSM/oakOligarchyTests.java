@@ -1,8 +1,11 @@
-package TSM; //not sure if this line is needed in this file or not
+import org.junit.*;
+import static org.junit.Assert.*;
 
 public class oakOligarchyTests{
-	
-	public static void main(String[] args) {
-	
+	@Test
+	public void testRollDice() {
+		System.out.println("testRollDice()");
+		int result = oakOligarchy.rollDice();
+		assertTrue(result >= 1 && result <= 6);
 	}
 }
