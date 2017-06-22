@@ -9,42 +9,42 @@ import java.io.IOException;
 
 
 public class GameBoard extends JPanel{
-	private static final String[][] tileInfo= new String[][]{{"name1","100"},
-											{"name2","200"},
-											{"name3","300"},
-											{"name4","400"},
-											{"name5","500"},
-											{"name6","600"},
-											{"name7","700"},
-											{"name8","800"},
-											{"name9","900"},
-											{"name10","1000"},
-											{"name11","1100"},
-											{"name12","1200"},
-											{"name13","1300"},
-											{"name14","1400"},
-											{"name15","1500"},
-											{"name16","1600"},
-											{"name17","1700"},
-											{"name18","1800"},
-											{"name19","1900"},
-											{"name20","2000"},
-											{"name21","2100"},
-											{"name22","2200"},
-											{"name23","2300"},
-											{"name24","2400"},
-											{"name25","2500"},
-											{"name26","2600"},
-											{"name27","2700"},
-											{"name28","2800"},
-											{"name29","2900"},
-											{"name30","3000"},
-											{"name31","3100"},
-											{"name32","3200"},
-											{"name33","3300"},
-											{"name34","3400"},
-											{"name35","3500"},
-											{"name36","3600"}};
+	private static final String[][] tileInfo= new String[][]{{"Start","0"},
+															 {"Five Guys","2000"},
+															 {"Noodles n' Company","2500"},
+															 {"actiontile","0"},
+															 {"Primanti Bros.","5000"},
+															 {"actiontile","0"},
+															 {"Panera Bread","3500"},
+															 {"McDonald's","1250"},
+															 {"Sorrento's Pizza","750"},
+															 {"Go to Hillman","0"},
+															 {"Forbes Hall","35000"},
+															 {"Benedum Hall","45000"},
+															 {"actiontile","0"},
+															 {"Litchfield Towers","25000"},
+															 {"actiontile","0"},
+															 {"Sennott Square","20000"},
+															 {"William Pitt Union","25000"},
+															 {"Cathedral of Learning","250000"},
+															 {"Hillman Library","20000"},
+															 {"Schenley Plaza","15000"},
+															 {"Carnegie Library","25000"},
+															 {"actiontile","0"},
+															 {"Carnegie Museum of Art","150000"},
+															 {"Carnegie Museum of Natural History","100000"},
+															 {"actiontile","0"},
+															 {"Phipps Conservatory","75000"},
+															 {"Schenley Park","10000"},
+															 {"Go to Hillman","0"},
+															 {"Union Grill","1500"},
+															 {"Lulu's Noodles","1250"},
+															 {"actiontile","0"},
+															 {"Razzy Fresh","1000"},
+															 {"The Original Hot Dog Shop","500"},
+															 {"actiontile","0"},
+															 {"Papa D's","750"},
+															 {"actiontile","0"}};
 
 	public static ArrayList<Tile> tiles = new ArrayList<Tile>();
 	Center center = new Center();
@@ -160,7 +160,12 @@ public class GameBoard extends JPanel{
 			for(int i=0;i<36;i++){
 				JPanel tilePanel = new JPanel();
 				tilePanel.setLayout(new GridLayout(1,2));
-				JLabel label = new JLabel("<html><b>"+tileInfo[tiles.size()][0]+"</b><br>$"+tileInfo[tiles.size()][1]);
+				StringBuilder labelText = new StringBuilder("<html><b>"+tileInfo[tiles.size()][0]+"</b><br>");
+				if (!tileInfo[tiles.size()][1].equals("0"))
+				{
+					labelText.append("$"+tileInfo[tiles.size()][1]);
+				}
+				JLabel label = new JLabel(new String(labelText));
 				label.setFont(new Font("Calibri", Font.PLAIN, textSize));
 				tilePanel.setBorder(BorderFactory.createLineBorder(Color.black));
 				tilePanel.add(label);
