@@ -47,10 +47,6 @@ public class Information extends JPanel {
 	 */	
 	public void initPlayerInfo(){
 		JSeparator separator;
-
-
-	public void drawPlayerInfo(){
-		JSeparator seperator;
 		JLabel name;
 		this.removeAll();
 		this.add(new JLabel("<html><h1>Player Information</h1></html>",SwingConstants.LEFT));

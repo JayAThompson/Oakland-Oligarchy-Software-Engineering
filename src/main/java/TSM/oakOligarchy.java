@@ -49,13 +49,8 @@ public class oakOligarchy{
 	}
 
 
-	/**
-	 * Change the display in the menu to reflect that the player will have the next turn
-	 * @param player The Player object for the player who will have the next turn.
-	 */
-	void takeTurn(Player player){
-		menu.drawPlayer(player);
-	}
+
+
 
 	/**
 	 * Move the marker for a player forward a certain number of spaces
