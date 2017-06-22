@@ -1,3 +1,8 @@
+
+/**
+ * Main program for Oakland Oligarchy game
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -13,7 +18,10 @@ public class oakOligarchy{
 	static Player currPlayer;
 	static int currPlayerIndex;
 
-	//constructor initializes our JFrame
+	/**
+	 * Class constructor
+	 * Initializes our JFrame
+	 */
 	oakOligarchy(){
 		window = new JFrame("Oakland Oligarchy");
 		//default size or the JFrame
@@ -29,16 +37,29 @@ public class oakOligarchy{
 		window.add(board.getBoard(), BorderLayout.CENTER);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
-
 	}
-	//
+
+	/**
+	 * Creates a random dice roll
+	 * @return int The integer value of the dice roll
+	 */
 	public static int rollDice(){
 		return (int)(Math.random()*6+1);
 	}
 
+	/**
+	 * Change the display in the menu to reflect that the player will have the next turn
+	 * @param player The Player object for the player who will have the next turn.
+	 */
 	void takeTurn(Player player){
 		menu.drawPlayer(player);
 	}
+
+	/**
+	 * Move the marker for a player forward a certain number of spaces
+	 * @param player The Player object for the player whose marker must be moved
+	 * @param spaces The number of spaces the marker will be moved forward
+	 */
 	static void movePlayer(Player player,int spaces){
 		board.erasePlayer(currPlayer);
 		player.tile = (player.tile+spaces)%36;
@@ -46,7 +67,9 @@ public class oakOligarchy{
 		board.drawPlayer(currPlayer);
 	}
 
-
+	/**
+	 *
+	 */
 	public static void waitForEvent(){
 		if(menu.lastEvent != Menu.MenuEvent.NONE){
 			if(menu.lastEvent == Menu.MenuEvent.ROLL){
@@ -60,10 +83,12 @@ public class oakOligarchy{
 			}
 			menu.lastEvent = Menu.MenuEvent.NONE;
 		}
-
 	}
 
-	//main houses the highest layer of our application logic
+	/**
+	 * Main method to house the highest layer of our application logic
+	 * @param args Unused
+	 */
 	public static void main(String[] args){
 		new oakOligarchy();
 
@@ -89,8 +114,5 @@ public class oakOligarchy{
 			} catch(InterruptedException e) {
 			}
 		}
-
 	}
-
-
 }
