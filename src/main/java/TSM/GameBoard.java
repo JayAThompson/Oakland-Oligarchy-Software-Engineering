@@ -1,3 +1,8 @@
+
+/**
+ * Game board for Oakland Oligarchy
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -7,10 +12,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-
 public class GameBoard extends JPanel{
 	public enum Event{ ROLL,PURCHASE,END_TURN,NONE };
 
+	// 2-D array containing the title and the price for each tile on the game board
 	private static final String[][] tileInfo= new String[][]{{"Start","0"},
 															 {"Five Guys","2000"},
 															 {"Noodles n' Company","2500"},
@@ -65,6 +70,11 @@ public class GameBoard extends JPanel{
 	Tile eastSet [];
 	Tile westSet[]; */
 
+	/**
+	 * Class constructor
+	 * Initialize panels, set layout and preferred size, create tiles and add
+	 * them to the game board panel
+	 */
 	public GameBoard() { //add parameters later for rigid jail/home tile maybe?
 
 		this.north = new JPanel();
@@ -189,15 +199,20 @@ public class GameBoard extends JPanel{
 		g.ipady = 0;
 		g.fill = GridBagConstraints.BOTH;
 		board.add(west, g);
-
 	}
 
+	/**
+	 * Return game board JPanel
+	 * @return JPanel This returns the game board panel.
+	 */
 	public JPanel getBoard() {
 		return board;
 	}
 
-	//this method initializes all of the tile text and values
-	//it is the method that actually draws the tiles
+	/**
+	 * This method initializes all of the tile text and values.
+	 * It is the method that actually draws the tiles.
+	 */
 	private void createTiles(){
 		//int count++;
 		int textSize=10;
@@ -231,17 +246,26 @@ public class GameBoard extends JPanel{
 
 				tiles.add(new Tile(tilePanel, tileInfo[tiles.size()][0], Integer.parseInt(tileInfo[tiles.size()][1]), i));
 			}
-
-
 	}
+
 
 	public void drawPlayersTurn(Player player){
 		boardCenter.drawPlayersTurn(player);
 	}
 	
+
+	/**
+	 * This method draws a marker for the player on their current tile location.
+	 * @param player This is the Player object for the player whose marker will be drawn.
+	 */
 	public void drawPlayer(Player player){
 		tiles.get(player.tileIndex).addPlayer(player);
 	}
+
+	/**
+	 * This method erases a marker for the player from their current tile location.
+	 * @param player This is the Player object for the player whose marker will be erased.
+	 */
 	public void erasePlayer(Player player){
 		tiles.get(player.tileIndex).removePlayer(player);
 	}
@@ -290,6 +314,10 @@ public class GameBoard extends JPanel{
 	//public void addPlayerToTile()
 	
 
+	/**
+	 * Main method for testing purposes
+	 * @param args Unused
+	 */
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

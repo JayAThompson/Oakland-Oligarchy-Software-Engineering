@@ -1,10 +1,20 @@
+
+/*
+ * Individual tiles on the game board
+ * - Contains the property name and value
+ * - Contains a panel for the text and a panel for the player markers
+ */
+
 import javax.swing.*;
 import java.util.ArrayList;
 import java.awt.*;
 
-
 public class Tile{
+<<<<<<< HEAD
 	int rent = 100;
+=======
+
+>>>>>>> 6f1f4ff59d7c0a504536e2bf59fa93f464073675
 	boolean isActionTile;
 	String propertyName;
 	//String pr;
@@ -15,6 +25,9 @@ public class Tile{
 	ArrayList<Player> players = new ArrayList<Player>();
 	JPanel namePanel,markerPanel;
 
+	/*
+	 * Create a new tile object from a JPanel object, property name, and property value
+	 */
 	Tile(JPanel panel, String name, int value,int index) {
 		this.namePanel=panel;
 		this.propertyName=name;
@@ -24,6 +37,7 @@ public class Tile{
 		this.tileIndex=index;
 	}
 
+	// Return the panel associated with this tile that contains the name
 	public JPanel getPanel(){
 		return namePanel;
 	}
@@ -33,11 +47,14 @@ public class Tile{
 		players.add(player);
 		drawMarkers();
 	}
+
+	// Removes a player and draws their marker
 	public void removePlayer(Player player){
 		players.remove(player);
 		drawMarkers();
 	}
 
+	// Redraws the marker panel, adding the appropriate player markers
 	private void drawMarkers(){
 		int markersToDraw = players.size();
 		this.namePanel.remove(markerPanel);
@@ -65,5 +82,4 @@ public class Tile{
 		this.namePanel.validate();
 		this.namePanel.repaint();
 	}
-
 }
