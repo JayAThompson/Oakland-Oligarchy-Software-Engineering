@@ -9,18 +9,20 @@ public class Tile{
 	String propertyName;
 	int propertyValue;
 	String owner;
+	int tileIndex;
 	//String players;
 	ArrayList<Player> players = new ArrayList<Player>();
 	JPanel namePanel,markerPanel;
-	
-	Tile(JPanel panel, String name, int value) {
+
+	Tile(JPanel panel, String name, int value,int index) {
 		this.namePanel=panel;
 		this.propertyName=name;
 		this.propertyValue=value;
 		this.markerPanel = new JPanel();
 		this.namePanel.add(markerPanel);
+		this.tileIndex=index;
 	}
-	
+
 	public JPanel getPanel(){
 		return namePanel;
 	}
@@ -34,13 +36,17 @@ public class Tile{
 		players.remove(player);
 		drawMarkers();
 	}
-	
+
 	private void drawMarkers(){
 		int markersToDraw = players.size();
 		this.namePanel.remove(markerPanel);
 		//this.markerPanel.removeAll();
-		this.markerPanel = new JPanel(new GridLayout(markersToDraw,1));
-		for(Player player : players){	
+		if((tileIndex>=10 && tileIndex<=17)||(tileIndex>=28 && tileIndex<=35)){
+			this.markerPanel = new JPanel(new GridLayout(1,markersToDraw));
+		}else{
+			this.markerPanel = new JPanel(new GridLayout(markersToDraw,1));
+		}
+		for(Player player : players){
 			JPanel tmpPanel = new JPanel();
 			tmpPanel.setOpaque(true);
 			try{
@@ -58,5 +64,5 @@ public class Tile{
 		this.namePanel.validate();
 		this.namePanel.repaint();
 	}
-	
+
 }

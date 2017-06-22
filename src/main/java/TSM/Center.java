@@ -9,8 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Center extends JPanel{
-	
+public class Center extends JPanel{	
 	
 	JLabel bank;
 	JLabel dice;
@@ -26,12 +25,12 @@ public class Center extends JPanel{
 		this.setLayout(new GridLayout(0,4));
 		this.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.setPreferredSize(dim);
-		
+
 		cardPile = new JLabel("<html>Cards</html>", SwingConstants.CENTER);
 		cardPile.setFont(new Font("Calibri", Font.PLAIN, 20));
 		cardPile.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.add(cardPile, 0, 0);
-		
+
 		currCard = new JLabel("<html>Current<br>Card</html>", SwingConstants.CENTER);
 		currCard.setFont(new Font("Calibri", Font.PLAIN, 20));
 		currCard.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -41,16 +40,16 @@ public class Center extends JPanel{
 		//dice.setFont(new Font("Calibri", Font.PLAIN, 20));
 		dice.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.add(dice, 0, 0);
-		
+
 		bank = new JLabel("<html>The Bank</html>", SwingConstants.CENTER);
 		bank.setFont(new Font("Calibri", Font.PLAIN, 20));
 		bank.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.add(bank, 0, 0);
-		
-		
-		
+
+
+
 	}
-	
+
 	/*
 	 *Main method for testing purposes
 	 */
