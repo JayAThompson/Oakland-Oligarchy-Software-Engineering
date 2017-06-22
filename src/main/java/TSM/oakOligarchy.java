@@ -37,7 +37,7 @@ public class oakOligarchy{
 	}
 
 	void takeTurn(Player player){
-		menu.drawPlayer(player);
+		//menu.drawPlayer(player);
 	}
 	static void movePlayer(Player player,int spaces){
 		board.erasePlayer(currPlayer);
@@ -48,17 +48,16 @@ public class oakOligarchy{
 
 
 	public static void waitForEvent(){
-		if(menu.lastEvent != Menu.MenuEvent.NONE){
-			if(menu.lastEvent == Menu.MenuEvent.ROLL){
+		if(board.pollForEvent()){
+			if(board.getEvent() == GameBoard.Event.ROLL){
 				int roll1 = rollDice();
 				int roll2 = rollDice();
 				movePlayer(currPlayer,roll1+roll2);
 				board.drawDiceRoll(currPlayer,roll1,roll2);
 				currPlayerIndex = (currPlayerIndex+1)%players.size();
 				currPlayer = players.get(currPlayerIndex);
-				menu.drawPlayer(currPlayer);
+				//menu.drawPlayer(currPlayer);
 			}
-			menu.lastEvent = Menu.MenuEvent.NONE;
 		}
 
 	}
@@ -81,11 +80,11 @@ public class oakOligarchy{
 		}
 		currPlayerIndex=0;
 		currPlayer = players.get(0);
-		menu.drawPlayer(players.get(0));
+		//menu.drawPlayer(players.get(0));
 		while(true){
 			waitForEvent();
 			try {
-			   Thread.sleep(10);
+			   Thread.sleep(100);
 			} catch(InterruptedException e) {
 			}
 		}

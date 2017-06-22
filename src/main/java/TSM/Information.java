@@ -16,15 +16,15 @@ public class Information extends JPanel {
 	public boolean playerDataFlag = false;
 
 	public void drawPlayerInfo(){
-		JSeparator seperator;
+		JSeparator separator;
 		JLabel name;
 		this.removeAll();
 		this.add(new JLabel("<html><h1>Player Information</h1></html>",SwingConstants.CENTER));
 		for(Player player : players){
 				//adding a separator to tell the players apart
-				seperator = new JSeparator(SwingConstants.HORIZONTAL);
-				seperator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 20) );
-				this.add(seperator);
+				separator = new JSeparator(SwingConstants.HORIZONTAL);
+				separator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 20) );
+				this.add(separator);
 				//outerpanel houses two other panels. one panel has the text info about the player and the other has the player color
 				JPanel outerPanel = new JPanel(new GridLayout(1,2));
 				//innerPanel houses the player info

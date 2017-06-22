@@ -9,6 +9,8 @@ import java.io.IOException;
 
 
 public class GameBoard extends JPanel{
+	public enum Event{ ROLL,PURCHASE,END_TURN,NONE };
+
 	private static final String[][] tileInfo= new String[][]{{"Start","0"},
 															 {"Five Guys","2000"},
 															 {"Noodles n' Company","2500"},
@@ -48,8 +50,9 @@ public class GameBoard extends JPanel{
 
 	public static ArrayList<Tile> tiles = new ArrayList<Tile>();
 
-	Center center = new Center(new Dimension(640, 400));
+	BoardCenter boardCenter = new BoardCenter(new Dimension(640, 400));
 
+	
 	JPanel north;
 	JPanel south;
 	JPanel east;
@@ -156,7 +159,7 @@ public class GameBoard extends JPanel{
 		g.ipadx = 0;
 		g.ipady = 0;
 		g.fill = GridBagConstraints.BOTH;
-		board.add(center, g);
+		board.add(boardCenter, g);
 
 		//south
 		g.gridx = 2;
@@ -242,10 +245,23 @@ public class GameBoard extends JPanel{
 		tiles.get(player.tile).removePlayer(player);
 	}
 	public void drawDiceRoll(Player player,int dice1,int dice2){
-		center.drawDiceRoll(player,dice1,dice2);
+		boardCenter.drawDiceRoll(player,dice1,dice2);
 	}
 	
-
+	/*this method returns whether some event has happened (button)*/
+	public boolean pollForEvent(){
+		if(boardCenter.event == Event.NONE){
+			return false;
+		}
+		return true;
+	}
+	
+	/*this method returns what event happened and also clears the event*/
+	public Event getEvent(){
+		Event event = boardCenter.event;
+		boardCenter.event = Event.NONE;
+		return event;
+	}
 	//public void addPlayerToTile()
 
 	public static void main(String[] args) {
