@@ -1,6 +1,6 @@
 
-/*
- * Center piece of the gameboard for the oakland oligarchy computer gameboard
+/**
+ * Center piece of the game board for Oakland Oligarchy
  * In future this will need to be connected to the implementation of the bank
  * And the dice rolling, as well as the action card system
  */
@@ -16,6 +16,11 @@ public class Center extends JPanel{
 	private JLabel cardPile;
 	private JLabel currCard;
 
+	/**
+	 * Class constructor
+	 * Set the layout, border, and preferred size
+	 * Initialize panels for the card pile, current card, dice roll, and bank
+	 */
 	public Center() {
 		this.setLayout(new GridLayout(0,4));
 		this.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -40,13 +45,11 @@ public class Center extends JPanel{
 		bank.setFont(new Font("Calibri", Font.PLAIN, 20));
 		bank.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.add(bank, 0, 0);
-
-
-
 	}
 
-	/*
-	 *Main method for testing purposes
+	/**
+	 * Main method for testing purposes
+	 * @param args Unused
 	 */
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Test");

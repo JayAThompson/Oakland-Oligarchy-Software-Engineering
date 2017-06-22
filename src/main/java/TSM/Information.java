@@ -1,3 +1,8 @@
+
+/**
+ * Collect player information and display it in a panel on the left side of the window
+ */
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -15,6 +20,9 @@ public class Information extends JPanel {
 	//this flag is to be set by the the form to submit new player names
 	public boolean playerDataFlag = false;
 
+	/**
+	 * This method draws the information for the players (name, information, and marker color) in the panel.
+	 */
 	public void drawPlayerInfo(){
 		JSeparator seperator;
 		JLabel name;
@@ -52,8 +60,10 @@ public class Information extends JPanel {
 		this.repaint();
 	}
 
-	//this method is to be called if the new game button is selected, or by default when oakOli runs
-	//it collects player names from the user
+	/**
+	 * This method is to be called if the new game button is selected, or by default when oakOli runs
+	 * It collects player names from the user.
+	 */
 	public void collectPlayerInfo(){
 		int numberOfPlayers=0;
 
@@ -81,7 +91,6 @@ public class Information extends JPanel {
 		p2Field.setPreferredSize(new Dimension(285,30));
 		p2Field.setMaximumSize( p1Field.getPreferredSize() );
 		p2Field.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
-
 
 		JTextField p3Field = new JTextField();
 		p3Field.setPreferredSize(new Dimension(285,30));
@@ -146,19 +155,29 @@ public class Information extends JPanel {
 			}
 		} );
 		this.add(submitButton);
-		}
+	}
 
-
-
-	//this internal class is here to enforce a max player name len
+	/**
+	 * This internal class is here to enforce a max player name len
+	 */
 	public class JTextFieldLimit extends PlainDocument {
 	  private int limit;
 
+	  /**
+	   * Class constructor
+	   */
 	  JTextFieldLimit(int limit) {
 	   super();
 	   this.limit = limit;
-	   }
+	  }
 
+	  /**
+	   *
+	   * @param offset
+	   * @param str
+	   * @param attr
+	   * @throws BadLocationException
+	   */
 	  public void insertString( int offset, String  str, AttributeSet attr ) throws BadLocationException {
 		if (str == null) return;
 
@@ -167,6 +186,12 @@ public class Information extends JPanel {
 		}
 	  }
 	}
+
+	/**
+	 * Class constructor
+	 * Set border, preferred size, and layout
+	 * Collect player info
+	 */
 	Information(){
 
 	/*
@@ -189,7 +214,5 @@ public class Information extends JPanel {
 		//this.setBounds(0,0,285,1000);
 		this.setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		this.collectPlayerInfo();
-
 	}
-
 }
