@@ -2,19 +2,29 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-public class Menu extends JPanel{
+public class Menu extends JPanel implements ActionListener{
+	public enum MenuEvent{
+		ROLL,TRADE,NEW_GAME,END_GAME,HELP,NONE
+	}
 
+	public MenuEvent lastEvent;
 	//To display turn.
 	private JLabel currentPlayer;
 
 	//Buttons that will be needed.
-	private JButton trade = new JButton("TRADE");
-	private JButton roll = new JButton("ROLL");
-	private JButton newGame = new JButton("NEW GAME");
-	private JButton endGame = new JButton("END GAME");
-	private JButton help  = new JButton("HELP");
+	JButton trade = new JButton("TRADE");
+	JButton roll = new JButton("ROLL");
+	JButton newGame = new JButton("NEW GAME");
+	JButton endGame = new JButton("END GAME");
+	JButton help  = new JButton("HELP");
 
-	public Menu(Player current) {
+	public void drawPlayer(Player player){
+		currentPlayer.setText("<html><b>TURN:</b><em>" + player.getName() + "</em></html>");
+		this.validate();
+		this.repaint();
+	}
+	Menu(Player current) {
+		lastEvent = MenuEvent.NONE;
 		this.setPreferredSize(new Dimension(1000, 50));
 		this.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.setLayout(new GridLayout(0, 7));
@@ -33,6 +43,7 @@ public class Menu extends JPanel{
 		trade.setFont(new Font("Calibri", Font.PLAIN, 15));
 		this.add(trade, 0, 2);
 		roll.setFont(new Font("Calibri", Font.PLAIN, 15));
+		roll.addActionListener(this);
 		this.add(roll, 0, 3);
 		newGame.setFont(new Font("Calibri", Font.PLAIN, 15));
 		this.add(newGame, 0, 4);
@@ -42,4 +53,16 @@ public class Menu extends JPanel{
 		this.add(help, 0, 6);
 
 	}
+
+	public void actionPerformed(ActionEvent e) {
+				System.out.println("3");
+
+		if(e.getSource() == roll){
+			this.lastEvent = MenuEvent.ROLL;
+					System.out.println("1");
+
+		}
+	}
+
+
 }

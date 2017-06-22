@@ -1,17 +1,21 @@
 public class Player{
 
-	private String name;
-	private int money;
+	String name;
+	public int money;
+	String color;
+	public int tile;
 
-	public Player(String n, int m){
+	Player(String n, int m, String color){
 		this.name = n;
 		this.setMoney(m);
+		this.color=color;
+		this.tile = 0;
 	}
 
 	public int getMoney(){
 		return this.money;
 	}
-	
+
 	public void setMoney(int m){
 		if (m < 0) money = 0;
 		this.money = m;

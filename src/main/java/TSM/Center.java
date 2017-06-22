@@ -1,4 +1,9 @@
 
+/*
+ * Center piece of the gameboard for the oakland oligarchy computer gameboard
+ * In future this will need to be connected to the implementation of the bank
+ * And the dice rolling, as well as the action card system
+ */
 
 import java.awt.*;
 import java.awt.event.*;
@@ -14,7 +19,7 @@ public class Center extends JPanel{
 	public Center() {
 		this.setLayout(new GridLayout(0,4));
 		this.setBorder(BorderFactory.createLineBorder(Color.black));
-		this.setPreferredSize(new Dimension(720, 720));
+		this.setPreferredSize(new Dimension(800, 480));
 
 		cardPile = new JLabel("<html>Cards</html>", SwingConstants.CENTER);
 		cardPile.setFont(new Font("Calibri", Font.PLAIN, 20));
@@ -40,10 +45,13 @@ public class Center extends JPanel{
 
 	}
 
+	/*
+	 *Main method for testing purposes
+	 */
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(400, 400);
+		//frame.setSize(400, 400);
 		Center center = new Center();
 		frame.add(center);
 		frame.setVisible(true);
