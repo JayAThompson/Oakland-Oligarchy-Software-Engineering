@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class oakOligarchy{
 	static JFrame window;
-	static Information playerInfo;
+	static Controls controls;
 	static GameBoard board;
 	static Menu menu;
 	static ArrayList<Player> players;
@@ -32,9 +32,9 @@ public class oakOligarchy{
 		//adding dummy data into the menu
 		menu = new Menu(new Player("no one",0,"yo"));
 		board = new GameBoard();
-		playerInfo = new Information();
+		controls = new Controls();
 		window.add(menu, BorderLayout.NORTH);
-		window.add(playerInfo, BorderLayout.WEST);
+		window.add(controls, BorderLayout.WEST);
 		window.add(board.getBoard(), BorderLayout.CENTER);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
@@ -63,21 +63,22 @@ public class oakOligarchy{
 		board.drawPlayer(currPlayer);
 	}
 
-	public static void waitForBoardEvent(GameBoard.Event event){
+	public static void waitForControlEvent(Controls.Event event){
 		while(true){
-			while(!board.pollForEvent()){
+			while(!controls.pollForEvent()){
 				try {
 			   		Thread.sleep(1);
 				} catch(InterruptedException e) {}
 
 			}
-			if(event == board.getEvent()){
+			if(event == controls.event){
+				controls.event = Controls.Event.NONE;
 				break;
 			}			
 		}
 	}
 	
-	public static GameBoard.Event waitForBoardEvents(GameBoard.Event event[], int numEvents){
+/*	public static GameBoard.Event waitForBoardEvents(GameBoard.Event event[], int numEvents){
 		GameBoard.Event tmp;
 		while(true){
 			while(!board.pollForEvent()){
@@ -85,42 +86,42 @@ public class oakOligarchy{
 			   		Thread.sleep(1);
 				} catch(InterruptedException e) {}
 			}
-			tmp = board.getEvent();
+		//	tmp = board.getEvent();
 			for(int i=0;i<numEvents;i++)
 				if(event[i] == tmp){
 					return tmp;
 				}
 		}
 	}
-	
+	*/
 	private static void purchaseCurrentProperty(){
 		Tile tile = board.tiles.get(currPlayer.tileIndex);
 		if(tile.owner == null && tile.propertyValue>0){
 			currPlayer.purchaseProperty(tile);
-			playerInfo.drawPlayerInfo(currPlayer);
+//			playerInfo.drawPlayerInfo(currPlayer);
 		}
 	}
 	private static void nextTurn(){
-		final GameBoard.Event postRollEvents[] = {GameBoard.Event.END_TURN, GameBoard.Event.PURCHASE};
+//		final GameBoard.Event postRollEvents[] = {GameBoard.Event.END_TURN, GameBoard.Event.PURCHASE};
 		int roll1 = rollDice();
 		int roll2 = rollDice();
-		GameBoard.Event event;
-
-		board.hidePurchaseButton();
-		board.hideEndTurnButton();
+//		GameBoard.Event event;
+		Controls.Event event;
+//		board.hidePurchaseButton();
+//		board.hideEndTurnButton();
 		
 		currPlayerIndex = (currPlayerIndex+1)%players.size();
 		currPlayer = players.get(currPlayerIndex);
 		menu.drawPlayersTurn(currPlayer);
-		board.drawPlayersTurn(currPlayer);
-		board.showRollButton();
+//		board.drawPlayersTurn(currPlayer);
+//		board.showRollButton();
 		
-		waitForBoardEvent(GameBoard.Event.ROLL);
-		board.hideRollButton();
+		waitForControlEvent(Controls.Event.ROLL);
+	//	board.hideRollButton();
 		movePlayer(currPlayer,roll1+roll2);
-		board.drawDiceRoll(currPlayer,roll1,roll2);
-		board.showPurchaseButton();
-		board.showEndTurnButton();
+	//	board.drawDiceRoll(currPlayer,roll1,roll2);
+	//	board.showPurchaseButton();
+	//	board.showEndTurnButton();
 		//getting charged that money
 		Tile tmp = board.tiles.get(currPlayer.tileIndex);
 		if(tmp.owner != null && tmp.owner != currPlayer){
@@ -130,12 +131,12 @@ public class oakOligarchy{
 		}
 		
 		
-		event = waitForBoardEvents(postRollEvents,2);
-		if(event == postRollEvents[1]){
-			purchaseCurrentProperty();
-		}
-		board.hidePurchaseButton();
-		board.hideEndTurnButton();
+//		event = waitForBoardEvents(postRollEvents,2);
+//		if(event == postRollEvents[1]){
+//			purchaseCurrentProperty();
+//		}
+		//board.hidePurchaseButton();
+		//board.hideEndTurnButton();
 
 	}
 	
@@ -148,14 +149,15 @@ public class oakOligarchy{
 		new oakOligarchy();
 
 		//sleeping while the player info is collected
-		while(playerInfo.playerDataFlag == false){
+		while(controls.playerDataFlag == false){
 			try {
 			   Thread.sleep(50);
 			} catch(InterruptedException e) {
 			}
 		}
-		players=playerInfo.players;
-		playerInfo.initPlayerInfo();
+		controls.drawTurnButtons();
+		players=controls.players;
+		board.boardCenter.initPlayerInfo(players);
 		for(Player player : players){
 			board.drawPlayer(player);
 		}

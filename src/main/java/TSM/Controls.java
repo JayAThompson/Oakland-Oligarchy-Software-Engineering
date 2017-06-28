@@ -12,23 +12,26 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import java.util.ArrayList;
 
-public class Information extends JPanel {
-
+public class Controls extends JPanel implements ActionListener{
+	public enum Event{ ROLL,PURCHASE,END_TURN,NONE };	
+	
 	public ArrayList<Player> players = new ArrayList<Player>();
-	private ArrayList<JTextArea> propertyText = new ArrayList<JTextArea>();
-	private ArrayList<JLabel> moneyLabels = new ArrayList<JLabel>();
+//	private ArrayList<JTextArea> propertyText = new ArrayList<JTextArea>();
+//	private ArrayList<JLabel> moneyLabels = new ArrayList<JLabel>();
+	JButton rollButton,purchaseButton,endTurnButton;
+
 	
 	private int START_MONEY=750*20;
 	private int MAX_NAME_LEN = 20;
 	//this flag is to be set by the the form to submit new player names
 	public boolean playerDataFlag = false;
-
+	Event event = Event.NONE;
 	/**
 	 * Class constructor
 	 * Set border, preferred size, and layout
 	 * Collect player info
 	 */
-	Information(){
+	Controls(){
 		this.setBorder(BorderFactory.createLoweredBevelBorder());
 		this.setPreferredSize(new Dimension(285, 1000));
 		//this.setBounds(0,0,285,1000);
@@ -36,64 +39,76 @@ public class Information extends JPanel {
 		this.collectPlayerInfo();
 	}
 	
+	public void drawTurnButtons(){
+		JSeparator separator;
+		this.removeAll();
+		rollButton = new JButton("Roll the dice");
+		rollButton.addActionListener(this);
+		rollButton.setFont(new Font("Calibri", Font.PLAIN, 18));
+		rollButton.setVisible(true);
+		this.add(rollButton);
+		//turnControls.add(Box.createRigidArea(new Dimension(0,10)));
+
+		separator = new JSeparator(SwingConstants.HORIZONTAL);
+		//separator.setAlignmentX(Component.CENTER_ALIGNMENT);
+   		//separator.setPreferredSize(new Dimension(50, 10));
+		separator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 10) );
+		this.add(separator);
+
+		
+/*		purchaseLabel = new JLabel("Want to purchse this shiz?");
+		purchaseLabel.setFont(new Font("Calibri", Font.PLAIN, 14));
+		purchaseLabel.setVisible(false);
+		this.add(purchaseLabel);
+*/		//turnControls.add(Box.createRigidArea(new Dimension(0,10)));
+
+
+			
+		purchaseButton = new JButton("Purchase Property");
+		purchaseButton.addActionListener(this);
+		purchaseButton.setFont(new Font("Calibri", Font.PLAIN, 18));
+		purchaseButton.setVisible(false);
+		this.add(purchaseButton);
+		this.add(Box.createRigidArea(new Dimension(0,20)));
+
+		separator = new JSeparator(SwingConstants.HORIZONTAL);
+		//separator.setAlignmentX(Component.CENTER_ALIGNMENT);
+   		//separator.setPreferredSize(new Dimension(50, 10));
+		separator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 10) );
+		this.add(separator);
+		
+/*		purchaseLabel = new JLabel(" ");
+		purchaseLabel.setFont(new Font("Calibri", Font.PLAIN, 14));
+		purchaseLabel.setVisible(false);
+		this.add(purchaseLabel);
+		this.add(Box.createRigidArea(new Dimension(0,10)));
+*/
+
+		endTurnButton = new JButton("End Turn");
+		endTurnButton.addActionListener(this);
+		endTurnButton.setFont(new Font("Calibri", Font.PLAIN, 18));
+		endTurnButton.setVisible(false);
+		this.add(endTurnButton);
+		this.validate();
+		this.repaint();
+	}
+	
+	public boolean pollForEvent(){
+		if(this.event == Event.NONE){
+			return false;
+		}
+		return true;
+	}
+	
+/*	
 	public void drawPlayerInfo(Player player){
 		propertyText.get(players.indexOf(player)).setText(player.propertyString);
 		moneyLabels.get(players.indexOf(player)).setText("MONEY: $" +player.getMoney());
 		//this.revalidate();
 		//this.repaint();
 	}
-	/**
-	 * This method draws the information for the players (name, information, and marker color) in the panel.
-	 */	
-	public void initPlayerInfo(){
-		JSeparator separator;
-		JLabel name;
-		this.removeAll();
-		this.add(new JLabel("<html><h1>Player Information</h1></html>",SwingConstants.LEFT));
-		for(Player player : players){
-				//adding a separator to tell the players apart
-				separator = new JSeparator(SwingConstants.HORIZONTAL);
-				separator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 20) );
-				this.add(separator);
-				//outerpanel houses two other panels. one panel has the text info about the player and the other has the player color
-				//JPanel outerPanel = new JPanel(new GridLayout(1,2));
-				//innerPanel houses the player info
-				JPanel innerPanel = new JPanel();
-				this.add(innerPanel);
-				innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
-				//info goes in first spot in grid
-				//outerPanel.add(innerPanel);
-				//this.add(outerPanel);
-				//tmpPanel houses the player color info
-				//JPanel tmpPanel = new JPanel();
-				//tmpPanel.setOpaque(true);
-				try{
-//				tmpPanel.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
-				//tmpPanel.setBackground(Color.GREEN);
-				}catch(Exception e){}
-			
-			 	name = new JLabel("<html><u>"+player.getName()+"</u></html>",SwingConstants.LEFT);
-				name.setFont(new Font("Calibri", Font.BOLD, 15));
-				
-				innerPanel.add(name);
-				JLabel tmpLabel = new JLabel("MONEY: "+ player.money, SwingConstants.LEFT); 
-				innerPanel.add( tmpLabel );
-				moneyLabels.add(tmpLabel);
-				innerPanel.add(new JLabel("<html>PROPERTIES:</html>", SwingConstants.LEFT));
-				JTextArea tmp = new JTextArea();
-				tmp.setLineWrap(true);
-				tmp.setMaximumSize(new Dimension(200,1000));
-				try{
-					tmp.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
-				}catch(Exception e){}
-				innerPanel.add(tmp);
-				propertyText.add(tmp);
-				this.add(Box.createRigidArea(new Dimension(0,10)));
-		}
-		this.validate();
-		this.repaint();
-	}
-
+*/
+	
 	/**
 	 * This method is to be called if the new game button is selected, or by default when oakOli runs
 	 * It collects player names from the user.
@@ -191,6 +206,19 @@ public class Information extends JPanel {
 		this.add(submitButton);
 	}
 
+	
+	public void actionPerformed(ActionEvent e) { 
+		if(e.getSource() == rollButton){
+			event = Controls.Event.ROLL;
+		}else if(e.getSource() == purchaseButton){
+			event = Controls.Event.PURCHASE;
+		}else if(e.getSource() == endTurnButton){
+			event = Controls.Event.END_TURN;
+		}
+
+	}
+
+	
 	/**
 	 * This internal class is here to enforce a max player name len
 	 */

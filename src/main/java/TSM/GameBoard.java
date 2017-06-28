@@ -13,7 +13,6 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class GameBoard extends JPanel{
-	public enum Event{ ROLL,PURCHASE,END_TURN,NONE };
 
 	// 2-D array containing the title and the price for each tile on the game board
 	private static final String[][] tileInfo= new String[][]{{"Start","0"},
@@ -248,11 +247,11 @@ public class GameBoard extends JPanel{
 			}
 	}
 
-
+/*
 	public void drawPlayersTurn(Player player){
 		boardCenter.drawPlayersTurn(player);
 	}
-	
+*/	
 
 	/**
 	 * This method draws a marker for the player on their current tile location.
@@ -269,6 +268,7 @@ public class GameBoard extends JPanel{
 	public void erasePlayer(Player player){
 		tiles.get(player.tileIndex).removePlayer(player);
 	}
+	/*
 	public void drawDiceRoll(Player player,int dice1,int dice2){
 		boardCenter.drawDiceRoll(player,dice1,dice2);
 	}
@@ -298,20 +298,20 @@ public class GameBoard extends JPanel{
 	}		
 	
 	/*this method returns whether some event has happened (button)*/
-	public boolean pollForEvent(){
+/*	public boolean pollForEvent(){
 		if(boardCenter.event == Event.NONE){
 			return false;
 		}
 		return true;
 	}
-	
+*/	
 	/*this method returns what event happened and also clears the event*/
-	public Event getEvent(){
-		Event event = boardCenter.event;
-		boardCenter.event = Event.NONE;
+/*	public Event getEvent(){
+//		Event event = boardCenter.event;
+//		boardCenter.event = Event.NONE;
 		return event;
 	}
-	//public void addPlayerToTile()
+*/	//public void addPlayerToTile()
 	
 
 	/**

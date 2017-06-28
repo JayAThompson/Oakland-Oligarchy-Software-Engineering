@@ -8,23 +8,89 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.ArrayList;
 
-public class BoardCenter extends JPanel implements ActionListener{	
+
+public class BoardCenter extends JPanel{	
 	
-	private final String diceRollString = "<html><h1>Dice Roll</h1>";
-	
-	GameBoard.Event event = GameBoard.Event.NONE;
-	JLabel dice;
+/*	
+ 	JLabel dice;
 	JPanel turnControls;
 	JLabel	turnLabel,purchaseLabel;
 	JButton rollButton,purchaseButton,endTurnButton;
+*/
+	public ArrayList<Player> players;
+	public ArrayList<JPanel> playerPanels = new ArrayList<JPanel>();
+	private ArrayList<JTextArea> propertyText = new ArrayList<JTextArea>();
+	private ArrayList<JLabel> moneyLabels = new ArrayList<JLabel>();
 	
 	BoardCenter(Dimension dim) {
-		this.setLayout(new GridLayout(0,2));
+		//this.setLayout(new GridLayout(0,2));
 		this.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.setPreferredSize(dim);
-		
+	}
 	
+	
+	public void initPlayerInfo(ArrayList<Player> playerArray){
+		JSeparator separator;
+		JLabel name;
+		players = playerArray;
+		this.removeAll();
+		this.setLayout(new GridLayout(1,players.size()));
+		//this.add(new JLabel("<html><h1>Player Information</h1></html>",SwingConstants.LEFT));
+		for(Player player : players){
+			//adding a separator to tell the players apart
+			JPanel panel = new JPanel();
+			panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+			this.add(panel);
+			//separator = new JSeparator(SwingConstants.HORIZONTAL);
+			//separator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 20) );
+			
+			//this.add(separator);
+			//outerpanel houses two other panels. one panel has the text info about the player and the other has the player color
+			//JPanel outerPanel = new JPanel(new GridLayout(1,2));
+			//innerPanel houses the player info
+			//JPanel innerPanel = new JPanel();
+			//this.add(innerPanel);
+			//innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
+			//info goes in first spot in grid
+			//outerPanel.add(innerPanel);
+			//this.add(outerPanel);
+			//tmpPanel houses the player color info
+			//JPanel tmpPanel = new JPanel();
+			//tmpPanel.setOpaque(true);
+			try{
+//				tmpPanel.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
+				//tmpPanel.setBackground(Color.GREEN);
+			}catch(Exception e){}
+			
+		 	name = new JLabel("<html><u>"+player.getName()+"</u></html>");
+			name.setFont(new Font("Calibri", Font.BOLD, 15));
+				
+			panel.add(name);
+			JLabel tmpLabel = new JLabel("MONEY: "+ player.money);
+			tmpLabel.setHorizontalAlignment(SwingConstants.LEFT);
+			panel.add( tmpLabel );
+			moneyLabels.add(tmpLabel);
+			panel.add(new JLabel("<html>PROPERTIES:</html>"));
+			JTextArea tmp = new JTextArea();
+			tmp.setLineWrap(true);
+			tmp.setMaximumSize(new Dimension(200,1000));
+			try{
+				tmp.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
+			}catch(Exception e){}
+			//panel.add(tmp);
+			propertyText.add(tmp);
+			//this.add(Box.createRigidArea(new Dimension(0,10)));
+		}
+		this.validate();
+		this.repaint();
+	}
+	
+	
+	
+		
+/*	
 		
 		turnControls = new JPanel();
 		turnControls.setLayout(new BoxLayout(turnControls,BoxLayout.Y_AXIS));
@@ -38,7 +104,7 @@ public class BoardCenter extends JPanel implements ActionListener{
 		JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
 		separator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 10) );
 		turnControls.add(separator);
-*/		
+	
 		rollButton = new JButton("Roll the dice");
 		rollButton.addActionListener(this);
 		rollButton.setFont(new Font("Calibri", Font.PLAIN, 18));
@@ -58,7 +124,7 @@ public class BoardCenter extends JPanel implements ActionListener{
 		purchaseLabel.setVisible(false);
 		turnControls.add(purchaseLabel);
 		//turnControls.add(Box.createRigidArea(new Dimension(0,10)));
-*/
+
 
 			
 		purchaseButton = new JButton("Purchase Property");
@@ -79,7 +145,7 @@ public class BoardCenter extends JPanel implements ActionListener{
 		purchaseLabel.setVisible(false);
 		turnControls.add(purchaseLabel);
 		turnControls.add(Box.createRigidArea(new Dimension(0,10)));
-*/
+
 
 		endTurnButton = new JButton("End Turn");
 		endTurnButton.addActionListener(this);
@@ -91,9 +157,9 @@ public class BoardCenter extends JPanel implements ActionListener{
 		//dice.setFont(new Font("Calibri", Font.PLAIN, 20));
 		dice.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.add(dice);	
-		
-	}
-
+*/	
+//	}
+/*
 	public void drawDiceRoll(Player player, int roll1,int roll2){
 		dice.setText(diceRollString+"<h3>Player "+player.getName()
 				 +" rolled</h3><br><h2>"+Integer.toString(roll1)
@@ -109,16 +175,7 @@ public class BoardCenter extends JPanel implements ActionListener{
 		//turnLabel.set
 		//turnControls.
 	}
-	
-	public void actionPerformed(ActionEvent e) { 
-		if(e.getSource() == rollButton){
-			event = GameBoard.Event.ROLL;
-		}else if(e.getSource() == purchaseButton){
-			event = GameBoard.Event.PURCHASE;
-		}else if(e.getSource() == endTurnButton){
-			event = GameBoard.Event.END_TURN;
-		}
-	}
+*/	
 	/*
 	 *Main method for testing purposes
 	 */
