@@ -24,13 +24,20 @@ public class BoardCenter extends JPanel{
 	private ArrayList<JTextArea> propertyText = new ArrayList<JTextArea>();
 	private ArrayList<JLabel> moneyLabels = new ArrayList<JLabel>();
 	
+	/**
+	 * class constructor.
+	 * basically makes an empty Jpanel
+	 */
 	BoardCenter(Dimension dim) {
 		//this.setLayout(new GridLayout(0,2));
 		this.setBorder(BorderFactory.createLineBorder(Color.black));
 		this.setPreferredSize(dim);
 	}
 	
-	
+	/**
+	 * This method draws the player names and initial money/properties
+	 *
+	 */
 	public void initPlayerInfo(ArrayList<Player> playerArray){
 		JSeparator separator;
 		JLabel name;
@@ -46,40 +53,29 @@ public class BoardCenter extends JPanel{
 			//separator = new JSeparator(SwingConstants.HORIZONTAL);
 			//separator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 20) );
 			
-			//this.add(separator);
-			//outerpanel houses two other panels. one panel has the text info about the player and the other has the player color
-			//JPanel outerPanel = new JPanel(new GridLayout(1,2));
-			//innerPanel houses the player info
-			//JPanel innerPanel = new JPanel();
-			//this.add(innerPanel);
-			//innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
-			//info goes in first spot in grid
-			//outerPanel.add(innerPanel);
-			//this.add(outerPanel);
-			//tmpPanel houses the player color info
-			//JPanel tmpPanel = new JPanel();
-			//tmpPanel.setOpaque(true);
-			try{
-//				tmpPanel.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
-				//tmpPanel.setBackground(Color.GREEN);
-			}catch(Exception e){}
+
 			
 		 	name = new JLabel("<html><u>"+player.getName()+"</u></html>");
 			name.setFont(new Font("Calibri", Font.BOLD, 15));
-				
+			name.setOpaque(true);
+			try{
+				name.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
+			}catch(Exception e){}
 			panel.add(name);
-			JLabel tmpLabel = new JLabel("MONEY: "+ player.money);
+			
+			JLabel tmpLabel = new JLabel("MONEY: $"+ player.money);
 			tmpLabel.setHorizontalAlignment(SwingConstants.LEFT);
 			panel.add( tmpLabel );
 			moneyLabels.add(tmpLabel);
 			panel.add(new JLabel("<html>PROPERTIES:</html>"));
 			JTextArea tmp = new JTextArea();
 			tmp.setLineWrap(true);
+			tmp.setWrapStyleWord(true);
 			tmp.setMaximumSize(new Dimension(200,1000));
 			try{
 				tmp.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
 			}catch(Exception e){}
-			//panel.add(tmp);
+			panel.add(tmp);
 			propertyText.add(tmp);
 			//this.add(Box.createRigidArea(new Dimension(0,10)));
 		}
@@ -87,95 +83,27 @@ public class BoardCenter extends JPanel{
 		this.repaint();
 	}
 	
-	
-	
-		
-/*	
-		
-		turnControls = new JPanel();
-		turnControls.setLayout(new BoxLayout(turnControls,BoxLayout.Y_AXIS));
-		turnControls.setBorder(BorderFactory.createLineBorder(Color.black));
-		this.add(turnControls);
-//		turnControls.add(purchaseButton);
-		
-		turnLabel = new JLabel("<html><h1>Turn: <em>no one<em></h1></html>");
-		turnControls.add(turnLabel);
-/*		
-		JSeparator separator = new JSeparator(SwingConstants.HORIZONTAL);
-		separator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 10) );
-		turnControls.add(separator);
-	
-		rollButton = new JButton("Roll the dice");
-		rollButton.addActionListener(this);
-		rollButton.setFont(new Font("Calibri", Font.PLAIN, 18));
-		rollButton.setVisible(false);
-		turnControls.add(rollButton);
-		//turnControls.add(Box.createRigidArea(new Dimension(0,10)));
-/*
-		separator = new JSeparator(SwingConstants.HORIZONTAL);
-		//separator.setAlignmentX(Component.CENTER_ALIGNMENT);
-   		//separator.setPreferredSize(new Dimension(50, 10));
-		separator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 10) );
-		turnControls.add(separator);
-
-		
-		purchaseLabel = new JLabel("Want to purchse this shiz?");
-		purchaseLabel.setFont(new Font("Calibri", Font.PLAIN, 14));
-		purchaseLabel.setVisible(false);
-		turnControls.add(purchaseLabel);
-		//turnControls.add(Box.createRigidArea(new Dimension(0,10)));
-
-
-			
-		purchaseButton = new JButton("Purchase Property");
-		purchaseButton.addActionListener(this);
-		purchaseButton.setFont(new Font("Calibri", Font.PLAIN, 18));
-		purchaseButton.setVisible(false);
-		turnControls.add(purchaseButton);
-		turnControls.add(Box.createRigidArea(new Dimension(0,20)));
-/*
-		separator = new JSeparator(SwingConstants.HORIZONTAL);
-		//separator.setAlignmentX(Component.CENTER_ALIGNMENT);
-   		//separator.setPreferredSize(new Dimension(50, 10));
-		separator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 10) );
-		turnControls.add(separator);
-		
-		purchaseLabel = new JLabel(" ");
-		purchaseLabel.setFont(new Font("Calibri", Font.PLAIN, 14));
-		purchaseLabel.setVisible(false);
-		turnControls.add(purchaseLabel);
-		turnControls.add(Box.createRigidArea(new Dimension(0,10)));
-
-
-		endTurnButton = new JButton("End Turn");
-		endTurnButton.addActionListener(this);
-		endTurnButton.setFont(new Font("Calibri", Font.PLAIN, 18));
-		endTurnButton.setVisible(false);
-		turnControls.add(endTurnButton);
-		
-		dice = new JLabel(diceRollString, SwingConstants.CENTER);
-		//dice.setFont(new Font("Calibri", Font.PLAIN, 20));
-		dice.setBorder(BorderFactory.createLineBorder(Color.black));
-		this.add(dice);	
-*/	
-//	}
-/*
-	public void drawDiceRoll(Player player, int roll1,int roll2){
-		dice.setText(diceRollString+"<h3>Player "+player.getName()
-				 +" rolled</h3><br><h2>"+Integer.toString(roll1)
-				 +" and "+Integer.toString(roll2)+"</h2></html>");
+	/**
+	 * This method draws each players money on the center of the gameboard
+	 * 
+	 */
+	public void updateMoneyLabels(){
+		int i=0;
+		for(JLabel label : moneyLabels){
+			label.setText("MONEY: $" + players.get(i++).money);
+		}
+		this.validate();
+		this.repaint();
 	}
 	
-	public void drawPlayersTurn(Player player){
-		try{
-		turnLabel.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
-		}catch(Exception e){}
-		turnLabel.setOpaque(true);
-		turnLabel.setText("<html><h1>Turn: <em>"+player.getName()+"<em></h1></html>");
-		//turnLabel.set
-		//turnControls.
+	/**
+	 * This method draws the list of player properties on the center of the gameboard
+	 * 
+	 */
+	public void drawProperties(int playerIndex){
+		propertyText.get(playerIndex).setText(players.get(playerIndex).propertyString);
 	}
-*/	
+	
 	/*
 	 *Main method for testing purposes
 	 */

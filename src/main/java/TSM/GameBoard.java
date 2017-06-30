@@ -268,56 +268,28 @@ public class GameBoard extends JPanel{
 	public void erasePlayer(Player player){
 		tiles.get(player.tileIndex).removePlayer(player);
 	}
-	/*
-	public void drawDiceRoll(Player player,int dice1,int dice2){
-		boardCenter.drawDiceRoll(player,dice1,dice2);
+	
+	/**
+	* This method updates the player money
+	* it is here so that the board center is abstracted away from oakOli
+	*/
+	public void updateMoney(){
+		boardCenter.updateMoneyLabels();
 	}
-	
-	public void showRollButton(){
-		boardCenter.rollButton.setVisible(true);
+
+	/**
+	* This method updates the properties for a given player
+	* it is here so that the board center is absracted away from oakOli
+	* @param playerIndex the index of the player in the players array. This index is consitant with other arrays in Controls.java
+	*/
+	public void drawProperties(int playerIndex){
+		boardCenter.drawProperties(playerIndex);
 	}
-	
-	public void hideRollButton(){
-		boardCenter.rollButton.setVisible(false);	
-	}
-	
-	public void showPurchaseButton(){
-		boardCenter.purchaseButton.setVisible(true);
-	}
-	
-	public void hidePurchaseButton(){
-		boardCenter.purchaseButton.setVisible(false);	
-	}	
-	
-	public void showEndTurnButton(){
-		boardCenter.endTurnButton.setVisible(true);
-	}
-	
-	public void hideEndTurnButton(){
-		boardCenter.endTurnButton.setVisible(false);	
-	}		
-	
-	/*this method returns whether some event has happened (button)*/
-/*	public boolean pollForEvent(){
-		if(boardCenter.event == Event.NONE){
-			return false;
-		}
-		return true;
-	}
-*/	
-	/*this method returns what event happened and also clears the event*/
-/*	public Event getEvent(){
-//		Event event = boardCenter.event;
-//		boardCenter.event = Event.NONE;
-		return event;
-	}
-*/	//public void addPlayerToTile()
-	
 
 	/**
 	 * Main method for testing purposes
 	 * @param args Unused
-	 */
+	 */ 
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
