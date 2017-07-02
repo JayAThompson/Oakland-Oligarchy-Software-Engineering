@@ -44,7 +44,11 @@ public class Tile{
 		players.add(player);
 		drawMarkers();
 	}
-
+	
+	public void setOwner(Player player){
+		this.owner=player;
+	}
+	
 	// Removes a player and draws their marker
 	public void removePlayer(Player player){
 		players.remove(player);

@@ -114,6 +114,7 @@ public class oakOligarchy{
 		Tile tile = board.tiles.get(currPlayer.tileIndex);
 		if(tile.owner == null && tile.propertyValue>0){
 			currPlayer.purchaseProperty(tile);
+			tile.setOwner(currPlayer);
 			board.updateMoney();
 			board.drawProperties(currPlayerIndex);
 		}
@@ -146,6 +147,12 @@ public class oakOligarchy{
 		controls.showEndTurnButton();
 		//getting charged that money
 		Tile tmp = board.tiles.get(currPlayer.tileIndex);
+		if(tmp.owner != null){
+			controls.hidePurchaseButton();
+		}
+		else{
+			controls.showPurchaseButton();
+		}
 		if(tmp.owner != null && tmp.owner != currPlayer){
 			currPlayer.money -= tmp.rent;
 			tmp.owner.money+=tmp.rent;
