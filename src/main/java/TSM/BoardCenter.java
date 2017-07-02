@@ -61,14 +61,19 @@ public class BoardCenter extends JPanel{
 			try{
 				name.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
 			}catch(Exception e){}
+			name.setAlignmentX(name.LEFT_ALIGNMENT);
 			panel.add(name);
 			
 			JLabel tmpLabel = new JLabel("MONEY: $"+ player.money);
 			tmpLabel.setHorizontalAlignment(SwingConstants.LEFT);
+			tmpLabel.setAlignmentX(tmpLabel.LEFT_ALIGNMENT);
 			panel.add( tmpLabel );
 			moneyLabels.add(tmpLabel);
-			panel.add(new JLabel("<html>PROPERTIES:</html>"));
+			tmpLabel = new JLabel("<html>PROPERTIES:</html>");
+			tmpLabel.setAlignmentX(tmpLabel.LEFT_ALIGNMENT);
+			panel.add(tmpLabel);
 			JTextArea tmp = new JTextArea();
+			tmp.setAlignmentX(tmp.LEFT_ALIGNMENT);
 			tmp.setLineWrap(true);
 			tmp.setWrapStyleWord(true);
 			tmp.setMaximumSize(new Dimension(200,1000));
