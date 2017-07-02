@@ -16,9 +16,12 @@ public class oakOligarchy{
 	static Menu menu;
 	static ArrayList<Player> players;
 	
-	//these two variables are the player
+	//these two variables are the player who's turn it is
 	static Player currPlayer;
+	//the following fild is the index of the player and the player's corresponding swing components in many arrays
 	static int currPlayerIndex;
+	//with this field you can change the bechavior of the log text area
+	static String tab = " -> ";
 
 	/**
 	 * Class constructor
@@ -48,9 +51,49 @@ public class oakOligarchy{
 		return (int)(Math.random()*6+1);
 	}
 
+	
+	/**
+	 *This method does all the actiontile stuffs
+	 */
+	public static void actionTileFun(){
+		controls.writeLine("******Action Tile******");
+		int action = 1;
+		switch(action){
+			case 1:
+				controls.writeLine(tab+"you lost your Pitt ID");
+				controls.writeLine(tab+"go to panther central and pay the bank $20(on top of any rent)");
+				currPlayer.money-=20;
+				//tile 10 is pantherc 
+				movePlayerTo(currPlayer,10);
+				//currPlayer.money 
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+		}
+		controls.writeLine("***********************");
+		board.updateMoney();
 
-
-
+	}
+	
+	/**
+	 * Move the marker for a player to the tile tileNum
+	 * the tileNums are the indeces of the tileInfo data in GameBoard.java
+	 * @param player The Player object for the player whose marker must be moved
+	 * @param spaces The number of spaces the marker will be moved forward
+	 */
+	static void movePlayerTo(Player player, int tileNum){
+		board.erasePlayer(player);
+		player.tileIndex = tileNum;
+		board.drawPlayer(player);
+	}
 
 	/**
 	 * Move the marker for a player forward a certain number of spaces
@@ -58,9 +101,12 @@ public class oakOligarchy{
 	 * @param spaces The number of spaces the marker will be moved forward
 	 */
 	static void movePlayer(Player player,int spaces){
-		board.erasePlayer(currPlayer);
+		board.erasePlayer(player);
 		player.tileIndex = (player.tileIndex+spaces)%36;
-		board.drawPlayer(currPlayer);
+		try{
+			Thread.sleep(1);
+		}catch(Exception e){}
+		board.drawPlayer(player);
 	}
 
 	/**
@@ -117,6 +163,7 @@ public class oakOligarchy{
 			tile.setOwner(currPlayer);
 			board.updateMoney();
 			board.drawProperties(currPlayerIndex);
+			controls.writeLine(tab+currPlayer.name+" purchased "+tile.propertyName );
 		}
 	}
 	
@@ -135,29 +182,35 @@ public class oakOligarchy{
 		currPlayerIndex = (currPlayerIndex+1)%players.size();
 		currPlayer = players.get(currPlayerIndex);
 		controls.drawPlayerTurnLabel(currPlayer);
+		controls.writeLine(currPlayer.name+"'s turn");
 		menu.drawPlayersTurn(currPlayer);		
 		controls.showRollButton();
 		
 		waitForControlEvent(Controls.Event.ROLL);
-		controls.writeLine(currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
-
+		controls.writeLine(tab+currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
 		controls.hideRollButton();
+		
 		movePlayer(currPlayer,roll1+roll2);
 		controls.showPurchaseButton();
 		controls.showEndTurnButton();
 		//getting charged that money
 		Tile tmp = board.tiles.get(currPlayer.tileIndex);
+		if(tmp.propertyName.equals("actiontile")){
+			actionTileFun();
+			//reget tmp because actionTileFun can move players
+			tmp = board.tiles.get(currPlayer.tileIndex);
+		}
 		if(tmp.owner != null){
 			controls.hidePurchaseButton();
 		}
 		else{
-			controls.showPurchaseButton();
+			controls.showPurchaseButton();	
 		}
-		if(tmp.owner != null && tmp.owner != currPlayer){
+		if(tmp.owner != null && tmp.owner != currPlayer && tmp.rent>0){
 			currPlayer.money -= tmp.rent;
 			tmp.owner.money+=tmp.rent;
 			board.updateMoney();
-			controls.writeLine(currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
+			controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
 		}
 		
 		

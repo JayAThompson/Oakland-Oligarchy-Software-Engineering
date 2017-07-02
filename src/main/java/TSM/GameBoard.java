@@ -15,42 +15,42 @@ import java.io.IOException;
 public class GameBoard extends JPanel{
 
 	// 2-D array containing the title and the price for each tile on the game board
-	private static final String[][] tileInfo= new String[][]{{"Start","0"},
-															 {"Five Guys","2000"},
-															 {"Noodles n' Company","2500"},
-															 {"actiontile","0"},
-															 {"Primanti Bros.","5000"},
-															 {"actiontile","0"},
-															 {"Panera Bread","3500"},
-															 {"McDonald's","1250"},
-															 {"Sorrento's Pizza","750"},
-															 {"Go to Hillman","0"},
-															 {"Forbes Hall","35000"},
-															 {"Benedum Hall","45000"},
-															 {"actiontile","0"},
-															 {"Litchfield Towers","25000"},
-															 {"actiontile","0"},
-															 {"Sennott Square","20000"},
-															 {"William Pitt Union","25000"},
-															 {"Cathedral of Learning","250000"},
-															 {"Hillman Library","20000"},
-															 {"Schenley Plaza","15000"},
-															 {"Carnegie Library","25000"},
-															 {"actiontile","0"},
-															 {"Carnegie Museum of Art","150000"},
-															 {"Carnegie Museum of Natural History","100000"},
-															 {"actiontile","0"},
-															 {"Phipps Conservatory","75000"},
-															 {"Schenley Park","10000"},
-															 {"Go to Hillman","0"},
-															 {"Union Grill","1500"},
-															 {"Lulu's Noodles","1250"},
-															 {"actiontile","0"},
-															 {"Razzy Fresh","1000"},
-															 {"The Original Hot Dog Shop","500"},
-															 {"actiontile","0"},
-															 {"Papa D's","750"},
-															 {"actiontile","0"}};
+	private static final String[][] tileInfo= new String[][]{{"Start","0","0"},
+															 {"Five Guys","2000","40"},
+															 {"Noodles n' Company","2500","50"},
+															 {"actiontile","0","0"},
+															 {"Primanti Bros.","5000","100"},
+															 {"actiontile","0","0"},
+															 {"Panera Bread","3500","40"},
+															 {"McDonald's","1250","1"},
+															 {"Sorrento's Pizza","750","30"},
+															 {"Go to Hillman","0","0"},
+															 {"Panther Central","35000","90"},
+															 {"Benedum Hall","45000","115"},
+															 {"actiontile","0","0"},
+															 {"Litchfield Towers","25000","90"},
+															 {"actiontile","0","0"},
+															 {"Sennott Square","20000","90"},
+															 {"William Pitt Union","25000","120"},
+															 {"Cathedral of Learning","250000","295"},
+															 {"Hillman Library","20000","100"},
+															 {"Schenley Plaza","15000","70"},
+															 {"Carnegie Library","25000","100"},
+															 {"actiontile","0","0"},
+															 {"Museum of Art","150000","200"},
+															 {"Dippy the Diplodocus","100000","270"},
+															 {"actiontile","0","0"},
+															 {"Phipps Conservatory","75000","175"},
+															 {"Schenley Park","10000","100"},
+															 {"Go to Hillman","0","0"},
+															 {"Union Grill","1500","100"},
+															 {"Lulu's Noodles","1250","50"},
+															 {"actiontile","0","0"},
+															 {"Razzy Fresh","1000","40"},
+															 {"The Original Hot Dog Shop","500","9"},
+															 {"actiontile","0","0"},
+															 {"Papa D's","750","0"},
+															 {"actiontile","0","0"}};
 
 	public static ArrayList<Tile> tiles = new ArrayList<Tile>();
 
@@ -102,7 +102,7 @@ public class GameBoard extends JPanel{
 		for(int i=10;i<19;i++){
 			east.add(tiles.get(i).getPanel());
 		}
-		for(int i=26;i>=20;i--){
+		for(int i=26;i>=19;i--){
 			south.add(tiles.get(i).getPanel());
 		}
 		for(int i=35;i>=28;i--){
@@ -222,7 +222,7 @@ public class GameBoard extends JPanel{
 					tilePanel.setLayout(new GridLayout(1,2));
 
 				}
-				if((i>=1 && i<=8)||(i>=20 && i<=26)){
+				if((i>=1 && i<=8)||(i>=19 && i<=26)){
 					tilePanel.setLayout(new GridLayout(2,1));
 				}else{
 					tilePanel.setLayout(new GridLayout(1,2));
@@ -232,6 +232,10 @@ public class GameBoard extends JPanel{
 				{
 					labelText.append("$"+tileInfo[tiles.size()][1]);
 				}
+				if(!tileInfo[tiles.size()][2].equals("0")){
+					labelText.append("<br>rent: $"+tileInfo[tiles.size()][2]);
+				}
+				
 				JLabel label = new JLabel(new String(labelText));
 				label.setFont(new Font("Calibri", Font.PLAIN, textSize));
 				tilePanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -243,7 +247,7 @@ public class GameBoard extends JPanel{
 				tilePanel.add(separator);
 				*/
 
-				tiles.add(new Tile(tilePanel, tileInfo[tiles.size()][0], Integer.parseInt(tileInfo[tiles.size()][1]), i));
+				tiles.add(new Tile(tilePanel, tileInfo[tiles.size()][0], Integer.parseInt(tileInfo[tiles.size()][1]), i,Integer.parseInt(tileInfo[tiles.size()][2])));
 			}
 	}
 

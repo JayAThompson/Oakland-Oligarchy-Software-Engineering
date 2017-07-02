@@ -26,7 +26,7 @@ public class Player{
 				propertyString+=tmp.propertyName+" ";
 			}
 			*/
-			propertyString+=tmp.propertyName+"\n";
+			propertyString+=">"+tmp.propertyName+"\n";
 		}
 	}
 	

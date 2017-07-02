@@ -25,13 +25,17 @@ public class Tile{
 	/*
 	 * Create a new tile object from a JPanel object, property name, and property value
 	 */
-	Tile(JPanel panel, String name, int value,int index) {
+	Tile(JPanel panel, String name, int value,int index,int rent) {
 		this.namePanel=panel;
 		this.propertyName=name;
 		this.propertyValue=value;
 		this.markerPanel = new JPanel();
 		this.namePanel.add(markerPanel);
 		this.tileIndex=index;
+		this.rent = rent;
+		if(value == 0){
+			this.owner = new Player("dummy",1,"blue");
+		}
 	}
 
 	// Return the panel associated with this tile that contains the name
