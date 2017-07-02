@@ -8,7 +8,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.*;
 import java.util.ArrayList;
+//import javax.swing.border;
 
 
 public class BoardCenter extends JPanel{	
@@ -42,13 +44,18 @@ public class BoardCenter extends JPanel{
 		JSeparator separator;
 		JLabel name;
 		players = playerArray;
+		
+		Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+		Border compound =BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
+		
 		this.removeAll();
 		this.setLayout(new GridLayout(1,players.size()));
 		//this.add(new JLabel("<html><h1>Player Information</h1></html>",SwingConstants.LEFT));
 		for(Player player : players){
-			//adding a separator to tell the players apart
 			JPanel panel = new JPanel();
 			panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
+			panel.setBorder(new EmptyBorder(5,5,5,5));
 			this.add(panel);
 			//separator = new JSeparator(SwingConstants.HORIZONTAL);
 			//separator.setMaximumSize( new Dimension(Integer.MAX_VALUE, 20) );
@@ -58,6 +65,7 @@ public class BoardCenter extends JPanel{
 		 	name = new JLabel("<html><u>"+player.getName()+"</u></html>");
 			name.setFont(new Font("Calibri", Font.BOLD, 15));
 			name.setOpaque(true);
+			name.setBorder(compound);
 			try{
 				name.setBackground((Color)Class.forName("java.awt.Color").getField(player.color).get(null));
 			}catch(Exception e){}
@@ -73,6 +81,7 @@ public class BoardCenter extends JPanel{
 			tmpLabel.setAlignmentX(tmpLabel.LEFT_ALIGNMENT);
 			panel.add(tmpLabel);
 			JTextArea tmp = new JTextArea();
+			tmp.setBorder(compound);
 			tmp.setAlignmentX(tmp.LEFT_ALIGNMENT);
 			tmp.setLineWrap(true);
 			tmp.setWrapStyleWord(true);

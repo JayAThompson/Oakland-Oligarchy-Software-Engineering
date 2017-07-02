@@ -26,7 +26,7 @@ public class Controls extends JPanel implements ActionListener{
 	JScrollPane pane;
 	
 	private int START_MONEY=750*20;
-	private int MAX_NAME_LEN = 20;
+	private int MAX_NAME_LEN = 12;
 	//this flag is to be set by the the form to submit new player names
 	public boolean playerDataFlag = false;
 	Event event = Event.NONE;
@@ -275,7 +275,7 @@ public class Controls extends JPanel implements ActionListener{
 					count++;
 				}
 				if(!p4Field.getText().trim().equals("")){
-					players.add(new Player(p4Field.getText(),START_MONEY,"blue"));
+					players.add(new Player(p4Field.getText(),START_MONEY,"cyan"));
 					count++;
 				}
 				if(count<2){
