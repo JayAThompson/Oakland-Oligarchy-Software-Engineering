@@ -14,6 +14,10 @@ public class Clock {
     private int minutes;
     private int seconds;
 
+    /**
+     * Class constructor
+     * Initialize hours, minutes, seconds with minimum value of 0
+     */
     public Clock(JLabel l) {
         this.label = l;
         this.hours = MIN_VAL;
@@ -21,6 +25,10 @@ public class Clock {
         this.seconds = MIN_VAL;
     }
 
+    /**
+     * Class constructor
+     * Initialize hours, minutes, seconds with existing values
+     */
     public Clock(JLabel l, int h, int m, int s) {
         this.label = l;
         this.hours = h;
@@ -28,14 +36,41 @@ public class Clock {
         this.seconds = s;
     }
 
-    public void start() {
+    /**
+     * Start the clock
+     * Create a separate thread to increment the time values every one second
+     * Update JLabel text with formatted string
+     */
+    public void startClock() {
         Thread t = new Thread(() ->
         {
-            
+            while (true) {
+                if (++seconds == MAX_VAL) {
+                    seconds = MIN_VAL;
+                    minutes++;
+                }
+                if (minutes == MAX_VAL) {
+                    minutes = MIN_VAL;
+                    hours++;
+                }
+                System.out.println(getElapsedTime());
+                label.setText(getElapsedTime());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException iex) {
+                    // Do nothing
+                }
+            }
         });
+
+        t.start();
     }
 
+    /**
+     * Format string to contain the elapsed time data
+     * @return String formatted string for JLabel text
+     */
     public String getElapsedTime() {
-        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+        return String.format("<html><b>Elapsed Time: </b>%02d:%02d:%02d</html>", hours, minutes, seconds);
     }
 }
