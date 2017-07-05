@@ -15,12 +15,12 @@ import java.util.ArrayList;
 
 
 public class Controls extends JPanel implements ActionListener{
-	public enum Event{ ROLL,PURCHASE,END_TURN,NONE };	
+	public enum Event{ ROLL,PURCHASE,END_TURN,TRADE,NONE };	
 	
 	public ArrayList<Player> players = new ArrayList<Player>();
 //	private ArrayList<JTextArea> propertyText = new ArrayList<JTextArea>();
 //	private ArrayList<JLabel> moneyLabels = new ArrayList<JLabel>();
-	JButton rollButton,purchaseButton,endTurnButton;
+	JButton rollButton,purchaseButton,endTurnButton,tradeButton;
 	JLabel turnLabel;
 	JTextArea log;
 	JScrollPane pane;
@@ -44,6 +44,10 @@ public class Controls extends JPanel implements ActionListener{
 		endTurnButton.setVisible(false);
 	}
 	
+	public void hideTradeButton() {
+		tradeButton.setVisible(false);
+	}
+	
 	public void showRollButton(){
 		rollButton.setVisible(true);
 	}
@@ -55,6 +59,10 @@ public class Controls extends JPanel implements ActionListener{
 	public void showEndTurnButton(){
 		endTurnButton.setVisible(true);
 	}	
+	
+	public void showTradeButton(){
+		tradeButton.setVisible(true);
+	}
 	
 	/**
 	 * Class constructor
@@ -155,6 +163,13 @@ public class Controls extends JPanel implements ActionListener{
 		purchaseButton.setVisible(true);
 		this.add(purchaseButton);
 		this.add(Box.createRigidArea(new Dimension(0,20)));
+		
+		tradeButton = new JButton("Trade Property");
+		tradeButton.addActionListener(this);
+		tradeButton.setFont(new Font("Calibri", Font.PLAIN, 18));
+		tradeButton.setVisible(true);
+		this.add(tradeButton);
+		this.add(Box.createRigidArea(new Dimension(0,20)));
 
 		separator = new JSeparator(SwingConstants.HORIZONTAL);
 		//separator.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -175,6 +190,7 @@ public class Controls extends JPanel implements ActionListener{
 		endTurnButton.setVisible(true);
 		this.add(endTurnButton);
 		this.add(Box.createRigidArea(new Dimension(0,40)));
+		
 		
 		JLabel logLabel = new JLabel("Game Log:");
 		logLabel.setFont(new Font("Calibri", Font.PLAIN, 18));
@@ -299,6 +315,8 @@ public class Controls extends JPanel implements ActionListener{
 			event = Controls.Event.PURCHASE;
 		}else if(e.getSource() == endTurnButton){
 			event = Controls.Event.END_TURN;
+		}else if (e.getSource() == tradeButton) {
+			event = Controls.Event.TRADE;
 		}
 
 	}
