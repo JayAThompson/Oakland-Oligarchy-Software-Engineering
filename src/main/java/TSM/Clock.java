@@ -53,7 +53,6 @@ public class Clock {
                     minutes = MIN_VAL;
                     hours++;
                 }
-                System.out.println(getElapsedTime());
                 label.setText(getElapsedTime());
                 try {
                     Thread.sleep(1000);
