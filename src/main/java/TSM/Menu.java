@@ -15,8 +15,8 @@ public class Menu extends JPanel /*implements ActionListener*/{
 	}
 
 	public MenuEvent lastEvent;
-	//To display turn.
-	private JLabel currentPlayer;
+	//To display clock.
+	private JLabel clock;
 
 	//Buttons that will be needed.
 /*	JButton trade = new JButton("TRADE");
@@ -25,18 +25,6 @@ public class Menu extends JPanel /*implements ActionListener*/{
 	JButton newGame = new JButton("NEW GAME");
 	JButton endGame = new JButton("END GAME");
 	JButton help  = new JButton("HELP");
-
-
-	/**
-	 * This method displays the name of the player who is currently taking their turn.
-	 * @param player The Player object for the player who is currently taking their turn
-	 */
-	public void drawPlayersTurn(Player player){
-		currentPlayer.setText("<html><b>TURN:</b><em>" + player.getName() + "</em></html>");
-		this.validate();
-		this.repaint();
-	}
-
 
 	/**
 	 * Class constructor
@@ -53,10 +41,12 @@ public class Menu extends JPanel /*implements ActionListener*/{
 		title.setFont(new Font("Calibri", Font.BOLD, 18));
 		this.add(title, 0, 0);
 
-		//Get current player for label.
-		currentPlayer = new JLabel("<html><b>TURN:</b><em>" + current.getName() + "</em></html>", SwingConstants.CENTER);
-		currentPlayer.setFont(new Font("Courier", Font.PLAIN, 15));
-		this.add(currentPlayer, 0, 1);
+		// Initialize clock
+		clock = new JLabel("", SwingConstants.CENTER);
+		clock.setFont(new Font("Courier", Font.PLAIN, 16));
+		this.add(clock, 0, 1);
+		Clock elapsedTime = new Clock(clock);
+		elapsedTime.startClock();
 
 		//Font for all the buttons, display them.
 /*
@@ -65,7 +55,7 @@ public class Menu extends JPanel /*implements ActionListener*/{
 		roll.setFont(new Font("Calibri", Font.PLAIN, 15));
 		roll.addActionListener(this);
 		this.add(roll, 0, 3);
-*/		
+*/
 		newGame.setFont(new Font("Calibri", Font.PLAIN, 15));
 		this.add(newGame, 0, 2);
 		endGame.setFont(new Font("Calibri", Font.PLAIN, 15));
