@@ -15,7 +15,7 @@ public class oakOligarchy{
 	static GameBoard board;
 	static Menu menu;
 	static ArrayList<Player> players;
-	
+
 	//these two variables are the player who's turn it is
 	static Player currPlayer;
 	//the following fild is the index of the player and the player's corresponding swing components in many arrays
@@ -51,7 +51,7 @@ public class oakOligarchy{
 		return (int)(Math.random()*6+1);
 	}
 
-	
+
 	/**
 	 *This method does all the actiontile stuffs
 	 */
@@ -63,9 +63,9 @@ public class oakOligarchy{
 				controls.writeLine(tab+"you lost your Pitt ID");
 				controls.writeLine(tab+"go to panther central and pay the bank $20(on top of any rent)");
 				currPlayer.money-=20;
-				//tile 10 is pantherc 
+				//tile 10 is pantherc
 				movePlayerTo(currPlayer,10);
-				//currPlayer.money 
+				//currPlayer.money
 				break;
 			case 2:
 				break;
@@ -82,7 +82,7 @@ public class oakOligarchy{
 		board.updateMoney();
 
 	}
-	
+
 	/**
 	 * Move the marker for a player to the tile tileNum
 	 * the tileNums are the indeces of the tileInfo data in GameBoard.java
@@ -110,7 +110,7 @@ public class oakOligarchy{
 	}
 
 	/**
-	* This method waits for the given event. 
+	* This method waits for the given event.
 	* These events are currently generated through button presses.
 	* the thread busy waits while waiting for the event. Sleeping every ms
 	* @param event the event to wait for
@@ -125,12 +125,12 @@ public class oakOligarchy{
 			}
 			if(controls.getEvent() == event){
 				break;
-			}			
+			}
 		}
 	}
-	
+
 	/**
-	* This method waits for the given events. 
+	* This method waits for the given events.
 	* These events are currently generated through button presses.
 	* the thread busy waits while waiting for the events. Sleeping every ms
 	* @param event[] an array containing the list of events to wait for
@@ -152,7 +152,7 @@ public class oakOligarchy{
 				}
 		}
 	}
-	
+
 	/**
 	*This method purchases property
 	*/
@@ -166,30 +166,29 @@ public class oakOligarchy{
 			controls.writeLine(tab+currPlayer.name+" purchased "+tile.propertyName );
 		}
 	}
-	
+
 	/**
-	* This method houses most of the logic for the actual game. 
-	* 
+	* This method houses most of the logic for the actual game.
+	*
 	*/
 	private static void nextTurn(){
 		final Controls.Event postRollEvents[] = {Controls.Event.END_TURN, Controls.Event.PURCHASE};
 		int roll1 = rollDice();
 		int roll2 = rollDice();
-		Controls.Event event;		
+		Controls.Event event;
 		controls.hidePurchaseButton();
 		controls.hideEndTurnButton();
-		
+
 		currPlayerIndex = (currPlayerIndex+1)%players.size();
 		currPlayer = players.get(currPlayerIndex);
 		controls.drawPlayerTurnLabel(currPlayer);
 		controls.writeLine(currPlayer.name+"'s turn");
-		menu.drawPlayersTurn(currPlayer);		
 		controls.showRollButton();
-		
+
 		waitForControlEvent(Controls.Event.ROLL);
 		controls.writeLine(tab+currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
 		controls.hideRollButton();
-		
+
 		movePlayer(currPlayer,roll1+roll2);
 		controls.showPurchaseButton();
 		controls.showEndTurnButton();
@@ -204,7 +203,7 @@ public class oakOligarchy{
 			controls.hidePurchaseButton();
 		}
 		else{
-			controls.showPurchaseButton();	
+			controls.showPurchaseButton();
 		}
 		if(tmp.owner != null && tmp.owner != currPlayer && tmp.rent>0){
 			currPlayer.money -= tmp.rent;
@@ -212,8 +211,8 @@ public class oakOligarchy{
 			board.updateMoney();
 			controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
 		}
-		
-		
+
+
 		event = waitForControlEvents(postRollEvents,2);
 		if(event == postRollEvents[1]){
 			purchaseCurrentProperty();
@@ -222,7 +221,7 @@ public class oakOligarchy{
 		controls.hideEndTurnButton();
 
 	}
-	
+
 
 	/**
 	 * Main method to house the highest layer of our application logic
