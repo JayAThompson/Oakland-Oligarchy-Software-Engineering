@@ -1,7 +1,7 @@
 
 /**
  * Menu displayed at the top of the window
- * Displays the title of the game (Oakland Oligarchy) and the player who is currently taking their turn
+ * Displays the title of the game (Oakland Oligarchy) and the elapsed time
  * Contains the buttons for trade, roll, new game, end game, and help
  */
 
@@ -28,9 +28,8 @@ public class Menu extends JPanel /*implements ActionListener*/{
 
 	/**
 	 * Class constructor
-	 * @param current The Player object for the player who will take their turn first
 	 */
-	Menu(Player current) {
+	Menu() {
 		lastEvent = MenuEvent.NONE;
 		this.setPreferredSize(new Dimension(1000, 50));
 		this.setBorder(BorderFactory.createLineBorder(Color.black));
