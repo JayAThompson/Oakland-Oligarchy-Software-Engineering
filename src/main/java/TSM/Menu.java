@@ -42,11 +42,11 @@ public class Menu extends JPanel /*implements ActionListener*/{
 		this.add(title, 0, 0);
 
 		// Initialize clock
-		Clock elapsedTime = new Clock(clock);
-		clock = new JLabel("<html><b>Elapsed Time: </b><em>" + elapsedTime.getElapsedTime() + "</em></html>", SwingConstants.CENTER);
-		clock.setFont(new Font("Courier", Font.PLAIN, 15));
+		clock = new JLabel("", SwingConstants.CENTER);
+		clock.setFont(new Font("Courier", Font.PLAIN, 16));
 		this.add(clock, 0, 1);
-		//elaspedTime.start();
+		Clock elapsedTime = new Clock(clock);
+		elapsedTime.startClock();
 
 		//Font for all the buttons, display them.
 /*
