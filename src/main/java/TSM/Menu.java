@@ -17,6 +17,7 @@ public class Menu extends JPanel /*implements ActionListener*/{
 	public MenuEvent lastEvent;
 	//To display clock.
 	private JLabel clock;
+	private Clock elapsedTime;
 
 	//Buttons that will be needed.
 /*	JButton trade = new JButton("TRADE");
@@ -44,7 +45,7 @@ public class Menu extends JPanel /*implements ActionListener*/{
 		clock = new JLabel("", SwingConstants.CENTER);
 		clock.setFont(new Font("Courier", Font.PLAIN, 16));
 		this.add(clock, 0, 1);
-		Clock elapsedTime = new Clock(clock);
+		elapsedTime = new Clock(clock);
 		elapsedTime.startClock();
 
 		//Font for all the buttons, display them.
@@ -70,4 +71,11 @@ public class Menu extends JPanel /*implements ActionListener*/{
 		}
 	}
 */
+
+	/**
+	 * Set the value of gameOver in the Clock class to true to signal the end of the game
+	 */
+	public void stopClock() {
+		elapsedTime.setGameOver(true);
+	}
 }
