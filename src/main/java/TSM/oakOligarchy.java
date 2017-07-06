@@ -33,7 +33,7 @@ public class oakOligarchy{
 		window.setSize(1500, 1080);
 
 		//adding dummy data into the menu
-		menu = new Menu(new Player("no one",0,"yo"));
+		menu = new Menu();
 		board = new GameBoard();
 		controls = new Controls();
 		window.add(menu, BorderLayout.NORTH);
@@ -56,11 +56,11 @@ public class oakOligarchy{
 	 *This method does all the actiontile stuffs
 	 */
 	public static void actionTileFun(){
-		controls.writeLine("******Action Tile******");
-		int action = 1;
+		controls.writeLine("***********Action Tile***********");				controls.writeLine("******Action Tile******");
+		int action = (int)(Math.random()*8+1);
 		switch(action){
 			case 1:
-				controls.writeLine(tab+"you lost your Pitt ID");
+				controls.writeLine(tab+"you lost your Pitt ID!");
 				controls.writeLine(tab+"go to panther central and pay the bank $20(on top of any rent)");
 				currPlayer.money-=20;
 				//tile 10 is pantherc 
@@ -68,19 +68,61 @@ public class oakOligarchy{
 				//currPlayer.money 
 				break;
 			case 2:
+				controls.writeLine(tab+"You begged your parents for money.");		
+				controls.writeLine(tab+"They were feeling generous and gave you $1750");		
+				currPlayer.money += 1750;		
 				break;
 			case 3:
+				controls.writeLine(tab+"You need some cheap grub.");		
+				controls.writeLine(tab+"go to the Dirty O");		
+				movePlayerTo(currPlayer,32);		
 				break;
 			case 4:
+				controls.writeLine(tab+"Your student loan money came in.");		
+				controls.writeLine(tab+"You get $10000 from the bank");		
+				currPlayer.money += 10000;		
 				break;
 			case 5:
+				controls.writeLine(tab+"Your got drunk at Papa D's and lost your wallet (again...)");		
+				controls.writeLine(tab+"You've lost $"+ currPlayer.money/10+" and moved to Papa D's");		
+				currPlayer.money -= currPlayer.money/10;		
+				movePlayerTo(currPlayer,34);		
 				break;
 			case 6:
+				controls.writeLine(tab+"Your walked around schenley park and pondered the futility of life");		
+				controls.writeLine(tab+"Luckily existential crises have monetary value in Oakland Oligarchy");		
+				controls.writeLine(tab+"Your newfound nihilism has doubled your dough! and you've moved to Schenley park");		
+				currPlayer.money *=2;		
+				movePlayerTo(currPlayer,26);		
 				break;
+			case 7:		
+				controls.writeLine(tab+"The other players have ganged up robbed you.");		
+				for(Player player : players){		
+					if(player != currPlayer && currPlayer.money>300 && player.money>0){		
+						controls.writeLine(tab + player.name+" took $300");		
+						player.money+=300;		
+						currPlayer.money -=300;		
+					}		
+				}		
+				break;					
+			case 8:		
+				controls.writeLine(tab + "You see that Dippy is wearing your hat.");		
+				controls.writeLine(tab + "You sue the Carnegie Museum of Natural History for psychological damages");		
+				controls.writeLine(tab + "You've earned $5000, way to go you hard worker");		
+				currPlayer.money += 5000;		
+				break;		
+//			case 9:		
+//				controls.writeLine(tab + "Finals are around the corner, go to hillman
 		}
-		controls.writeLine("***********************");
+		controls.writeLine("*********************************");
 		board.updateMoney();
 
+	}
+	/**
+	 */
+	static void passGo(){		
+		controls.writeLine(tab + "You passed start and collected $1000");		
+		currPlayer.money += 1000;		
 	}
 	
 	/**
@@ -91,10 +133,15 @@ public class oakOligarchy{
 	 */
 	static void movePlayerTo(Player player, int tileNum){
 		board.erasePlayer(player);
+		if(tileNum < player.tileIndex){		
+			passGo();		
+		}
 		player.tileIndex = tileNum;
 		board.drawPlayer(player);
 	}
-
+	
+	
+	
 	/**
 	 * Move the marker for a player forward a certain number of spaces
 	 * @param player The Player object for the player whose marker must be moved
@@ -102,10 +149,10 @@ public class oakOligarchy{
 	 */
 	static void movePlayer(Player player,int spaces){
 		board.erasePlayer(player);
-		player.tileIndex = (player.tileIndex+spaces)%36;
-		try{
-			Thread.sleep(1);
-		}catch(Exception e){}
+		if(player.tileIndex + spaces >=36){		
+			passGo();		
+		}		
+		player.tileIndex = (player.tileIndex+spaces)%36;				
 		board.drawPlayer(player);
 	}
 
@@ -327,8 +374,7 @@ public class oakOligarchy{
 		currPlayerIndex = (currPlayerIndex+1)%players.size();
 		currPlayer = players.get(currPlayerIndex);
 		controls.drawPlayerTurnLabel(currPlayer);
-		controls.writeLine(currPlayer.name+"'s turn");
-		menu.drawPlayersTurn(currPlayer);		
+		controls.writeLine(currPlayer.name+"'s turn");	
 		controls.showRollButton();
 		controls.showTradeButton();
 		
@@ -353,7 +399,7 @@ public class oakOligarchy{
 			//reget tmp because actionTileFun can move players
 			tmp = board.tiles.get(currPlayer.tileIndex);
 		}
-		if(tmp.owner != null){
+		if(tmp.owner != null || tmp.propertyValue>currPlayer.getMoney()){
 			controls.hidePurchaseButton();
 		}
 		else{

@@ -16,7 +16,8 @@ public class Menu extends JPanel /*implements ActionListener*/{
 
 	public MenuEvent lastEvent;
 	//To display turn.
-	private JLabel currentPlayer;
+	private JLabel clock;
+	private Clock elapsedTime;
 
 	//Buttons that will be needed.
 /*	JButton trade = new JButton("TRADE");
@@ -28,21 +29,10 @@ public class Menu extends JPanel /*implements ActionListener*/{
 
 
 	/**
-	 * This method displays the name of the player who is currently taking their turn.
-	 * @param player The Player object for the player who is currently taking their turn
-	 */
-	public void drawPlayersTurn(Player player){
-		currentPlayer.setText("<html><b>TURN:</b><em>" + player.getName() + "</em></html>");
-		this.validate();
-		this.repaint();
-	}
-
-
-	/**
 	 * Class constructor
-	 * @param current The Player object for the player who will take their turn first
+	 * 
 	 */
-	Menu(Player current) {
+	Menu() {
 		lastEvent = MenuEvent.NONE;
 		this.setPreferredSize(new Dimension(1000, 50));
 		this.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -52,12 +42,14 @@ public class Menu extends JPanel /*implements ActionListener*/{
 		JLabel title = new JLabel("<html>OAKLAND<br>OLIGARCHY</html>", SwingConstants.CENTER);
 		title.setFont(new Font("Calibri", Font.BOLD, 18));
 		this.add(title, 0, 0);
-
-		//Get current player for label.
-		currentPlayer = new JLabel("<html><b>TURN:</b><em>" + current.getName() + "</em></html>", SwingConstants.CENTER);
-		currentPlayer.setFont(new Font("Courier", Font.PLAIN, 15));
-		this.add(currentPlayer, 0, 1);
-
+		
+		// Initialize clock
+		clock = new JLabel("", SwingConstants.CENTER);
+		clock.setFont(new Font("Courier", Font.PLAIN, 16));
+		this.add(clock, 0, 1);
+		elapsedTime = new Clock(clock);
+		elapsedTime.startClock();
+		
 		//Font for all the buttons, display them.
 /*
 		trade.setFont(new Font("Calibri", Font.PLAIN, 15));
@@ -81,4 +73,10 @@ public class Menu extends JPanel /*implements ActionListener*/{
 		}
 	}
 */
+	/**
+	 * Set the value of gameOver in the Clock class to true to signal the end of the game
+	 */
+	public void stopClock() {
+		elapsedTime.setGameOver(true);
+	}
 }
