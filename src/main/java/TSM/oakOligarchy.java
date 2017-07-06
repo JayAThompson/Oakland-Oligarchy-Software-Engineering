@@ -241,12 +241,12 @@ public class oakOligarchy{
 			return;
 		}
 		String confirmString = "The current trade is:\n";
-		int playerOneTrades[] = new int[tradeInitiator.length];
+		Tile playerOneTrades[] = new Tile[tradeInitiator.length];
 		j = 0;
 		for (int i = 0; i < tradeInitiator.length; i++) {
 			if (tradeInitiator[i].isSelected()) {
 				confirmString = confirmString + currPlayer.properties.get(i).getPropertyName() + "\n";
-				playerOneTrades[j] = i;
+				playerOneTrades[j] = currPlayer.properties.get(i);
 				j++;
 			}
 		}
@@ -257,12 +257,12 @@ public class oakOligarchy{
 		} catch (NumberFormatException nme) {}
 		
 		confirmString += "For:\n";
-		int playerTwoTrades[] = new int [tradeRecipient.length];
+		Tile playerTwoTrades[] = new Tile [tradeRecipient.length];
 		j = 0;
 		for (int i = 0; i < tradeRecipient.length; i++) {
 			if (tradeRecipient[i].isSelected()) {
 				confirmString = confirmString + tradeWith.properties.get(i).getPropertyName() + "\n";
-				playerTwoTrades[j] = i;
+				playerTwoTrades[j] = tradeWith.properties.get(i);
 				j++;
 			}
 		}
@@ -278,29 +278,30 @@ public class oakOligarchy{
 		}
 		else {
 			for (int i = 0; i < tradeInitiator.length; i++) {
-				if (playerOneTrades[i] == 0 && i > 0 ) {
+				if (playerOneTrades[i] == null) {
 					break;
 				}
-				tradeWith.properties.add(currPlayer.properties.get(playerOneTrades[i]));
-				String replaceWith = ">" + currPlayer.properties.get(playerOneTrades[i]).getPropertyName() + "\n"; //one problem is here, probably to do with trading multiple properties and removal form the arraylist updating the index
+				tradeWith.properties.add(playerOneTrades[i]);
+				String replaceWith = ">" + playerOneTrades[i].getPropertyName() + "\n"; //one problem is here, probably to do with trading multiple properties and removal form the arraylist updating the index
 				tradeWith.setPropertyString(tradeWith.getPropertyString() + replaceWith);
 				currPlayer.setPropertyString(currPlayer.getPropertyString().replace(replaceWith, ""));
-				currPlayer.removeProperty(currPlayer.properties.get(playerOneTrades[i]).getPropertyName(), tradeWith);
-				currPlayer.setMoney(currPlayer.getMoney() + money2 - money1);
+				currPlayer.removeProperty(playerOneTrades[i].getPropertyName(), tradeWith);
 			}
+			currPlayer.setMoney(currPlayer.getMoney() + money2 - money1);
 			
 			for (int i = 0; i < tradeRecipient.length; i++) {
-				if (playerTwoTrades[i] == 0  && i > 0) {
+				if (playerTwoTrades[i] == null) {
 					break;
 				}
 				
-				currPlayer.properties.add(tradeWith.properties.get(playerTwoTrades[i]));
-				String replaceWith = ">" + tradeWith.properties.get(playerTwoTrades[i]).getPropertyName() + "\n";
+				currPlayer.properties.add(playerTwoTrades[i]);
+				String replaceWith = ">" + playerTwoTrades[i].getPropertyName() + "\n";
 				currPlayer.setPropertyString(currPlayer.getPropertyString() + replaceWith);
 				tradeWith.setPropertyString(tradeWith.getPropertyString().replace(replaceWith, ""));
-				tradeWith.removeProperty(tradeWith.properties.get(playerTwoTrades[i]).getPropertyName(), currPlayer);
-				tradeWith.setMoney(tradeWith.getMoney() + money1 - money2);
+				tradeWith.removeProperty(playerTwoTrades[i].getPropertyName(), currPlayer);
+				
 			}
+			tradeWith.setMoney(tradeWith.getMoney() + money1 - money2);
 			board.boardCenter.drawProperties(players.indexOf(tradeWith));
 			board.boardCenter.drawProperties(players.indexOf(currPlayer));
 			board.boardCenter.updateMoneyLabels();

@@ -99,9 +99,6 @@ public class Player{
 			Tile theProp = properties.get(i);
 			if (theProp.propertyName.equals(propName)) {
 				theProp.setOwner(newOwner);
-				if (newOwner != null) {
-					newOwner.properties.add(theProp);
-				}
 				properties.remove(i);
 				break;
 			}
@@ -115,9 +112,6 @@ public class Player{
 	public void removeProperty(Tile property, Player newOwner) {
 		Tile theProp = properties.get(properties.indexOf(property));
 		theProp.setOwner(newOwner);
-		if (newOwner != null) {
-			newOwner.properties.add(theProp);
-		}
 		properties.remove(property);
 	}
 }
