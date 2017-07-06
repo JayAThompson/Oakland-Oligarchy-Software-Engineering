@@ -1,7 +1,7 @@
 
 /**
  * Menu displayed at the top of the window
- * Displays the title of the game (Oakland Oligarchy) and the player who is currently taking their turn
+ * Displays the title of the game (Oakland Oligarchy) and the time elapsed while playing the game
  * Contains the buttons for trade, roll, new game, end game, and help
  */
 
@@ -15,7 +15,7 @@ public class Menu extends JPanel /*implements ActionListener*/{
 	}
 
 	public MenuEvent lastEvent;
-	//To display turn.
+	//To display clock
 	private JLabel clock;
 	private Clock elapsedTime;
 
@@ -30,7 +30,6 @@ public class Menu extends JPanel /*implements ActionListener*/{
 
 	/**
 	 * Class constructor
-	 * 
 	 */
 	Menu() {
 		lastEvent = MenuEvent.NONE;
@@ -42,14 +41,14 @@ public class Menu extends JPanel /*implements ActionListener*/{
 		JLabel title = new JLabel("<html>OAKLAND<br>OLIGARCHY</html>", SwingConstants.CENTER);
 		title.setFont(new Font("Calibri", Font.BOLD, 18));
 		this.add(title, 0, 0);
-		
+
 		// Initialize clock
 		clock = new JLabel("", SwingConstants.CENTER);
 		clock.setFont(new Font("Courier", Font.PLAIN, 16));
 		this.add(clock, 0, 1);
 		elapsedTime = new Clock(clock);
 		elapsedTime.startClock();
-		
+
 		//Font for all the buttons, display them.
 /*
 		trade.setFont(new Font("Calibri", Font.PLAIN, 15));
@@ -57,7 +56,7 @@ public class Menu extends JPanel /*implements ActionListener*/{
 		roll.setFont(new Font("Calibri", Font.PLAIN, 15));
 		roll.addActionListener(this);
 		this.add(roll, 0, 3);
-*/		
+*/
 		newGame.setFont(new Font("Calibri", Font.PLAIN, 15));
 		this.add(newGame, 0, 2);
 		endGame.setFont(new Font("Calibri", Font.PLAIN, 15));
