@@ -1,4 +1,3 @@
-
 /**
  * Main program for Oakland Oligarchy game
  */
