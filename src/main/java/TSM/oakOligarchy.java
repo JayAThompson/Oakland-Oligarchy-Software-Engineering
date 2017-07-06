@@ -199,7 +199,7 @@ public class oakOligarchy{
 			//reget tmp because actionTileFun can move players
 			tmp = board.tiles.get(currPlayer.tileIndex);
 		}
-		if(tmp.owner != null){
+		if(tmp.owner != null || tmp.propertyValue>currPlayer.getMoney()){
 			controls.hidePurchaseButton();
 		}
 		else{
@@ -211,7 +211,6 @@ public class oakOligarchy{
 			board.updateMoney();
 			controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
 		}
-
 
 		event = waitForControlEvents(postRollEvents,2);
 		if(event == postRollEvents[1]){
