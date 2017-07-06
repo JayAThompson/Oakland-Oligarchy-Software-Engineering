@@ -218,9 +218,36 @@ public class oakOligarchy{
 		}
 		controls.hidePurchaseButton();
 		controls.hideEndTurnButton();
-
 	}
 
+	/**
+	 * Check the money and properties of each player to see if only one player has any assets remaining.
+	 * If only one player has any remaining assets, they have won the game, and the game will end.
+	 * @return boolean True if a winner exists, False if there is no winner
+	 */
+	private static boolean winnerExists() {
+		int loserCount = 0;
+		Player winner = null;
+		for (Player p : players) {
+			if (p.getMoney() == 0 && p.properties.size() == 0) {
+				loserCount++;
+			} else {
+				winner = p;
+			}
+		}
+
+		if (loserCount == players.size() - 1) {
+			menu.stopClock();
+			controls.hideRollButton();
+			controls.writeLine("============ GAME OVER ============");
+			controls.writeLine(winner.getName() + " has won the game!");
+			controls.writeLine("===================================");
+			JOptionPane.showMessageDialog(null, winner.getName() + " has won the game!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	/**
 	 * Main method to house the highest layer of our application logic
@@ -246,7 +273,7 @@ public class oakOligarchy{
 		currPlayer = players.get(currPlayerIndex);
 		//menu.drawPlayer(players.get(0));
 		//this is the start of the actual game
-		while(true){
+		while(!winnerExists()){
 			nextTurn();
 		}
 	}
