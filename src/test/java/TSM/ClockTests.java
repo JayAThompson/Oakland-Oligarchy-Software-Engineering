@@ -17,4 +17,13 @@ public class ClockTests {
         Clock test = new Clock(testLabel, 1, 2, 3);
         assertEquals(test.getElapsedTime(), "<html><b>Elapsed Time: </b>01:02:03</html>");
     }
+
+    @Test
+    public void testSetGameOver() {
+        Clock test = new Clock(new JLabel("test"));
+        test.setGameOver(true);
+        assertEquals(test.isGameOver(), true);
+        test.setGameOver(false);
+        assertEquals(test.isGameOver(), false);
+    }
 }
