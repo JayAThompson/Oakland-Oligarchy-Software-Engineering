@@ -202,9 +202,11 @@ public class oakOligarchy{
 			return;
 		}
 		JPanel boxes = new JPanel();
-		JPanel play1 = new JPanel(new GridLayout(currPlayer.properties.size() + 2,1));
-		JPanel play2 = new JPanel(new GridLayout(tradeWith.properties.size() + 2,1));
+		JPanel play1 = new JPanel(new GridLayout(currPlayer.properties.size() + 3,1));
+		JPanel play2 = new JPanel(new GridLayout(tradeWith.properties.size() + 3,1));
 		
+		JLabel currPlayerName = new JLabel(currPlayer.getName() + ":");
+		play1.add(currPlayerName);
 		if (currPlayer.properties.size() > 0){
 			for (int i = 0; i < currPlayer.properties.size(); i++) {
 				tradeInitiator[i] = new JCheckBox(currPlayer.properties.get(i).getPropertyName());
@@ -217,6 +219,8 @@ public class oakOligarchy{
 		play1.add(moneyLabel1);
 		play1.add(play1Money);
 		
+		JLabel tradeWithName = new JLabel(tradeWith.getName() + ":");
+		play2.add(tradeWithName);
 		if (tradeWith.properties.size() > 0){			
 			for (int i = 0; i < tradeWith.properties.size(); i++ ) {
 				tradeRecipient[i] = new JCheckBox(tradeWith.properties.get(i).getPropertyName());
@@ -277,29 +281,29 @@ public class oakOligarchy{
 				if (playerOneTrades[i] == 0 && i > 0 ) {
 					break;
 				}
+				tradeWith.properties.add(currPlayer.properties.get(playerOneTrades[i]));
 				String replaceWith = ">" + currPlayer.properties.get(playerOneTrades[i]).getPropertyName() + "\n"; //one problem is here, probably to do with trading multiple properties and removal form the arraylist updating the index
 				tradeWith.setPropertyString(tradeWith.getPropertyString() + replaceWith);
 				currPlayer.setPropertyString(currPlayer.getPropertyString().replace(replaceWith, ""));
 				currPlayer.removeProperty(currPlayer.properties.get(playerOneTrades[i]).getPropertyName(), tradeWith);
-				currPlayer.setMoney(currPlayer.getMoney() + money2);
-				board.boardCenter.drawProperties(players.indexOf(currPlayer));
-				
-				
+				currPlayer.setMoney(currPlayer.getMoney() + money2 - money1);
 			}
+			
 			for (int i = 0; i < tradeRecipient.length; i++) {
 				if (playerTwoTrades[i] == 0  && i > 0) {
 					break;
 				}
 				
+				currPlayer.properties.add(tradeWith.properties.get(playerTwoTrades[i]));
 				String replaceWith = ">" + tradeWith.properties.get(playerTwoTrades[i]).getPropertyName() + "\n";
 				currPlayer.setPropertyString(currPlayer.getPropertyString() + replaceWith);
 				tradeWith.setPropertyString(tradeWith.getPropertyString().replace(replaceWith, ""));
 				tradeWith.removeProperty(tradeWith.properties.get(playerTwoTrades[i]).getPropertyName(), currPlayer);
-				tradeWith.setMoney(tradeWith.getMoney() + money1);
-				board.boardCenter.drawProperties(players.indexOf(tradeWith));
-				
+				tradeWith.setMoney(tradeWith.getMoney() + money1 - money2);
 			}
-			
+			board.boardCenter.drawProperties(players.indexOf(tradeWith));
+			board.boardCenter.drawProperties(players.indexOf(currPlayer));
+			board.boardCenter.updateMoneyLabels();
 			
 		}
 	
@@ -370,14 +374,14 @@ public class oakOligarchy{
 				
 			}
 			else if (event == postRollEvents[2]) {
-				//trade
+				tradeProperty();
 			}
 		}while (event != postRollEvents[0] && event != postRollEvents[1]); //to make sure you can't double purchase a place
 		if (event != postRollEvents[0]){ //to not overwrite an above end turn event
 			do{
 				event = waitForControlEvents(postPurchaseEvents, 2);
 				if (event != postPurchaseEvents[0]) {
-					//trade
+					tradeProperty();
 				}
 				
 			} while (event  !=  postPurchaseEvents[0]);
