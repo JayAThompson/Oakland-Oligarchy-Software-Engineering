@@ -358,6 +358,37 @@ public class oakOligarchy{
 	}
 	
 	/**
+	 * Auctions a property
+	 * @param the tile being auctioned
+	 */
+	public static void auction(Tile tile) {
+		JPasswordField bids[] = new JPasswordField[players.size()];
+		int index = 0;
+		int maxVal = 0;
+		for (int i = 0; i < players.size(); i++) {
+			bids[i] = new JPasswordField();
+			JOptionPane.showConfirmDialog(null, bids[i], "Your Bid, " + players.get(i).getName(), JOptionPane.OK_CANCEL_OPTION);
+			try {
+				int temp = Integer.parseInt(bids[i].getText());
+				if (temp > maxVal && temp <= players.get(i).getMoney()) {
+					index = i;
+					maxVal = temp;
+				}
+			} catch (NumberFormatException nme) {}
+			
+		}
+		Player winner = players.get(index);
+		JOptionPane.showMessageDialog(null, "You win, " + winner.getName() + ", with a bid of " + maxVal, "Auction", JOptionPane.DEFAULT_OPTION);
+		winner.setMoney(winner.getMoney() - maxVal);
+		winner.properties.add(tile);
+		winner.setPropertyString(winner.getPropertyString() + ">" + tile.getPropertyName() + "\n");
+		board.boardCenter.drawProperties(index);
+		board.boardCenter.updateMoneyLabels();
+		
+		
+	}
+	
+	/**
 	* This method houses most of the logic for the actual game. 
 	* 
 	*/
@@ -443,6 +474,12 @@ public class oakOligarchy{
 				tradeProperty();
 			}
 		}while (event != postRollEvents[0] && event != postRollEvents[1]); //to make sure you can't double purchase a place
+		
+		Tile tile = board.tiles.get(currPlayer.tileIndex);
+		if(tile.owner == null && tile.propertyValue>0){
+			auction(tile);
+		}
+		
 		if (event != postRollEvents[0]){ //to not overwrite an above end turn event
 			do{
 				event = waitForControlEvents(postPurchaseEvents, 2);
