@@ -206,10 +206,24 @@ public class oakOligarchy{
 			controls.showPurchaseButton();
 		}
 		if(tmp.owner != null && tmp.owner != currPlayer && tmp.rent>0){
-			currPlayer.money -= tmp.rent;
-			tmp.owner.money+=tmp.rent;
-			board.updateMoney();
-			controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
+			if (tmp.rent <= currPlayer.money) {
+				currPlayer.money -= tmp.rent;
+				tmp.owner.money+=tmp.rent;
+				board.updateMoney();
+				controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
+			} else {
+				/*
+				 * TODO Allow player to trade properties to cover the rent
+				 * For now, pay what is possible and print out in the log that the user
+				 * could not afford the rent and owes money.
+				 */
+				int currMoney = currPlayer.money;
+				currPlayer.money -= currMoney;
+				tmp.owner.money += currMoney;
+				board.updateMoney();
+				controls.writeLine(tab+currPlayer.getName() + " could not afford the $" + Integer.toString(tmp.rent)
+				 	+ " rent and owes $" + Integer.toString(tmp.rent - currMoney) + " in rent to " + tmp.owner.getName());
+			}
 		}
 
 		event = waitForControlEvents(postRollEvents,2);
