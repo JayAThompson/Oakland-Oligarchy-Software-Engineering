@@ -33,7 +33,7 @@ public class oakOligarchy{
 		window.setSize(1500, 1080);
 
 		//adding dummy data into the menu
-		menu = new Menu(new Player("no one",0,"yo"));
+		menu = new Menu();
 		board = new GameBoard();
 		controls = new Controls();
 		window.add(menu, BorderLayout.NORTH);
