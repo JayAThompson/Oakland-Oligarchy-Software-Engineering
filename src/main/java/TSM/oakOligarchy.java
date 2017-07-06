@@ -237,27 +237,35 @@ public class oakOligarchy{
 			return;
 		}
 		String confirmString = "The current trade is:\n";
+		int playerOneTrades[] = new int[tradeInitiator.length];
+		j = 0;
 		for (int i = 0; i < tradeInitiator.length; i++) {
 			if (tradeInitiator[i].isSelected()) {
 				confirmString = confirmString + currPlayer.properties.get(i).getPropertyName() + "\n";
+				playerOneTrades[j] = i;
+				j++;
 			}
 		}
-		
+		int money1 = 0;
 		try {
-			int money = Integer.parseInt(play1Money.getText());
-			confirmString = confirmString + "$" + money + "\n" ;
+			money1 = Integer.parseInt(play1Money.getText());
+			confirmString = confirmString + "$" + money1 + "\n" ;
 		} catch (NumberFormatException nme) {}
 		
 		confirmString += "For:\n";
+		int playerTwoTrades[] = new int [tradeRecipient.length];
+		j = 0;
 		for (int i = 0; i < tradeRecipient.length; i++) {
 			if (tradeRecipient[i].isSelected()) {
 				confirmString = confirmString + tradeWith.properties.get(i).getPropertyName() + "\n";
+				playerTwoTrades[j] = i;
+				j++;
 			}
 		}
-		
+		int money2 = 0;
 		try {
-			int money = Integer.parseInt(play2Money.getText());
-			confirmString =confirmString + "$" + money + "\n" ;
+			money2 = Integer.parseInt(play2Money.getText());
+			confirmString =confirmString + "$" + money2 + "\n" ;
 		} catch (NumberFormatException nme) {}
 		confirmString = confirmString + tradeWith.getName() + " is this okay?";
 		cont = JOptionPane.showConfirmDialog(null, confirmString, "Confirm Trade?", JOptionPane.YES_NO_OPTION);
@@ -265,6 +273,33 @@ public class oakOligarchy{
 			return;
 		}
 		else {
+			for (int i = 0; i < tradeInitiator.length; i++) {
+				if (playerOneTrades[i] == 0 && i > 0 ) {
+					break;
+				}
+				String replaceWith = ">" + currPlayer.properties.get(playerOneTrades[i]).getPropertyName() + "\n"; //one problem is here, probably to do with trading multiple properties and removal form the arraylist updating the index
+				tradeWith.setPropertyString(tradeWith.getPropertyString() + replaceWith);
+				currPlayer.setPropertyString(currPlayer.getPropertyString().replace(replaceWith, ""));
+				currPlayer.removeProperty(currPlayer.properties.get(playerOneTrades[i]).getPropertyName(), tradeWith);
+				currPlayer.setMoney(currPlayer.getMoney() + money2);
+				board.boardCenter.drawProperties(players.indexOf(currPlayer));
+				
+				
+			}
+			for (int i = 0; i < tradeRecipient.length; i++) {
+				if (playerTwoTrades[i] == 0  && i > 0) {
+					break;
+				}
+				
+				String replaceWith = ">" + tradeWith.properties.get(playerTwoTrades[i]).getPropertyName() + "\n";
+				currPlayer.setPropertyString(currPlayer.getPropertyString() + replaceWith);
+				tradeWith.setPropertyString(tradeWith.getPropertyString().replace(replaceWith, ""));
+				tradeWith.removeProperty(tradeWith.properties.get(playerTwoTrades[i]).getPropertyName(), currPlayer);
+				tradeWith.setMoney(tradeWith.getMoney() + money1);
+				board.boardCenter.drawProperties(players.indexOf(tradeWith));
+				
+			}
+			
 			
 		}
 	

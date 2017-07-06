@@ -92,15 +92,26 @@ public class Player{
 	/**
 	 * Remove property from the property array list
 	 * @param the string name of the property to remove
+	 * @param the player object who is new owner of the property or null if none
 	 */
-	public void removeProperty(String propName, Player owner) {
+	public void removeProperty(String propName, Player newOwner) {
 		for (int i = 0; i < properties.size(); i++) {
 			Tile theProp = properties.get(i);
 			if (theProp.propertyName.equals(propName)) {
-				theProp.setOwner(owner);
+				theProp.setOwner(newOwner);
 				properties.remove(i);
 				break;
 			}
 		}
+	}
+	/**
+	 *Remove property from the property array list
+	 * @param the property tile 
+	 * @param the player object who is the new owner, or null if none
+	 */
+	public void removeProperty(Tile property, Player newOwner) {
+		Tile theProp = properties.get(properties.indexOf(property));
+		theProp.setOwner(newOwner);
+		properties.remove(property);
 	}
 }
