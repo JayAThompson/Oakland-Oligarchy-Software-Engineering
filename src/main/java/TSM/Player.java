@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 
-
 /**
  * Contains player information, such as name, amount of money, color of marker,
  * and current location on the board
@@ -13,7 +12,7 @@ public class Player{
 	public int money;
 	String color;
 	public int tileIndex;
-	ArrayList<Tile> properties;
+	public ArrayList<Tile> properties;
 	
 	/*this is only to be called if the player is on the tile*/
 	public void purchaseProperty(Tile tile){
@@ -75,5 +74,33 @@ public class Player{
 	 */
 	public void setName(String n){
 		this.name = n;
+	}
+	/**
+	 * Get the string of properties
+	 * @return String The string of properties
+	*/
+	public String getPropertyString() {
+			return this.propertyString;
+	}
+	/**
+	 * Set the property string
+	 * @param n The new string of properties
+	 */
+	public void setPropertyString(String n) {
+		this.propertyString = n;
+	}
+	/**
+	 * Remove property from the property array list
+	 * @param the string name of the property to remove
+	 */
+	public void removeProperty(String propName, Player owner) {
+		for (int i = 0; i < properties.size(); i++) {
+			Tile theProp = properties.get(i);
+			if (theProp.propertyName.equals(propName)) {
+				theProp.setOwner(owner);
+				properties.remove(i);
+				break;
+			}
+		}
 	}
 }

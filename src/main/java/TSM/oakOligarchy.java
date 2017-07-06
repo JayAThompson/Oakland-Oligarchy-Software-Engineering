@@ -18,7 +18,7 @@ public class oakOligarchy{
 	
 	//these two variables are the player who's turn it is
 	static Player currPlayer;
-	//the following fild is the index of the player and the player's corresponding swing components in many arrays
+	//the following field is the index of the player and the player's corresponding swing components in many arrays
 	static int currPlayerIndex;
 	//with this field you can change the bechavior of the log text area
 	static String tab = " -> ";
@@ -166,13 +166,118 @@ public class oakOligarchy{
 			controls.writeLine(tab+currPlayer.name+" purchased "+tile.propertyName );
 		}
 	}
+	/**
+	 * Trades property with other players
+	 */
+	public static void tradeProperty() {
+		String tradeOptions[] = new String[players.size() - 1];
+		int j = 0;
+		for (int i = 0; i <  players.size(); i++) {
+			if (!players.get(i).equals(currPlayer)) {
+				 tradeOptions[j] = players.get(i).getName();
+				 j++;
+			}
+		}
+		String s = (String) JOptionPane.showInputDialog(
+                window,
+                "Who would you like to trade?",
+                "Trade Player",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                tradeOptions,
+                tradeOptions[0]);
+				
+		Player tradeWith = null;
+		for (int i = 0; i < players.size(); i++) {
+			if (players.get(i).getName().equals(s)) {
+				tradeWith = players.get(i);
+			}
+		}
+		
+		JCheckBox tradeInitiator[] = new JCheckBox[currPlayer.properties.size()];
+		JCheckBox tradeRecipient[] = null;
+		try {
+			tradeRecipient = new JCheckBox[tradeWith.properties.size()];
+		} catch(NullPointerException npe) {
+			return;
+		}
+		JPanel boxes = new JPanel();
+		JPanel play1 = new JPanel(new GridLayout(currPlayer.properties.size() + 2,1));
+		JPanel play2 = new JPanel(new GridLayout(tradeWith.properties.size() + 2,1));
+		
+		if (currPlayer.properties.size() > 0){
+			for (int i = 0; i < currPlayer.properties.size(); i++) {
+				tradeInitiator[i] = new JCheckBox(currPlayer.properties.get(i).getPropertyName());
+				play1.add(tradeInitiator[i]);
+			}
+		}
+		
+		JLabel moneyLabel1 = new JLabel("Money:");
+		JTextField play1Money = new JTextField();
+		play1.add(moneyLabel1);
+		play1.add(play1Money);
+		
+		if (tradeWith.properties.size() > 0){			
+			for (int i = 0; i < tradeWith.properties.size(); i++ ) {
+				tradeRecipient[i] = new JCheckBox(tradeWith.properties.get(i).getPropertyName());
+				play2.add(tradeRecipient[i]);
+			}
+		}
+		
+		JLabel moneyLabel2 = new JLabel("Money:");
+		JTextField play2Money = new JTextField();
+		play2.add(moneyLabel2);
+		play2.add(play2Money);
+		
+		boxes.add(play1, BorderLayout.EAST);
+		boxes.add(play2, BorderLayout.WEST);
+		
+		int cont = JOptionPane.showConfirmDialog(null, boxes, "Trade", JOptionPane.OK_CANCEL_OPTION);
+		if (cont == JOptionPane.CANCEL_OPTION) {
+			return;
+		}
+		String confirmString = "The current trade is:\n";
+		for (int i = 0; i < tradeInitiator.length; i++) {
+			if (tradeInitiator[i].isSelected()) {
+				confirmString = confirmString + currPlayer.properties.get(i).getPropertyName() + "\n";
+			}
+		}
+		
+		try {
+			int money = Integer.parseInt(play1Money.getText());
+			confirmString = confirmString + "$" + money + "\n" ;
+		} catch (NumberFormatException nme) {}
+		
+		confirmString += "For:\n";
+		for (int i = 0; i < tradeRecipient.length; i++) {
+			if (tradeRecipient[i].isSelected()) {
+				confirmString = confirmString + tradeWith.properties.get(i).getPropertyName() + "\n";
+			}
+		}
+		
+		try {
+			int money = Integer.parseInt(play2Money.getText());
+			confirmString =confirmString + "$" + money + "\n" ;
+		} catch (NumberFormatException nme) {}
+		confirmString = confirmString + tradeWith.getName() + " is this okay?";
+		cont = JOptionPane.showConfirmDialog(null, confirmString, "Confirm Trade?", JOptionPane.YES_NO_OPTION);
+		if (cont  == JOptionPane.NO_OPTION) {
+			return;
+		}
+		else {
+			
+		}
+	
+	}
 	
 	/**
 	* This method houses most of the logic for the actual game. 
 	* 
 	*/
 	private static void nextTurn(){
-		final Controls.Event postRollEvents[] = {Controls.Event.END_TURN, Controls.Event.PURCHASE};
+		final Controls.Event preRollEvents[] = {Controls.Event.ROLL, Controls.Event.TRADE};
+		final Controls.Event postRollEvents[] = {Controls.Event.END_TURN, Controls.Event.PURCHASE, Controls.Event.TRADE};
+		final Controls.Event postPurchaseEvents[] = {Controls.Event.END_TURN, Controls.Event.TRADE};
 		int roll1 = rollDice();
 		int roll2 = rollDice();
 		Controls.Event event;		
@@ -185,12 +290,20 @@ public class oakOligarchy{
 		controls.writeLine(currPlayer.name+"'s turn");
 		menu.drawPlayersTurn(currPlayer);		
 		controls.showRollButton();
+		controls.showTradeButton();
 		
-		waitForControlEvent(Controls.Event.ROLL);
-		controls.writeLine(tab+currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
-		controls.hideRollButton();
+		do {
+		event = waitForControlEvents(preRollEvents, 2);
+			if (event == preRollEvents[0]){
+				controls.writeLine(tab+currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
+				controls.hideRollButton();
+				movePlayer(currPlayer,roll1+roll2); 
+			}
+			else {
+				tradeProperty();
+			}
+		} while (event != preRollEvents[0]);
 		
-		movePlayer(currPlayer,roll1+roll2);
 		controls.showPurchaseButton();
 		controls.showEndTurnButton();
 		//getting charged that money
@@ -214,10 +327,28 @@ public class oakOligarchy{
 		}
 		
 		
-		event = waitForControlEvents(postRollEvents,2);
-		if(event == postRollEvents[1]){
-			purchaseCurrentProperty();
+		do {
+			event = waitForControlEvents(postRollEvents,3);
+			if(event == postRollEvents[1]){
+				purchaseCurrentProperty();
+				controls.hidePurchaseButton();
+				
+			}
+			else if (event == postRollEvents[2]) {
+				//trade
+			}
+		}while (event != postRollEvents[0] && event != postRollEvents[1]); //to make sure you can't double purchase a place
+		if (event != postRollEvents[0]){ //to not overwrite an above end turn event
+			do{
+				event = waitForControlEvents(postPurchaseEvents, 2);
+				if (event != postPurchaseEvents[0]) {
+					//trade
+				}
+				
+			} while (event  !=  postPurchaseEvents[0]);
 		}
+		
+		
 		controls.hidePurchaseButton();
 		controls.hideEndTurnButton();
 

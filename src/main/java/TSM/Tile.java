@@ -58,6 +58,10 @@ public class Tile{
 		players.remove(player);
 		drawMarkers();
 	}
+	
+	public String getPropertyName() {
+		return this.propertyName;
+	}
 
 	// Redraws the marker panel, adding the appropriate player markers
 	private void drawMarkers(){
