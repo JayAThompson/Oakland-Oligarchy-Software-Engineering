@@ -25,7 +25,7 @@ public class Controls extends JPanel implements ActionListener{
 	JTextArea log;
 	JScrollPane pane;
 	
-	private int START_MONEY=750*20;
+	private int START_MONEY=500*20;
 	private int MAX_NAME_LEN = 12;
 	//this flag is to be set by the the form to submit new player names
 	public boolean playerDataFlag = false;

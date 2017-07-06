@@ -406,10 +406,29 @@ public class oakOligarchy{
 			controls.showPurchaseButton();	
 		}
 		if(tmp.owner != null && tmp.owner != currPlayer && tmp.rent>0){
-			currPlayer.money -= tmp.rent;
-			tmp.owner.money+=tmp.rent;
-			board.updateMoney();
-			controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
+			
+			if (tmp.rent <= currPlayer.money) {
+				currPlayer.money -= tmp.rent;
+				tmp.owner.money+=tmp.rent;
+				board.updateMoney();
+				controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
+			}
+			else {
+				/*
+				 * TODO Allow player to trade properties to cover the rent
+				 * For now, pay what is possible and print out in the log that the user
+				 * could not afford the rent and owes money.
+				 */
+				int currMoney = currPlayer.money;
+				currPlayer.money -= currMoney;
+				tmp.owner.money += currMoney;
+				board.updateMoney();
+				controls.writeLine(tab+currPlayer.getName() + " could not afford the $" + Integer.toString(tmp.rent)
+				 	+ " rent and owes $" + Integer.toString(tmp.rent - currMoney) + " in rent to " + tmp.owner.getName());
+			}
+		
+		
+		
 		}
 		
 		
@@ -440,6 +459,35 @@ public class oakOligarchy{
 
 	}
 	
+	/**
+	 * Check the money and properties of each player to see if only one player has any assets remaining.
+	 * If only one player has any remaining assets, they have won the game, and the game will end.
+	 * @return boolean True if a winner exists, False if there is no winner
+	 */
+	private static boolean winnerExists() {
+		int loserCount = 0;
+		Player winner = null;
+		for (Player p : players) {
+			if (p.getMoney() == 0 && p.properties.size() == 0) {
+				loserCount++;
+			} else {
+				winner = p;
+			}
+		}
+
+		if (loserCount == players.size() - 1) {
+			menu.stopClock();
+			controls.hideRollButton();
+			controls.writeLine("============ GAME OVER ============");
+			controls.writeLine(winner.getName() + " has won the game!");
+			controls.writeLine("===================================");
+			JOptionPane.showMessageDialog(null, winner.getName() + " has won the game!", "Game Over", JOptionPane.INFORMATION_MESSAGE);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 
 	/**
 	 * Main method to house the highest layer of our application logic
@@ -465,7 +513,7 @@ public class oakOligarchy{
 		currPlayer = players.get(currPlayerIndex);
 		//menu.drawPlayer(players.get(0));
 		//this is the start of the actual game
-		while(true){
+		while(!winnerExists()){
 			nextTurn();
 		}
 	}

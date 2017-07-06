@@ -16,47 +16,47 @@ public class GameBoard extends JPanel{
 
 	// 2-D array containing the title and the price for each tile on the game board
 	private static final String[][] tileInfo= new String[][]{{"Start","0","0"},
-															 {"Five Guys","2000","40"},
-															 {"Noodles n' Company","2500","50"},
+															 {"Five Guys","2000","200"},
+															 {"Noodles n' Company","2500","250"},
 															 {"actiontile","0","0"},
-															 {"Primanti Bros.","5000","100"},
+															 {"Primanti Bros.","5000","500"},
 															 {"actiontile","0","0"},
-															 {"Panera Bread","3500","40"},
-															 {"McDonald's","1250","1"},
-															 {"Sorrento's Pizza","750","30"},
+															 {"Panera Bread","3500","350"},
+															 {"McDonald's","1250","125"},
+															 {"Sorrento's Pizza","750","75"},
 															 {"Go to Hillman","0","0"},
-															 {"Panther Central","35000","90"},
-															 {"Benedum Hall","45000","115"},
+															 {"Panther Central","3500","350"},
+															 {"Benedum Hall","8000","800"},
 															 {"actiontile","0","0"},
-															 {"Litchfield Towers","25000","90"},
+															 {"Litchfield Towers","5000","500"},
 															 {"actiontile","0","0"},
-															 {"Sennott Square","20000","90"},
-															 {"William Pitt Union","25000","120"},
-															 {"Cathedral of Learning","250000","295"},
-															 {"Hillman Library","20000","100"},
-															 {"Schenley Plaza","15000","70"},
-															 {"Carnegie Library","25000","100"},
+															 {"Sennott Square","7500","750"},
+															 {"William Pitt Union","5000","500"},
+															 {"Cathedral of Learning","15000","1500"},
+															 {"Hillman Library","7500","750"},
+															 {"Schenley Plaza","10000","1000"},
+															 {"Carnegie Library","15000","1500"},
 															 {"actiontile","0","0"},
-															 {"Museum of Art","150000","200"},
-															 {"Dippy the Diplodocus","100000","270"},
+															 {"Museum of Art","20000","2000"},
+															 {"Dippy the Diplodocus","25000","2500"},
 															 {"actiontile","0","0"},
-															 {"Phipps Conservatory","75000","175"},
-															 {"Schenley Park","10000","100"},
+															 {"Phipps Conservatory","20000","2000"},
+															 {"Schenley Park","10000","1000"},
 															 {"Go to Hillman","0","0"},
-															 {"Union Grill","1500","100"},
-															 {"Lulu's Noodles","1250","50"},
+															 {"Union Grill","1500","150"},
+															 {"Lulu's Noodles","1250","125"},
 															 {"actiontile","0","0"},
-															 {"Razzy Fresh","1000","40"},
-															 {"The Original Hot Dog Shop","500","9"},
+															 {"Razzy Fresh","1000","100"},
+															 {"The Original Hot Dog Shop","500","50"},
 															 {"actiontile","0","0"},
-															 {"Papa D's","750","0"},
+															 {"Papa D's","750","75"},
 															 {"actiontile","0","0"}};
 
 	public static ArrayList<Tile> tiles = new ArrayList<Tile>();
 
 	BoardCenter boardCenter = new BoardCenter(new Dimension(640, 400));
 
-	
+
 	JPanel north;
 	JPanel south;
 	JPanel east;
@@ -80,12 +80,12 @@ public class GameBoard extends JPanel{
 		this.south = new JPanel();
 		this.east  = new JPanel();
 		this.west = new JPanel();
-	    
+
 		this.north.setLayout(new GridLayout(1, 8));
 		this.south.setLayout(new GridLayout(1, 8));
 		this.east.setLayout (new GridLayout(8, 1));
 		this.west.setLayout(new GridLayout(8, 1));
-		
+
 		 this.board.setPreferredSize(new Dimension(960, 600));
 		 this.north.setPreferredSize(new Dimension(640, 100));
 		 this.south.setPreferredSize(new Dimension(640, 100));
@@ -98,7 +98,7 @@ public class GameBoard extends JPanel{
 		for(int i=1;i<9;i++){
 			north.add(tiles.get(i).getPanel());
 		}
-		
+
 		for(int i=10;i<19;i++){
 			east.add(tiles.get(i).getPanel());
 		}
@@ -119,7 +119,7 @@ public class GameBoard extends JPanel{
 		g.ipady = 0;
 		g.fill = GridBagConstraints.BOTH;
 		board.add(tiles.get(0).namePanel, g);
-		
+
 		//northeast corner
 		g.gridx = 10;
 		g.gridy = 0;
@@ -129,7 +129,7 @@ public class GameBoard extends JPanel{
 		g.ipady = 0;
 		g.fill = GridBagConstraints.BOTH;
 		board.add(tiles.get(9).namePanel, g);
-		
+
 		//southeast corner
 		g.gridx = 10;
 		g.gridy = 10;
@@ -139,7 +139,7 @@ public class GameBoard extends JPanel{
 		g.ipady = 0;
 		g.fill = GridBagConstraints.BOTH;
 		board.add(tiles.get(18).namePanel, g);
-		
+
 		//southwest corner
 		g.gridx = 0;
 		g.gridy = 10;
@@ -149,8 +149,8 @@ public class GameBoard extends JPanel{
 		g.ipady = 0;
 		g.fill = GridBagConstraints.BOTH;
 		board.add(tiles.get(27).namePanel, g);
-		
-		//north		
+
+		//north
 		g.gridx = 2;
 		g.gridy = 0;
 		g.gridwidth = 8;
@@ -235,7 +235,7 @@ public class GameBoard extends JPanel{
 				if(!tileInfo[tiles.size()][2].equals("0")){
 					labelText.append("<br>rent: $"+tileInfo[tiles.size()][2]);
 				}
-				
+
 				JLabel label = new JLabel(new String(labelText));
 				label.setFont(new Font("Calibri", Font.PLAIN, textSize));
 				tilePanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -255,7 +255,7 @@ public class GameBoard extends JPanel{
 	public void drawPlayersTurn(Player player){
 		boardCenter.drawPlayersTurn(player);
 	}
-*/	
+*/
 
 	/**
 	 * This method draws a marker for the player on their current tile location.
@@ -272,7 +272,7 @@ public class GameBoard extends JPanel{
 	public void erasePlayer(Player player){
 		tiles.get(player.tileIndex).removePlayer(player);
 	}
-	
+
 	/**
 	* This method updates the player money
 	* it is here so that the board center is abstracted away from oakOli
@@ -293,7 +293,7 @@ public class GameBoard extends JPanel{
 	/**
 	 * Main method for testing purposes
 	 * @param args Unused
-	 */ 
+	 */
 	public static void main(String[] args) {
 		JFrame frame = new JFrame("Test");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
