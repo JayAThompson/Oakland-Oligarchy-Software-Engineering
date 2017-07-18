@@ -33,7 +33,7 @@ public class GameBoard extends JPanel{
 															 {"Sennott Square","7500","750"},
 															 {"William Pitt Union","5000","500"},
 															 {"Cathedral of Learning","15000","1500"},
-															 {"Hillman Library","7500","750"},
+															 {"Hillman Library","0","0"},
 															 {"Schenley Plaza","10000","1000"},
 															 {"Carnegie Library","15000","1500"},
 															 {"actiontile","0","0"},
