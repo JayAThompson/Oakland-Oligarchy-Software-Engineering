@@ -56,18 +56,12 @@ public class GameBoard extends JPanel{
 
 	BoardCenter boardCenter = new BoardCenter(new Dimension(640, 400));
 
-
 	JPanel north;
 	JPanel south;
 	JPanel east;
 	JPanel west;
 
 	JPanel board = new JPanel(new GridBagLayout());
-
-/* 	Tile northSet[];
-	Tile southSet[];
-	Tile eastSet [];
-	Tile westSet[]; */
 
 	/**
 	 * Class constructor
@@ -86,11 +80,11 @@ public class GameBoard extends JPanel{
 		this.east.setLayout (new GridLayout(8, 1));
 		this.west.setLayout(new GridLayout(8, 1));
 
-		 this.board.setPreferredSize(new Dimension(960, 600));
-		 this.north.setPreferredSize(new Dimension(640, 100));
-		 this.south.setPreferredSize(new Dimension(640, 100));
-		 this.east.setPreferredSize(new Dimension(160, 400));
-		 this.west.setPreferredSize(new Dimension(160, 400));
+		this.board.setPreferredSize(new Dimension(960, 600));
+		this.north.setPreferredSize(new Dimension(640, 100));
+		this.south.setPreferredSize(new Dimension(640, 100));
+		this.east.setPreferredSize(new Dimension(160, 400));
+		this.west.setPreferredSize(new Dimension(160, 400));
 
 		createTiles();
 
@@ -240,22 +234,10 @@ public class GameBoard extends JPanel{
 				label.setFont(new Font("Calibri", Font.PLAIN, textSize));
 				tilePanel.setBorder(BorderFactory.createLineBorder(Color.black));
 				tilePanel.add(label);
-				/*
-				JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
-				separator.setMaximumSize( new Dimension(2, 40) );
-				separator.setAlignmentX(Component.LEFT_ALIGNMENT);
-				tilePanel.add(separator);
-				*/
 
 				tiles.add(new Tile(tilePanel, tileInfo[tiles.size()][0], Integer.parseInt(tileInfo[tiles.size()][1]), i,Integer.parseInt(tileInfo[tiles.size()][2])));
 			}
 	}
-
-/*
-	public void drawPlayersTurn(Player player){
-		boardCenter.drawPlayersTurn(player);
-	}
-*/
 
 	/**
 	 * This method draws a marker for the player on their current tile location.
