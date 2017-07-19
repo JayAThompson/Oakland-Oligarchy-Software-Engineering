@@ -555,7 +555,7 @@ public class oakOligarchy{
 					"<li>If the player lands on an unowned property, they are given the option to buy the property for the price listed on the tile. If they chose not to purchase the property or cannot afford to purchase the property, the property will be auctioned off among all the other players and sold to the highest bidder.</li>" +
 					"<li>If the current player is the owner of the property, nothing will happen, but if another player owns the property, the current player will pay the rent on the property to the owner. If the current player cannot afford the rent, they will be able to trade properties to pay off what they owe.</li>" +
 					"<li>If the player lands on an action tile, some random action will be taken. This random action could involve receiving money, having money taken away, or their token being moved to another tile.</li>" +
-					"<li>If the player lands on a Go to Hillman tile, their token will be moved to the Hillman Library tile. To leave Hillman Library, the player must roll **********************</li>" +
+					"<li>If the player lands on a Go to Hillman tile, their token will be moved to the Hillman Library tile. To leave Hillman Library, the player must roll doubles or pay the $500 fine. If they fail to roll doubles or pay the fine, they may leave after three turns.</li>" +
 					"<li>A player will always have the option to engage in trade with other players during their turn.</li>" +
 					"<li>A player can always sell properties back to the bank for half price during their turn.</li>" +
 					"<li>If a player passes the Start tile, they will gain an additional $1000.</li>" +
