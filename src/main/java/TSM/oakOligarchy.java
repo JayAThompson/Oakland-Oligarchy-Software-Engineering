@@ -548,7 +548,22 @@ public class oakOligarchy{
 				controls.writeLine("save game");
 				break;
 			case HELP:
-				controls.writeLine("HELP ME PLEASE PLZ PLZ PLZ");
+				JOptionPane help = new JOptionPane(
+					"<html><div style='margin:0px 10px'>Here are the rules.<br>" +
+					"<ul><li>To begin the game, enter the names of the players in the sidebar on the left. The first player to take their turn will be chosen randomly.</li>" +
+					"<li>On a player's turn, they must roll two die, and their token will be moved forward the number of spaces as rolled on the dice.</li>" +
+					"<li>If the player lands on an unowned property, they are given the option to buy the property for the price listed on the tile. If they chose not to purchase the property or cannot afford to purchase the property, the property will be auctioned off among all the other players and sold to the highest bidder.</li>" +
+					"<li>If the current player is the owner of the property, nothing will happen, but if another player owns the property, the current player will pay the rent on the property to the owner. If the current player cannot afford the rent, they will be able to trade properties to pay off what they owe.</li>" +
+					"<li>If the player lands on an action tile, some random action will be taken. This random action could involve receiving money, having money taken away, or their token being moved to another tile.</li>" +
+					"<li>If the player lands on a Go to Hillman tile, their token will be moved to the Hillman Library tile. To leave Hillman Library, the player must roll **********************</li>" +
+					"<li>A player will always have the option to engage in trade with other players during their turn.</li>" +
+					"<li>A player can always sell properties back to the bank for half price during their turn.</li>" +
+					"<li>If a player passes the Start tile, they will gain an additional $1000.</li>" +
+					"<li>A player will win the game when all of the other players have run out of assets (no money or properties).</li></ul></div></html>",
+					JOptionPane.PLAIN_MESSAGE);
+				help.setPreferredSize(new Dimension(700, 400));
+				JDialog helpDlg = help.createDialog(null, "Help");
+				helpDlg.show();
 				break;
 			case NONE:
 				break;

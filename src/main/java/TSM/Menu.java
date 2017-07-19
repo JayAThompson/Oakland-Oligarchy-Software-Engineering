@@ -57,6 +57,7 @@ public class Menu extends JPanel implements ActionListener{
 		roll.addActionListener(this);
 		this.add(roll, 0, 3);
 */
+
 		newGame.setFont(new Font("Calibri", Font.PLAIN, 15));
 		newGame.addActionListener(this);
 		this.add(newGame, 0, 2);
@@ -94,7 +95,6 @@ public class Menu extends JPanel implements ActionListener{
 		}
 		return true;
 	}
-
 
 	/**
 	* This method is the action listener for the buttons
