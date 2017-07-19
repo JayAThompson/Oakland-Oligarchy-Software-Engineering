@@ -170,7 +170,9 @@ public class oakOligarchy{
 	*/
 	public static void waitForControlEvent(Controls.Event event){
 		while(true){
+			menuAction(menu.getEvent());
 			while(!controls.pollForEvent()){
+				menuAction(menu.getEvent());
 				try {
 			   		Thread.sleep(1);
 				} catch(InterruptedException e) {}
@@ -193,7 +195,9 @@ public class oakOligarchy{
 	public static Controls.Event waitForControlEvents(Controls.Event event[], int numEvents){
 		Controls.Event tmp;
 		while(true){
+			menuAction(menu.getEvent());
 			while(!controls.pollForEvent()){
+			menuAction(menu.getEvent());
 				try {
 			   		Thread.sleep(1);
 				} catch(InterruptedException e) {}
@@ -414,6 +418,7 @@ public class oakOligarchy{
 		controls.showTradeButton();
 
 		do {
+		menuAction(menu.getEvent());
 		event = waitForControlEvents(preRollEvents, 2);
 			if (event == preRollEvents[0]){
 				controls.writeLine(tab+currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
@@ -444,7 +449,6 @@ public class oakOligarchy{
 			controls.showPurchaseButton();
 		}
 		if(tmp.owner != null && tmp.owner != currPlayer && tmp.rent>0){
-
 			if (tmp.rent <= currPlayer.money) {
 				currPlayer.money -= tmp.rent;
 				tmp.owner.money+=tmp.rent;
@@ -465,7 +469,6 @@ public class oakOligarchy{
 				 	+ " rent and owes $" + Integer.toString(tmp.rent - currMoney) + " in rent to " + tmp.owner.getName());
 			}
 		}
-
 		do {
 			event = waitForControlEvents(postRollEvents,3);
 			if(event == postRollEvents[1]){
@@ -528,6 +531,33 @@ public class oakOligarchy{
 	}
 
 	/**
+	*This is the method that performs all of the menu bar actions
+	*/
+	public static void menuAction(Menu.Event event){
+		switch(event){
+			case NEW_GAME:
+				controls.writeLine("new game");
+				break;
+			case END_GAME:
+				controls.writeLine("end game");
+				break;
+			case LOAD_GAME:
+				controls.writeLine("load game");
+				break;
+			case SAVE_GAME:
+				controls.writeLine("save game");
+				break;
+			case HELP:
+				controls.writeLine("HELP ME PLEASE PLZ PLZ PLZ");
+				break;
+			case NONE:
+				break;
+			default:
+				break;
+		}
+	}
+
+	/**
 	 * Main method to house the highest layer of our application logic
 	 * @param args Unused
 	 */
@@ -536,6 +566,7 @@ public class oakOligarchy{
 
 		//sleeping while the player info is collected
 		while(controls.playerDataFlag == false){
+			menuAction(menu.getEvent());
 			try {
 			   Thread.sleep(50);
 			} catch(InterruptedException e) {
@@ -551,6 +582,7 @@ public class oakOligarchy{
 		currPlayer = players.get(currPlayerIndex);
 		//this is the start of the actual game
 		while(!winnerExists()){
+			menuAction(menu.getEvent());
 			nextTurn();
 		}
 	}
