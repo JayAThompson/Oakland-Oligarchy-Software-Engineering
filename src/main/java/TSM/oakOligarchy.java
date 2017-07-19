@@ -14,7 +14,7 @@ public class oakOligarchy{
 	static GameBoard board;
 	static Menu menu;
 	static ArrayList<Player> players;
-	
+
 	//these two variables are the player who's turn it is
 	static Player currPlayer;
 	//the following field is the index of the player and the player's corresponding swing components in many arrays
@@ -50,7 +50,6 @@ public class oakOligarchy{
 		return (int)(Math.random()*6+1);
 	}
 
-	
 	/**
 	 *This method does all the actiontile stuffs
 	 */
@@ -59,71 +58,81 @@ public class oakOligarchy{
 		int action = (int)(Math.random()*8+1);
 		switch(action){
 			case 1:
-				controls.writeLine(tab+"you lost your Pitt ID!");
-				controls.writeLine(tab+"go to panther central and pay the bank $20(on top of any rent)");
+				controls.writeLine(tab+"You lost your Pitt ID!");
+				controls.writeLine(tab+"Go to Panther Central and pay the bank $20 (on top of any rent)");
 				currPlayer.money-=20;
-				//tile 10 is pantherc 
+				//tile 10 is pantherc
 				movePlayerTo(currPlayer,10);
-				//currPlayer.money 
+				//currPlayer.money
 				break;
 			case 2:
-				controls.writeLine(tab+"You begged your parents for money.");		
-				controls.writeLine(tab+"They were feeling generous and gave you $1750");		
-				currPlayer.money += 1750;		
+				controls.writeLine(tab+"You begged your parents for money");
+				controls.writeLine(tab+"They were feeling generous and gave you $1750");
+				currPlayer.money += 1750;
 				break;
 			case 3:
-				controls.writeLine(tab+"You need some cheap grub.");		
-				controls.writeLine(tab+"go to the Dirty O");		
-				movePlayerTo(currPlayer,32);		
+				controls.writeLine(tab+"You need some cheap grub");
+				controls.writeLine(tab+"Go to the Dirty O");
+				movePlayerTo(currPlayer,32);
 				break;
 			case 4:
-				controls.writeLine(tab+"Your student loan money came in.");		
-				controls.writeLine(tab+"You get $10000 from the bank");		
-				currPlayer.money += 10000;		
+				controls.writeLine(tab+"Your student loan money came in");
+				controls.writeLine(tab+"You get $10000 from the bank");
+				currPlayer.money += 10000;
 				break;
 			case 5:
-				controls.writeLine(tab+"Your got drunk at Papa D's and lost your wallet (again...)");		
-				controls.writeLine(tab+"You've lost $"+ currPlayer.money/10+" and moved to Papa D's");		
-				currPlayer.money -= currPlayer.money/10;		
-				movePlayerTo(currPlayer,34);		
+				controls.writeLine(tab+"You got drunk at Papa D's and lost your wallet (again...)");
+				controls.writeLine(tab+"You've lost $"+ currPlayer.money/10+" and moved to Papa D's");
+				currPlayer.money -= currPlayer.money/10;
+				movePlayerTo(currPlayer,34);
 				break;
 			case 6:
-				controls.writeLine(tab+"Your walked around schenley park and pondered the futility of life");		
-				controls.writeLine(tab+"Luckily existential crises have monetary value in Oakland Oligarchy");		
-				controls.writeLine(tab+"Your newfound nihilism has doubled your dough! and you've moved to Schenley park");		
-				currPlayer.money *=2;		
-				movePlayerTo(currPlayer,26);		
+				controls.writeLine(tab+"You walked around Schenley Park and pondered the futility of life");
+				controls.writeLine(tab+"Luckily existential crises have monetary value in Oakland Oligarchy");
+				controls.writeLine(tab+"Your newfound nihilism has doubled your dough! and you've moved to Schenley Park");
+				currPlayer.money *=2;
+				movePlayerTo(currPlayer,26);
 				break;
-			case 7:		
-				controls.writeLine(tab+"The other players have ganged up robbed you.");		
-				for(Player player : players){		
-					if(player != currPlayer && currPlayer.money>300 && player.money>0){		
-						controls.writeLine(tab + player.name+" took $300");		
-						player.money+=300;		
-						currPlayer.money -=300;		
-					}		
-				}		
-				break;					
-			case 8:		
-				controls.writeLine(tab + "You see that Dippy is wearing your hat.");		
-				controls.writeLine(tab + "You sue the Carnegie Museum of Natural History for psychological damages");		
-				controls.writeLine(tab + "You've earned $5000, way to go you hard worker");		
-				currPlayer.money += 5000;		
-				break;		
-//			case 9:		
-//				controls.writeLine(tab + "Finals are around the corner, go to hillman
+			case 7:
+				controls.writeLine(tab+"The other players have ganged up and robbed you.");
+				for(Player player : players){
+					if(player != currPlayer && currPlayer.money>300 && player.money>0){
+						controls.writeLine(tab + player.name+" took $300");
+						player.money+=300;
+						currPlayer.money -=300;
+					}
+				}
+				break;
+			case 8:
+				controls.writeLine(tab + "You see that Dippy is wearing your hat");
+				controls.writeLine(tab + "You sue the Carnegie Museum of Natural History for psychological damages");
+				controls.writeLine(tab + "You've earned $5000, way to go you hard worker");
+				currPlayer.money += 5000;
+				break;
 		}
 		controls.writeLine("*********************************");
 		board.updateMoney();
+	}
 
-	}
 	/**
+	 * Reward a player every time they pass go
 	 */
-	static void passGo(){		
-		controls.writeLine(tab + "You passed start and collected $1000");		
-		currPlayer.money += 1000;		
+	public static void passGo(){
+		controls.writeLine(tab + "You passed start and collected $1000");
+		currPlayer.money += 1000;
+		board.boardCenter.updateMoneyLabels();
 	}
-	
+
+	/**
+	 * Handle a player's time in jail (Hillman Library)
+	 */
+	public static void jail() {
+		controls.writeLine("**************** Go to Hillman *****************");
+		controls.writeLine(tab + currPlayer.getName() + " has an exam and has been banished to Hillman.");
+		controls.writeLine("************************************************");
+		movePlayerTo(currPlayer, 18);
+	}
+
 	/**
 	 * Move the marker for a player to the tile tileNum
 	 * the tileNums are the indeces of the tileInfo data in GameBoard.java
@@ -132,15 +141,13 @@ public class oakOligarchy{
 	 */
 	static void movePlayerTo(Player player, int tileNum){
 		board.erasePlayer(player);
-		if(tileNum < player.tileIndex){		
-			passGo();		
+		if(tileNum < player.tileIndex){
+			passGo();
 		}
 		player.tileIndex = tileNum;
 		board.drawPlayer(player);
 	}
-	
-	
-	
+
 	/**
 	 * Move the marker for a player forward a certain number of spaces
 	 * @param player The Player object for the player whose marker must be moved
@@ -148,15 +155,15 @@ public class oakOligarchy{
 	 */
 	static void movePlayer(Player player,int spaces){
 		board.erasePlayer(player);
-		if(player.tileIndex + spaces >=36){		
-			passGo();		
-		}		
-		player.tileIndex = (player.tileIndex+spaces)%36;				
+		if(player.tileIndex + spaces >=36){
+			passGo();
+		}
+		player.tileIndex = (player.tileIndex+spaces)%36;
 		board.drawPlayer(player);
 	}
 
 	/**
-	* This method waits for the given event. 
+	* This method waits for the given event.
 	* These events are currently generated through button presses.
 	* the thread busy waits while waiting for the event. Sleeping every ms
 	* @param event the event to wait for
@@ -173,12 +180,12 @@ public class oakOligarchy{
 			}
 			if(controls.getEvent() == event){
 				break;
-			}			
+			}
 		}
 	}
-	
+
 	/**
-	* This method waits for the given events. 
+	* This method waits for the given events.
 	* These events are currently generated through button presses.
 	* the thread busy waits while waiting for the events. Sleeping every ms
 	* @param event[] an array containing the list of events to wait for
@@ -202,7 +209,7 @@ public class oakOligarchy{
 				}
 		}
 	}
-	
+
 	/**
 	*This method purchases property
 	*/
@@ -216,6 +223,7 @@ public class oakOligarchy{
 			controls.writeLine(tab+currPlayer.name+" purchased "+tile.propertyName );
 		}
 	}
+
 	/**
 	 * Trades property with other players
 	 */
@@ -236,14 +244,14 @@ public class oakOligarchy{
                 null,
                 tradeOptions,
                 tradeOptions[0]);
-				
+
 		Player tradeWith = null;
 		for (int i = 0; i < players.size(); i++) {
 			if (players.get(i).getName().equals(s)) {
 				tradeWith = players.get(i);
 			}
 		}
-		
+
 		JCheckBox tradeInitiator[] = new JCheckBox[currPlayer.properties.size()];
 		JCheckBox tradeRecipient[] = null;
 		try {
@@ -254,7 +262,7 @@ public class oakOligarchy{
 		JPanel boxes = new JPanel();
 		JPanel play1 = new JPanel(new GridLayout(currPlayer.properties.size() + 3,1));
 		JPanel play2 = new JPanel(new GridLayout(tradeWith.properties.size() + 3,1));
-		
+
 		JLabel currPlayerName = new JLabel(currPlayer.getName() + ":");
 		play1.add(currPlayerName);
 		if (currPlayer.properties.size() > 0){
@@ -263,29 +271,29 @@ public class oakOligarchy{
 				play1.add(tradeInitiator[i]);
 			}
 		}
-		
+
 		JLabel moneyLabel1 = new JLabel("Money:");
 		JTextField play1Money = new JTextField();
 		play1.add(moneyLabel1);
 		play1.add(play1Money);
-		
+
 		JLabel tradeWithName = new JLabel(tradeWith.getName() + ":");
 		play2.add(tradeWithName);
-		if (tradeWith.properties.size() > 0){			
+		if (tradeWith.properties.size() > 0){
 			for (int i = 0; i < tradeWith.properties.size(); i++ ) {
 				tradeRecipient[i] = new JCheckBox(tradeWith.properties.get(i).getPropertyName());
 				play2.add(tradeRecipient[i]);
 			}
 		}
-		
+
 		JLabel moneyLabel2 = new JLabel("Money:");
 		JTextField play2Money = new JTextField();
 		play2.add(moneyLabel2);
 		play2.add(play2Money);
-		
+
 		boxes.add(play1, BorderLayout.EAST);
 		boxes.add(play2, BorderLayout.WEST);
-		
+
 		int cont = JOptionPane.showConfirmDialog(null, boxes, "Trade", JOptionPane.OK_CANCEL_OPTION);
 		if (cont == JOptionPane.CANCEL_OPTION) {
 			return;
@@ -305,7 +313,7 @@ public class oakOligarchy{
 			money1 = Integer.parseInt(play1Money.getText());
 			confirmString = confirmString + "$" + money1 + "\n" ;
 		} catch (NumberFormatException nme) {}
-		
+
 		confirmString += "For:\n";
 		Tile playerTwoTrades[] = new Tile [tradeRecipient.length];
 		j = 0;
@@ -338,28 +346,26 @@ public class oakOligarchy{
 				currPlayer.removeProperty(playerOneTrades[i].getPropertyName(), tradeWith);
 			}
 			currPlayer.setMoney(currPlayer.getMoney() + money2 - money1);
-			
+
 			for (int i = 0; i < tradeRecipient.length; i++) {
 				if (playerTwoTrades[i] == null) {
 					break;
 				}
-				
+
 				currPlayer.properties.add(playerTwoTrades[i]);
 				String replaceWith = ">" + playerTwoTrades[i].getPropertyName() + "\n";
 				currPlayer.setPropertyString(currPlayer.getPropertyString() + replaceWith);
 				tradeWith.setPropertyString(tradeWith.getPropertyString().replace(replaceWith, ""));
 				tradeWith.removeProperty(playerTwoTrades[i].getPropertyName(), currPlayer);
-				
+
 			}
 			tradeWith.setMoney(tradeWith.getMoney() + money1 - money2);
 			board.boardCenter.drawProperties(players.indexOf(tradeWith));
 			board.boardCenter.drawProperties(players.indexOf(currPlayer));
 			board.boardCenter.updateMoneyLabels();
-			
 		}
-	
 	}
-	
+
 	/**
 	 * Auctions a property
 	 * @param the tile being auctioned
@@ -378,22 +384,21 @@ public class oakOligarchy{
 					maxVal = temp;
 				}
 			} catch (NumberFormatException nme) {}
-			
+
 		}
 		Player winner = players.get(index);
 		JOptionPane.showMessageDialog(null, "You win, " + winner.getName() + ", with a bid of " + maxVal, "Auction", JOptionPane.DEFAULT_OPTION);
 		winner.setMoney(winner.getMoney() - maxVal);
 		winner.properties.add(tile);
 		winner.setPropertyString(winner.getPropertyString() + ">" + tile.getPropertyName() + "\n");
+		tile.setOwner(winner);
 		board.boardCenter.drawProperties(index);
 		board.boardCenter.updateMoneyLabels();
-		
-		
 	}
-	
+
 	/**
-	* This method houses most of the logic for the actual game. 
-	* 
+	* This method houses most of the logic for the actual game.
+	*
 	*/
 	private static void nextTurn(){
 		final Controls.Event preRollEvents[] = {Controls.Event.ROLL, Controls.Event.TRADE};
@@ -401,44 +406,47 @@ public class oakOligarchy{
 		final Controls.Event postPurchaseEvents[] = {Controls.Event.END_TURN, Controls.Event.TRADE};
 		int roll1 = rollDice();
 		int roll2 = rollDice();
-		Controls.Event event;		
+		Controls.Event event;
 		controls.hidePurchaseButton();
 		controls.hideEndTurnButton();
-		
+
 		currPlayerIndex = (currPlayerIndex+1)%players.size();
 		currPlayer = players.get(currPlayerIndex);
 		controls.drawPlayerTurnLabel(currPlayer);
-		controls.writeLine(currPlayer.name+"'s turn");	
+		controls.writeLine(currPlayer.name+"'s turn");
 		controls.showRollButton();
 		controls.showTradeButton();
-		
+
 		do {
 		menuAction(menu.getEvent());
 		event = waitForControlEvents(preRollEvents, 2);
 			if (event == preRollEvents[0]){
 				controls.writeLine(tab+currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
 				controls.hideRollButton();
-				movePlayer(currPlayer,roll1+roll2); 
+				movePlayer(currPlayer,roll1+roll2);
 			}
 			else {
 				tradeProperty();
 			}
 		} while (event != preRollEvents[0]);
-		
+
 		controls.showPurchaseButton();
 		controls.showEndTurnButton();
 		//getting charged that money
 		Tile tmp = board.tiles.get(currPlayer.tileIndex);
-		if(tmp.propertyName.equals("actiontile")){
+		if(tmp.propertyName.equals("Action Tile")){
 			actionTileFun();
 			//reget tmp because actionTileFun can move players
+			tmp = board.tiles.get(currPlayer.tileIndex);
+		} else if (tmp.propertyName.equals("Go to Hillman")) {
+			jail();
 			tmp = board.tiles.get(currPlayer.tileIndex);
 		}
 		if(tmp.owner != null || tmp.propertyValue>currPlayer.getMoney()){
 			controls.hidePurchaseButton();
 		}
 		else{
-			controls.showPurchaseButton();	
+			controls.showPurchaseButton();
 		}
 		if(tmp.owner != null && tmp.owner != currPlayer && tmp.rent>0){
 			if (tmp.rent <= currPlayer.money) {
@@ -461,40 +469,38 @@ public class oakOligarchy{
 				 	+ " rent and owes $" + Integer.toString(tmp.rent - currMoney) + " in rent to " + tmp.owner.getName());
 			}
 		}
-		
 		do {
 			event = waitForControlEvents(postRollEvents,3);
 			if(event == postRollEvents[1]){
 				purchaseCurrentProperty();
 				controls.hidePurchaseButton();
-				
+
 			}
 			else if (event == postRollEvents[2]) {
 				tradeProperty();
 			}
 		}while (event != postRollEvents[0] && event != postRollEvents[1]); //to make sure you can't double purchase a place
-		
+
 		Tile tile = board.tiles.get(currPlayer.tileIndex);
 		if(tile.owner == null && tile.propertyValue>0){
 			auction(tile);
 		}
-		
+
 		if (event != postRollEvents[0]){ //to not overwrite an above end turn event
 			do{
 				event = waitForControlEvents(postPurchaseEvents, 2);
 				if (event != postPurchaseEvents[0]) {
 					tradeProperty();
 				}
-				
+
 			} while (event  !=  postPurchaseEvents[0]);
 		}
-		
-		
+
 		controls.hidePurchaseButton();
 		controls.hideEndTurnButton();
 
 	}
-	
+
 	/**
 	 * Check the money and properties of each player to see if only one player has any assets remaining.
 	 * If only one player has any remaining assets, they have won the game, and the game will end.
@@ -523,7 +529,7 @@ public class oakOligarchy{
 			return false;
 		}
 	}
-	
+
 	/**
 	*This is the method that performs all of the menu bar actions
 	*/
@@ -542,7 +548,22 @@ public class oakOligarchy{
 				controls.writeLine("save game");
 				break;
 			case HELP:
-				controls.writeLine("HELP ME PLEASE PLZ PLZ PLZ");
+				JOptionPane help = new JOptionPane(
+					"<html><div style='margin:0px 10px'>Here are the rules.<br>" +
+					"<ul><li>To begin the game, enter the names of the players in the sidebar on the left. The first player to take their turn will be chosen randomly.</li>" +
+					"<li>On a player's turn, they must roll two die, and their token will be moved forward the number of spaces as rolled on the dice.</li>" +
+					"<li>If the player lands on an unowned property, they are given the option to buy the property for the price listed on the tile. If they chose not to purchase the property or cannot afford to purchase the property, the property will be auctioned off among all the other players and sold to the highest bidder.</li>" +
+					"<li>If the current player is the owner of the property, nothing will happen, but if another player owns the property, the current player will pay the rent on the property to the owner. If the current player cannot afford the rent, they will be able to trade properties to pay off what they owe.</li>" +
+					"<li>If the player lands on an action tile, some random action will be taken. This random action could involve receiving money, having money taken away, or their token being moved to another tile.</li>" +
+					"<li>If the player lands on a Go to Hillman tile, their token will be moved to the Hillman Library tile. To leave Hillman Library, the player must roll doubles or pay the $500 fine. If they fail to roll doubles or pay the fine, they may leave after three turns.</li>" +
+					"<li>A player will always have the option to engage in trade with other players during their turn.</li>" +
+					"<li>A player can always sell properties back to the bank for half price during their turn.</li>" +
+					"<li>If a player passes the Start tile, they will gain an additional $1000.</li>" +
+					"<li>A player will win the game when all of the other players have run out of assets (no money or properties).</li></ul></div></html>",
+					JOptionPane.PLAIN_MESSAGE);
+				help.setPreferredSize(new Dimension(700, 400));
+				JDialog helpDlg = help.createDialog(null, "Help");
+				helpDlg.show();
 				break;
 			case NONE:
 				break;
@@ -550,8 +571,7 @@ public class oakOligarchy{
 				break;
 		}
 	}
-	
-	
+
 	/**
 	 * Main method to house the highest layer of our application logic
 	 * @param args Unused
@@ -575,7 +595,6 @@ public class oakOligarchy{
 		}
 		currPlayerIndex=(int)(Math.random()*players.size());
 		currPlayer = players.get(currPlayerIndex);
-		//menu.drawPlayer(players.get(0));
 		//this is the start of the actual game
 		while(!winnerExists()){
 			menuAction(menu.getEvent());

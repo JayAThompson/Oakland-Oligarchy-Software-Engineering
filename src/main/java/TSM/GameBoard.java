@@ -18,44 +18,43 @@ public class GameBoard extends JPanel{
 	private static final String[][] tileInfo= new String[][]{{"Start","0","0"},
 															 {"Five Guys","2000","200"},
 															 {"Noodles n' Company","2500","250"},
-															 {"actiontile","0","0"},
+															 {"Action Tile","0","0"},
 															 {"Primanti Bros.","5000","500"},
-															 {"actiontile","0","0"},
+															 {"Action Tile","0","0"},
 															 {"Panera Bread","3500","350"},
 															 {"McDonald's","1250","125"},
 															 {"Sorrento's Pizza","750","75"},
 															 {"Go to Hillman","0","0"},
 															 {"Panther Central","3500","350"},
 															 {"Benedum Hall","8000","800"},
-															 {"actiontile","0","0"},
+															 {"Action Tile","0","0"},
 															 {"Litchfield Towers","5000","500"},
-															 {"actiontile","0","0"},
+															 {"Action Tile","0","0"},
 															 {"Sennott Square","7500","750"},
 															 {"William Pitt Union","5000","500"},
 															 {"Cathedral of Learning","15000","1500"},
-															 {"Hillman Library","7500","750"},
+															 {"Hillman Library","0","0"},
 															 {"Schenley Plaza","10000","1000"},
 															 {"Carnegie Library","15000","1500"},
-															 {"actiontile","0","0"},
+															 {"Action Tile","0","0"},
 															 {"Museum of Art","20000","2000"},
 															 {"Dippy the Diplodocus","25000","2500"},
-															 {"actiontile","0","0"},
+															 {"Action Tile","0","0"},
 															 {"Phipps Conservatory","20000","2000"},
 															 {"Schenley Park","10000","1000"},
 															 {"Go to Hillman","0","0"},
 															 {"Union Grill","1500","150"},
 															 {"Lulu's Noodles","1250","125"},
-															 {"actiontile","0","0"},
+															 {"Action Tile","0","0"},
 															 {"Razzy Fresh","1000","100"},
 															 {"The Original Hot Dog Shop","500","50"},
-															 {"actiontile","0","0"},
+															 {"Action Tile","0","0"},
 															 {"Papa D's","750","75"},
-															 {"actiontile","0","0"}};
+															 {"Action Tile","0","0"}};
 
 	public static ArrayList<Tile> tiles = new ArrayList<Tile>();
 
 	BoardCenter boardCenter = new BoardCenter(new Dimension(640, 400));
-
 
 	JPanel north;
 	JPanel south;
@@ -63,11 +62,6 @@ public class GameBoard extends JPanel{
 	JPanel west;
 
 	JPanel board = new JPanel(new GridBagLayout());
-
-/* 	Tile northSet[];
-	Tile southSet[];
-	Tile eastSet [];
-	Tile westSet[]; */
 
 	/**
 	 * Class constructor
@@ -86,11 +80,11 @@ public class GameBoard extends JPanel{
 		this.east.setLayout (new GridLayout(8, 1));
 		this.west.setLayout(new GridLayout(8, 1));
 
-		 this.board.setPreferredSize(new Dimension(960, 600));
-		 this.north.setPreferredSize(new Dimension(640, 100));
-		 this.south.setPreferredSize(new Dimension(640, 100));
-		 this.east.setPreferredSize(new Dimension(160, 400));
-		 this.west.setPreferredSize(new Dimension(160, 400));
+		this.board.setPreferredSize(new Dimension(960, 600));
+		this.north.setPreferredSize(new Dimension(640, 100));
+		this.south.setPreferredSize(new Dimension(640, 100));
+		this.east.setPreferredSize(new Dimension(160, 400));
+		this.west.setPreferredSize(new Dimension(160, 400));
 
 		createTiles();
 
@@ -240,22 +234,10 @@ public class GameBoard extends JPanel{
 				label.setFont(new Font("Calibri", Font.PLAIN, textSize));
 				tilePanel.setBorder(BorderFactory.createLineBorder(Color.black));
 				tilePanel.add(label);
-				/*
-				JSeparator separator = new JSeparator(SwingConstants.VERTICAL);
-				separator.setMaximumSize( new Dimension(2, 40) );
-				separator.setAlignmentX(Component.LEFT_ALIGNMENT);
-				tilePanel.add(separator);
-				*/
 
 				tiles.add(new Tile(tilePanel, tileInfo[tiles.size()][0], Integer.parseInt(tileInfo[tiles.size()][1]), i,Integer.parseInt(tileInfo[tiles.size()][2])));
 			}
 	}
-
-/*
-	public void drawPlayersTurn(Player player){
-		boardCenter.drawPlayersTurn(player);
-	}
-*/
 
 	/**
 	 * This method draws a marker for the player on their current tile location.
