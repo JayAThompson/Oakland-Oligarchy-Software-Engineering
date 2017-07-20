@@ -124,12 +124,13 @@ public class oakOligarchy{
 	}
 
 	/**
-	 * Handle a player's time in jail (Hillman Library)
+	 * Move a player to jail (Hillman Library)
 	 */
-	public static void jail() {
+	public static void goToJail() {
 		controls.writeLine("**************** Go to Hillman *****************");
 		controls.writeLine(tab + currPlayer.getName() + " has an exam and has been banished to Hillman.");
 		controls.writeLine("************************************************");
+		currPlayer.setInJail(true);
 		movePlayerTo(currPlayer, 18);
 	}
 
@@ -414,91 +415,137 @@ public class oakOligarchy{
 		currPlayer = players.get(currPlayerIndex);
 		controls.drawPlayerTurnLabel(currPlayer);
 		controls.writeLine(currPlayer.name+"'s turn");
-		controls.showRollButton();
-		controls.showTradeButton();
 
-		do {
-		menuAction(menu.getEvent());
-		event = waitForControlEvents(preRollEvents, 2);
-			if (event == preRollEvents[0]){
-				controls.writeLine(tab+currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
-				controls.hideRollButton();
-				movePlayer(currPlayer,roll1+roll2);
+		if (currPlayer.isInJail()) {
+			currPlayer.incrementJailedTurns();
+			Object[] options = {"Roll for doubles", "Pay the fine", "Keep studying"};
+			int selectedOption = JOptionPane.showOptionDialog(null,
+										"To leave Hillman, you must roll doubles, pay the $500 fine, or keep studying for " + currPlayer.getRemainingJailedTurns() + " more turns. What would you like to do?",
+										"You are stuck in Hillman Library!",
+										JOptionPane.DEFAULT_OPTION,
+										JOptionPane.QUESTION_MESSAGE,
+										null,
+										options,
+										null);
+			if (selectedOption == 0) {
+				controls.writeLine(tab + currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a " + Integer.toString(roll2));
+				if (roll1 == roll2) {
+					controls.writeLine(tab + "You escaped from Hillman!");
+					currPlayer.setInJail(false);
+				} else {
+					if (currPlayer.getRemainingJailedTurns() == 0) {
+						controls.writeLine(tab + "You have studied long enough. You are no longer banished to Hillman!");
+					} else {
+						controls.writeLine(tab + "You are still stuck in Hillman.");
+					}
+				}
+			} else if (selectedOption == 1) {
+				if (currPlayer.getMoney() >= 500) {
+					currPlayer.money -= 500;
+					board.boardCenter.updateMoneyLabels();
+					controls.writeLine(tab + "You paid the $500 fine and escaped from Hillman!");
+					currPlayer.setInJail(false);
+				} else {
+					if (currPlayer.getRemainingJailedTurns() == 0) {
+						controls.writeLine(tab + "You have studied long enough. You are no longer banished to Hillman!");
+					} else {
+						controls.writeLine(tab + "You cannot afford to pay the fine and will remain in Hillman.");
+					}
+				}
+			} else if (selectedOption == 2) {
+				if (currPlayer.getRemainingJailedTurns() == 0) {
+					controls.writeLine(tab + "You have studied long enough. You are no longer banished to Hillman!");
+				} else {
+					controls.writeLine(tab + "You will remain in Hillman to study for your exam.");
+				}
 			}
-			else {
-				tradeProperty();
-			}
-		} while (event != preRollEvents[0]);
+		} else {
+			controls.showRollButton();
+			controls.showTradeButton();
 
-		controls.showPurchaseButton();
-		controls.showEndTurnButton();
-		//getting charged that money
-		Tile tmp = board.tiles.get(currPlayer.tileIndex);
-		if(tmp.propertyName.equals("Action Tile")){
-			actionTileFun();
-			//reget tmp because actionTileFun can move players
-			tmp = board.tiles.get(currPlayer.tileIndex);
-		} else if (tmp.propertyName.equals("Go to Hillman")) {
-			jail();
-			tmp = board.tiles.get(currPlayer.tileIndex);
-		}
-		if(tmp.owner != null || tmp.propertyValue>currPlayer.getMoney()){
-			controls.hidePurchaseButton();
-		}
-		else{
-			controls.showPurchaseButton();
-		}
-		if(tmp.owner != null && tmp.owner != currPlayer && tmp.rent>0){
-			if (tmp.rent <= currPlayer.money) {
-				currPlayer.money -= tmp.rent;
-				tmp.owner.money+=tmp.rent;
-				board.updateMoney();
-				controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
-			}
-			else {
-				/*
-				 * TODO Allow player to trade properties to cover the rent
-				 * For now, pay what is possible and print out in the log that the user
-				 * could not afford the rent and owes money.
-				 */
-				int currMoney = currPlayer.money;
-				currPlayer.money -= currMoney;
-				tmp.owner.money += currMoney;
-				board.updateMoney();
-				controls.writeLine(tab+currPlayer.getName() + " could not afford the $" + Integer.toString(tmp.rent)
-				 	+ " rent and owes $" + Integer.toString(tmp.rent - currMoney) + " in rent to " + tmp.owner.getName());
-			}
-		}
-		do {
-			event = waitForControlEvents(postRollEvents,3);
-			if(event == postRollEvents[1]){
-				purchaseCurrentProperty();
-				controls.hidePurchaseButton();
-
-			}
-			else if (event == postRollEvents[2]) {
-				tradeProperty();
-			}
-		}while (event != postRollEvents[0] && event != postRollEvents[1]); //to make sure you can't double purchase a place
-
-		Tile tile = board.tiles.get(currPlayer.tileIndex);
-		if(tile.owner == null && tile.propertyValue>0){
-			auction(tile);
-		}
-
-		if (event != postRollEvents[0]){ //to not overwrite an above end turn event
-			do{
-				event = waitForControlEvents(postPurchaseEvents, 2);
-				if (event != postPurchaseEvents[0]) {
+			do {
+			menuAction(menu.getEvent());
+			event = waitForControlEvents(preRollEvents, 2);
+				if (event == preRollEvents[0]){
+					controls.writeLine(tab+currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
+					controls.hideRollButton();
+					movePlayer(currPlayer,roll1+roll2);
+				}
+				else {
 					tradeProperty();
 				}
+			} while (event != preRollEvents[0]);
 
-			} while (event  !=  postPurchaseEvents[0]);
+			controls.showPurchaseButton();
+			controls.showEndTurnButton();
+			//getting charged that money
+			Tile tmp = board.tiles.get(currPlayer.tileIndex);
+			if(tmp.propertyName.equals("Action Tile")){
+				actionTileFun();
+				//reget tmp because actionTileFun can move players
+				tmp = board.tiles.get(currPlayer.tileIndex);
+			} else if (tmp.propertyName.equals("Go to Hillman")) {
+				goToJail();
+				tmp = board.tiles.get(currPlayer.tileIndex);
+			}
+			if(tmp.owner != null || tmp.propertyValue>currPlayer.getMoney()){
+				controls.hidePurchaseButton();
+			}
+			else{
+				controls.showPurchaseButton();
+			}
+			if(tmp.owner != null && tmp.owner != currPlayer && tmp.rent>0){
+				if (tmp.rent <= currPlayer.money) {
+					currPlayer.money -= tmp.rent;
+					tmp.owner.money+=tmp.rent;
+					board.updateMoney();
+					controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
+				}
+				else {
+					/*
+					 * TODO Allow player to trade properties to cover the rent
+					 * For now, pay what is possible and print out in the log that the user
+					 * could not afford the rent and owes money.
+					 */
+					int currMoney = currPlayer.money;
+					currPlayer.money -= currMoney;
+					tmp.owner.money += currMoney;
+					board.updateMoney();
+					controls.writeLine(tab+currPlayer.getName() + " could not afford the $" + Integer.toString(tmp.rent)
+					 	+ " rent and owes $" + Integer.toString(tmp.rent - currMoney) + " in rent to " + tmp.owner.getName());
+				}
+			}
+			do {
+				event = waitForControlEvents(postRollEvents,3);
+				if(event == postRollEvents[1]){
+					purchaseCurrentProperty();
+					controls.hidePurchaseButton();
+
+				}
+				else if (event == postRollEvents[2]) {
+					tradeProperty();
+				}
+			}while (event != postRollEvents[0] && event != postRollEvents[1]); //to make sure you can't double purchase a place
+
+			Tile tile = board.tiles.get(currPlayer.tileIndex);
+			if(tile.owner == null && tile.propertyValue>0){
+				auction(tile);
+			}
+
+			if (event != postRollEvents[0]){ //to not overwrite an above end turn event
+				do{
+					event = waitForControlEvents(postPurchaseEvents, 2);
+					if (event != postPurchaseEvents[0]) {
+						tradeProperty();
+					}
+
+				} while (event  !=  postPurchaseEvents[0]);
+			}
+
+			controls.hidePurchaseButton();
+			controls.hideTradeButton();
+			controls.hideEndTurnButton();
 		}
-
-		controls.hidePurchaseButton();
-		controls.hideEndTurnButton();
-
 	}
 
 	/**
@@ -551,7 +598,7 @@ public class oakOligarchy{
 				JOptionPane help = new JOptionPane(
 					"<html><div style='margin:0px 10px'>Here are the rules.<br>" +
 					"<ul><li>To begin the game, enter the names of the players in the sidebar on the left. The first player to take their turn will be chosen randomly.</li>" +
-					"<li>On a player's turn, they must roll two die, and their token will be moved forward the number of spaces as rolled on the dice.</li>" +
+					"<li>On a player's turn, they must roll two dice. Their token will be moved forward the number of spaces as rolled on the dice.</li>" +
 					"<li>If the player lands on an unowned property, they are given the option to buy the property for the price listed on the tile. If they chose not to purchase the property or cannot afford to purchase the property, the property will be auctioned off among all the other players and sold to the highest bidder.</li>" +
 					"<li>If the current player is the owner of the property, nothing will happen, but if another player owns the property, the current player will pay the rent on the property to the owner. If the current player cannot afford the rent, they will be able to trade properties to pay off what they owe.</li>" +
 					"<li>If the player lands on an action tile, some random action will be taken. This random action could involve receiving money, having money taken away, or their token being moved to another tile.</li>" +

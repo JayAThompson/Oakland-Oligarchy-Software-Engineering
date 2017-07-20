@@ -13,7 +13,9 @@ public class Player{
 	String color;
 	public int tileIndex;
 	public ArrayList<Tile> properties;
-	
+	private boolean inJail;
+	private int jailedTurns;
+
 	/*this is only to be called if the player is on the tile*/
 	public void purchaseProperty(Tile tile){
 		this.money -= tile.propertyValue;
@@ -28,7 +30,7 @@ public class Player{
 			propertyString+=">"+tmp.propertyName+"\n";
 		}
 	}
-	
+
 		/**
 	 * Class constructor
 	 * @param name The name of the player
@@ -41,6 +43,8 @@ public class Player{
 		this.color=color;
 		this.tileIndex = 0;
 		this.properties = new ArrayList<Tile>();
+		this.inJail = false;
+		this.jailedTurns = 0;
 	}
 
 	/**
@@ -91,8 +95,8 @@ public class Player{
 	}
 	/**
 	 * Remove property from the property array list
-	 * @param the string name of the property to remove
-	 * @param the player object who is new owner of the property or null if none
+	 * @param propName the string name of the property to remove
+	 * @param newOwner the player object who is new owner of the property or null if none
 	 */
 	public void removeProperty(String propName, Player newOwner) {
 		for (int i = 0; i < properties.size(); i++) {
@@ -106,12 +110,49 @@ public class Player{
 	}
 	/**
 	 *Remove property from the property array list
-	 * @param the property tile 
-	 * @param the player object who is the new owner, or null if none
+	 * @param property the property tile
+	 * @param newOwner the player object who is the new owner, or null if none
 	 */
 	public void removeProperty(Tile property, Player newOwner) {
 		Tile theProp = properties.get(properties.indexOf(property));
 		theProp.setOwner(newOwner);
 		properties.remove(property);
+	}
+
+	/**
+	 * Get value of jail flag
+	 * @return value of jail flag
+	 */
+	public boolean isInJail() {
+		return this.inJail;
+	}
+
+	/**
+	 * Set the value of the jail flag
+	 * @param j the new value of the jail flag
+	 */
+	public void setInJail(boolean j) {
+		this.inJail = j;
+		if (j == true) {
+			this.jailedTurns = 0;
+		}
+	}
+
+	/**
+	 * Increment the amount of turns spent in jail by 1
+	 */
+	public void incrementJailedTurns() {
+		this.jailedTurns++;
+		if (this.jailedTurns == 3) {
+			this.setInJail(false);
+		}
+	}
+
+	/**
+	 * Get the number of jailed turns remaining
+	 * @return The number of jailed turns remaining
+	 */
+	public int getRemainingJailedTurns() {
+		return 3 - this.jailedTurns;
 	}
 }
