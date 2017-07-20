@@ -12,9 +12,10 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import javax.swing.text.DefaultCaret;
 import java.util.ArrayList;
+import java.io.Serializable;
 
 
-public class Controls extends JPanel implements ActionListener{
+public class Controls extends JPanel implements ActionListener,Serializable{
 	public enum Event{ ROLL,PURCHASE,END_TURN,TRADE,NONE };	
 	
 	public ArrayList<Player> players = new ArrayList<Player>();

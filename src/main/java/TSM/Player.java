@@ -1,11 +1,12 @@
 import java.util.ArrayList;
+import java.io.Serializable;
 
 /**
  * Contains player information, such as name, amount of money, color of marker,
  * and current location on the board
  */
 
-public class Player{
+public class Player implements Serializable{
 
 	String name;
 	public String propertyString;

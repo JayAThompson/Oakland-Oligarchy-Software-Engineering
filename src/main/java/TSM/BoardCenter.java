@@ -11,9 +11,10 @@ import javax.swing.*;
 import javax.swing.border.*;
 import java.util.ArrayList;
 //import javax.swing.border;
+import java.io.Serializable;
 
 
-public class BoardCenter extends JPanel{	
+public class BoardCenter extends JPanel implements Serializable{	
 	
 /*	
  	JLabel dice;

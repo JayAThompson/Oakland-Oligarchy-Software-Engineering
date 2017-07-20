@@ -3,8 +3,9 @@
  */
 
 import javax.swing.JLabel;
+import java.io.Serializable;
 
-public class Clock {
+public class Clock implements Serializable {
 
     private final int MAX_VAL = 60;
     private final int MIN_VAL = 0;

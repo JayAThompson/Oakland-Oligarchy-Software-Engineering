@@ -7,6 +7,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import java.io.*;
+
 
 public class oakOligarchy{
 	static JFrame window;
@@ -20,7 +22,7 @@ public class oakOligarchy{
 	//the following field is the index of the player and the player's corresponding swing components in many arrays
 	static int currPlayerIndex;
 	//with this field you can change the bechavior of the log text area
-	static String tab = " -> ";
+	static final String tab = " -> ";
 
 	/**
 	 * Class constructor
@@ -40,11 +42,64 @@ public class oakOligarchy{
 		window.add(board.getBoard(), BorderLayout.CENTER);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setVisible(true);
+		
+		
+		//sleeping while the player info is collected
+		while(controls.playerDataFlag == false){
+			menuAction(menu.getEvent());
+			try {
+			   Thread.sleep(50);
+			} catch(InterruptedException e) {
+			}
+		}
+		controls.drawTurnButtons();
+		players=controls.players;
+		board.boardCenter.initPlayerInfo(players);
+		for(Player player : players){
+			board.drawPlayer(player);
+		}
+		currPlayerIndex=(int)(Math.random()*players.size());
+		currPlayer = players.get(currPlayerIndex);
+		//menu.drawPlayer(players.get(0));
+		//this is the start of the actual game
+		playGame();
+	}
+	
+	oakOligarchy(Object[] gameStuffs){
+		board = (GameBoard)gameStuffs[0];
+		menu = (Menu)gameStuffs[1];
+		controls = (Controls)gameStuffs[2];
+		currPlayer = (Player)gameStuffs[3];
+		currPlayerIndex = (int)gameStuffs[4];
+		players = controls.players;
+		window = new JFrame("Oakland Oligarchy");
+		//default size for the JFrame
+		window.setSize(1500, 1080);
+		window.add(menu, BorderLayout.NORTH);
+		window.add(controls, BorderLayout.WEST);
+		window.add(board.getBoard(), BorderLayout.CENTER);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setVisible(true);
+		
+		menu.startClock();
+		//board.addPlayersToTiles(players);
+		controls.writeLine("****** game loaded ******");
+		
+		nextTurn(false);
+		playGame();
+	}
+	
+	
+	private static void playGame(){
+		while(!winnerExists()){
+			menuAction(menu.getEvent());
+			nextTurn(true);
+		}
 	}
 
 	/**
 	 * Creates a random dice roll
-	 * @return int The integer value of the dice roll
+	 * @return int The integer value of the dice roll	
 	 */
 	public static int rollDice(){
 		return (int)(Math.random()*6+1);
@@ -55,7 +110,7 @@ public class oakOligarchy{
 	 *This method does all the actiontile stuffs
 	 */
 	public static void actionTileFun(){
-		controls.writeLine("***********Action Tile***********");				controls.writeLine("******Action Tile******");
+		controls.writeLine("***********Action Tile***********");
 		int action = (int)(Math.random()*8+1);
 		switch(action){
 			case 1:
@@ -395,7 +450,7 @@ public class oakOligarchy{
 	* This method houses most of the logic for the actual game. 
 	* 
 	*/
-	private static void nextTurn(){
+	private static void nextTurn(boolean nextPlayer){
 		final Controls.Event preRollEvents[] = {Controls.Event.ROLL, Controls.Event.TRADE};
 		final Controls.Event postRollEvents[] = {Controls.Event.END_TURN, Controls.Event.PURCHASE, Controls.Event.TRADE};
 		final Controls.Event postPurchaseEvents[] = {Controls.Event.END_TURN, Controls.Event.TRADE};
@@ -404,8 +459,9 @@ public class oakOligarchy{
 		Controls.Event event;		
 		controls.hidePurchaseButton();
 		controls.hideEndTurnButton();
-		
-		currPlayerIndex = (currPlayerIndex+1)%players.size();
+		if(nextPlayer){
+			currPlayerIndex = (currPlayerIndex+1)%players.size();
+		}
 		currPlayer = players.get(currPlayerIndex);
 		controls.drawPlayerTurnLabel(currPlayer);
 		controls.writeLine(currPlayer.name+"'s turn");	
@@ -525,21 +581,129 @@ public class oakOligarchy{
 	}
 	
 	/**
+	*This method creates a new game. it does this by disposing all the objects and recalling the main constructor
+	*/
+	private static void newGame(){
+		//JOptionPane tmp = new JOptionPane("sup?");
+		window.dispose();
+		menu=null;
+		controls=null;
+		board=null;
+		//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+		new oakOligarchy();
+		//tmp.;
+	}
+	
+	/**
+	*this method saves the game by putting the important objects in an object array then serializing them all
+	*/	
+	private static void saveGame(){
+		FileOutputStream fout = null;
+		ObjectOutputStream oos = null;
+		Object[] gameStuffs = new Object[5];
+		gameStuffs[0]=board;
+		gameStuffs[1]=menu;
+		gameStuffs[2]=controls;
+		gameStuffs[3]=currPlayer;
+		gameStuffs[4]=currPlayerIndex;
+		
+		try {
+			fout = new FileOutputStream("objs.game");
+			oos = new ObjectOutputStream(fout);
+			oos.writeObject(gameStuffs);
+			System.out.println("Done");
+		} catch (Exception ex) {
+			//ex.printStackTrace();
+		} finally {
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (Exception e) {
+				//	e.printStackTrace();
+				}
+			}
+			if (oos != null) {
+				try {
+					oos.close();
+				} catch (Exception e) {
+				//	e.printStackTrace();
+				}
+			}
+		}
+		controls.writeLine("****** game saved ******");
+		//window.revalidate();
+		window.repaint();
+	}
+	
+	/**
+	*This method loads a saved game file. it reads in an object array and then calls a special constructor to remake all the game
+	*/
+	private static void loadGame(){
+		FileInputStream fin = null;
+		ObjectInputStream ois = null;
+		Object[] gameStuffs = new Object[5];
+
+
+		try {
+
+			fin = new FileInputStream("objs.game");
+			ois = new ObjectInputStream(fin);
+			gameStuffs = (Object[]) ois.readObject();
+
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(null, "Corrupted game file", "File error", JOptionPane.INFORMATION_MESSAGE);
+			return;
+		} finally {
+
+			if (fin != null) {
+				try {
+					fin.close();
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Corrupted game file", "File error", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+			}
+
+			if (ois != null) {
+				try {
+					ois.close();
+				} catch (IOException e) {
+					//e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "Corrupted game file", "File error", JOptionPane.INFORMATION_MESSAGE);
+					return;
+				}
+			}
+
+		}
+		
+		window.dispose();
+		menu=null;
+		controls=null;
+		board=null;
+		currPlayer=null;
+		//window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
+		new oakOligarchy(gameStuffs);
+		//tmp.;
+		
+	}
+	
+	
+	/**
 	*This is the method that performs all of the menu bar actions
 	*/
 	public static void menuAction(Menu.Event event){
 		switch(event){
 			case NEW_GAME:
-				controls.writeLine("new game");
+				newGame();
 				break;
 			case END_GAME:
-				controls.writeLine("end game");
+				System.exit(0);
 				break;
 			case LOAD_GAME:
-				controls.writeLine("load game");
+				loadGame();
 				break;
 			case SAVE_GAME:
-				controls.writeLine("save game");
+				saveGame();
 				break;
 			case HELP:
 				controls.writeLine("HELP ME PLEASE PLZ PLZ PLZ");
@@ -558,28 +722,5 @@ public class oakOligarchy{
 	 */
 	public static void main(String[] args){
 		new oakOligarchy();
-
-		//sleeping while the player info is collected
-		while(controls.playerDataFlag == false){
-			menuAction(menu.getEvent());
-			try {
-			   Thread.sleep(50);
-			} catch(InterruptedException e) {
-			}
-		}
-		controls.drawTurnButtons();
-		players=controls.players;
-		board.boardCenter.initPlayerInfo(players);
-		for(Player player : players){
-			board.drawPlayer(player);
-		}
-		currPlayerIndex=(int)(Math.random()*players.size());
-		currPlayer = players.get(currPlayerIndex);
-		//menu.drawPlayer(players.get(0));
-		//this is the start of the actual game
-		while(!winnerExists()){
-			menuAction(menu.getEvent());
-			nextTurn();
-		}
 	}
 }

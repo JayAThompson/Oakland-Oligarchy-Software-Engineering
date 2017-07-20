@@ -8,8 +8,10 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.Serializable;
 
-public class Menu extends JPanel implements ActionListener{
+
+public class Menu extends JPanel implements ActionListener,Serializable{
 	public enum Event{NONE,NEW_GAME,END_GAME,SAVE_GAME,LOAD_GAME,HELP };
 
 	public Event event;
@@ -122,5 +124,12 @@ public class Menu extends JPanel implements ActionListener{
 	 */
 	public void stopClock() {
 		elapsedTime.setGameOver(true);
+	}
+	
+	/**
+	*This method starts the clock after it has been loaded from a file
+	*/
+	public void startClock(){
+		elapsedTime.startClock();
 	}
 }

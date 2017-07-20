@@ -7,12 +7,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.ArrayList;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.Serializable;
 
-public class GameBoard extends JPanel{
+
+public class GameBoard extends JPanel implements Serializable{
 
 	// 2-D array containing the title and the price for each tile on the game board
 	private static final String[][] tileInfo= new String[][]{{"Start","0","0"},
@@ -52,9 +50,9 @@ public class GameBoard extends JPanel{
 															 {"Papa D's","750","75"},
 															 {"actiontile","0","0"}};
 
-	public static ArrayList<Tile> tiles = new ArrayList<Tile>();
+	public ArrayList<Tile> tiles;
 
-	BoardCenter boardCenter = new BoardCenter(new Dimension(640, 400));
+	BoardCenter boardCenter;
 
 
 	JPanel north;
@@ -75,7 +73,9 @@ public class GameBoard extends JPanel{
 	 * them to the game board panel
 	 */
 	public GameBoard() { //add parameters later for rigid jail/home tile maybe?
-
+		tiles = new ArrayList<Tile>();
+		boardCenter = new BoardCenter(new Dimension(640, 400));
+		
 		this.north = new JPanel();
 		this.south = new JPanel();
 		this.east  = new JPanel();
@@ -289,7 +289,22 @@ public class GameBoard extends JPanel{
 	public void drawProperties(int playerIndex){
 		boardCenter.drawProperties(playerIndex);
 	}
-
+	
+	/**
+	*This method is here so that all the player object pointers are still to the right spots after a load
+	*/
+	public void addPlayersToTiles( ArrayList<Player> players){
+		Tile tmp;
+		for(Tile tile : tiles){
+				tile.players = new ArrayList<Player>();
+				tile.drawMarkers();
+		}
+		for(Player player : players){
+			tmp = tiles.get(player.tileIndex);
+			//tmp.addPlayer(player);
+		}
+	}
+	
 	/**
 	 * Main method for testing purposes
 	 * @param args Unused
