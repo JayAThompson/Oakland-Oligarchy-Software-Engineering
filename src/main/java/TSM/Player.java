@@ -43,6 +43,7 @@ public class Player{
 		this.color=color;
 		this.tileIndex = 0;
 		this.properties = new ArrayList<Tile>();
+		this.propertyString = "";
 		this.inJail = false;
 		this.jailedTurns = 0;
 	}
