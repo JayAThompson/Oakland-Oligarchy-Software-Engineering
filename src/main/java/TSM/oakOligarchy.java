@@ -391,6 +391,21 @@ public class oakOligarchy{
 		
 	}
 	
+	
+	public static boolean playerLoss() {
+		if (currPlayer.getMoney() <= 0 && currPlayer.properties.size() == 0) {
+			
+			currPlayer.setPropertyString("Lost");
+			board.boardCenter.drawProperties(currPlayerIndex);
+			board.boardCenter.removeMoneyLabel(currPlayerIndex);
+			players.remove(currPlayer);
+			
+			return true;
+		}
+		return false;
+	}
+	
+	
 	/**
 	* This method houses most of the logic for the actual game. 
 	* 
@@ -489,6 +504,9 @@ public class oakOligarchy{
 			} while (event  !=  postPurchaseEvents[0]);
 		}
 		
+		if (playerLoss()) {
+			controls.writeLine(tab+currPlayer.getName() + " has no properties nor money, and has lost the game.");
+		}
 		
 		controls.hidePurchaseButton();
 		controls.hideEndTurnButton();
