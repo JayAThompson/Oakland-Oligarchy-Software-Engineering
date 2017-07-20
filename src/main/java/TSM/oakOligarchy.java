@@ -16,7 +16,8 @@ public class oakOligarchy{
 	static GameBoard board;
 	static Menu menu;
 	static ArrayList<Player> players;
-	static Runnable runSave = new Runnable(){ 
+	
+	static Runnable runSave = new Runnable(){ //this runnable is here to remove the awt exceptions caused by serialization
 		public void run(){
 			saveGame();
 		}
@@ -604,6 +605,7 @@ public class oakOligarchy{
 	*this method saves the game by putting the important objects in an object array then serializing them all
 	*/	
 	private static void saveGame(){
+		int rVal;
 		FileOutputStream fout = null;
 		ObjectOutputStream oos = null;
 		Object[] gameStuffs = new Object[5];
@@ -613,11 +615,17 @@ public class oakOligarchy{
 		gameStuffs[3]=currPlayer;
 		gameStuffs[4]=currPlayerIndex;
 		
+		JFileChooser open = new JFileChooser();
+		rVal = open.showSaveDialog(window);
+		
 		try {
-			fout = new FileOutputStream("objs.game");
+			if(rVal ==JFileChooser.APPROVE_OPTION){
+				fout = new FileOutputStream(open.getSelectedFile().getCanonicalPath());
+			}else{
+				return;
+			}
 			oos = new ObjectOutputStream(fout);
 			oos.writeObject(gameStuffs);
-			System.out.println("Done");
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "file not saved", "File error", JOptionPane.INFORMATION_MESSAGE);
 		} finally {
@@ -645,14 +653,20 @@ public class oakOligarchy{
 	*This method loads a saved game file. it reads in an object array and then calls a special constructor to remake all the game
 	*/
 	private static void loadGame(){
+		int rVal;
 		FileInputStream fin = null;
 		ObjectInputStream ois = null;
 		Object[] gameStuffs = new Object[5];
 
-
+		JFileChooser open = new JFileChooser();
+		rVal = open.showOpenDialog(window);
+		
 		try {
-
-			fin = new FileInputStream("objs.game");
+			if(rVal ==JFileChooser.APPROVE_OPTION){
+				fin = new FileInputStream(open.getSelectedFile().getCanonicalPath());
+			}else{
+				return;
+			}
 			ois = new ObjectInputStream(fin);
 			gameStuffs = (Object[]) ois.readObject();
 
