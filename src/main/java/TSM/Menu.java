@@ -50,7 +50,7 @@ public class Menu extends JPanel implements ActionListener,Serializable{
 		clock.setFont(new Font("Courier", Font.PLAIN, 16));
 		this.add(clock, 0, 1);
 		elapsedTime = new Clock(clock);
-		elapsedTime.startClock();
+		//elapsedTime.startClock();
 		
 		//Font for all the buttons, display them.
 /*
@@ -75,6 +75,8 @@ public class Menu extends JPanel implements ActionListener,Serializable{
 		help.setFont(new Font("Calibri", Font.PLAIN, 15));
 		help.addActionListener(this);
 		this.add(help, 0, 6);
+		
+		saveGame.setVisible(false);
 	}
 	
 		/**
@@ -119,6 +121,14 @@ public class Menu extends JPanel implements ActionListener,Serializable{
 
 	}
 
+	public void hideSaveButton(){
+		saveGame.setVisible(false);	
+	}
+	
+	public void showSaveButton(){
+		saveGame.setVisible(true);	
+	}
+	
 	/**
 	 * Set the value of gameOver in the Clock class to true to signal the end of the game
 	 */
@@ -127,7 +137,7 @@ public class Menu extends JPanel implements ActionListener,Serializable{
 	}
 	
 	/**
-	*This method starts the clock after it has been loaded from a file
+	*This method starts the game clock
 	*/
 	public void startClock(){
 		elapsedTime.startClock();

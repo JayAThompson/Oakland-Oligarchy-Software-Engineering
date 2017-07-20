@@ -16,7 +16,11 @@ public class oakOligarchy{
 	static GameBoard board;
 	static Menu menu;
 	static ArrayList<Player> players;
-	
+	static Runnable runSave = new Runnable(){ 
+		public void run(){
+			saveGame();
+		}
+	};
 	//these two variables are the player who's turn it is
 	static Player currPlayer;
 	//the following field is the index of the player and the player's corresponding swing components in many arrays
@@ -62,6 +66,7 @@ public class oakOligarchy{
 		currPlayer = players.get(currPlayerIndex);
 		//menu.drawPlayer(players.get(0));
 		//this is the start of the actual game
+		menu.startClock();
 		playGame();
 	}
 	
@@ -471,6 +476,7 @@ public class oakOligarchy{
 		do {
 		menuAction(menu.getEvent());
 		event = waitForControlEvents(preRollEvents, 2);
+			menu.hideSaveButton();
 			if (event == preRollEvents[0]){
 				controls.writeLine(tab+currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
 				controls.hideRollButton();
@@ -548,7 +554,7 @@ public class oakOligarchy{
 		
 		controls.hidePurchaseButton();
 		controls.hideEndTurnButton();
-
+		menu.showSaveButton();
 	}
 	
 	/**
@@ -613,20 +619,20 @@ public class oakOligarchy{
 			oos.writeObject(gameStuffs);
 			System.out.println("Done");
 		} catch (Exception ex) {
-			//ex.printStackTrace();
+			JOptionPane.showMessageDialog(null, "file not saved", "File error", JOptionPane.INFORMATION_MESSAGE);
 		} finally {
 			if (fout != null) {
 				try {
 					fout.close();
 				} catch (Exception e) {
-				//	e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "file not saved", "File error", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 			if (oos != null) {
 				try {
 					oos.close();
 				} catch (Exception e) {
-				//	e.printStackTrace();
+						JOptionPane.showMessageDialog(null, "file not saved", "File error", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
 		}
@@ -703,7 +709,8 @@ public class oakOligarchy{
 				loadGame();
 				break;
 			case SAVE_GAME:
-				saveGame();
+				//saveGame();
+				SwingUtilities.invokeLater(runSave);
 				break;
 			case HELP:
 				controls.writeLine("HELP ME PLEASE PLZ PLZ PLZ");
