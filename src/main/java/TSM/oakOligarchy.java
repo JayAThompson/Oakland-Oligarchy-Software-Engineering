@@ -420,7 +420,7 @@ public class oakOligarchy{
 				currPlayer.setPropertyString(currPlayer.getPropertyString().replace(replaceWith, ""));
 				currPlayer.removeProperty(playerOneTrades[i].getPropertyName(), tradeWith);
 			}
-			if (playerOneTrades[0] != null) {
+			if (playerOneTrades.length>0 && playerOneTrades[0] != null) {
 				hasTraded = true;
 			}
 			currPlayer.setMoney(currPlayer.getMoney() + money2 - money1);
@@ -576,9 +576,9 @@ public class oakOligarchy{
 	*
 	*/
 	private static void nextTurn(boolean nextPlayer){
-		final Controls.Event preRollEvents[] = {Controls.Event.ROLL, Controls.Event.TRADE};
-		final Controls.Event postRollEvents[] = {Controls.Event.END_TURN, Controls.Event.PURCHASE, Controls.Event.TRADE};
-		final Controls.Event postPurchaseEvents[] = {Controls.Event.END_TURN, Controls.Event.TRADE};
+		final Controls.Event preRollEvents[] = {Controls.Event.ROLL, Controls.Event.TRADE, Controls.Event.SELL};
+		final Controls.Event postRollEvents[] = {Controls.Event.END_TURN, Controls.Event.PURCHASE, Controls.Event.TRADE, Controls.Event.SELL};
+		final Controls.Event postPurchaseEvents[] = {Controls.Event.END_TURN, Controls.Event.TRADE, Controls.Event.SELL};
 
 		int roll1 = rollDice();
 		int roll2 = rollDice();
@@ -639,59 +639,54 @@ public class oakOligarchy{
 			}
 		} else {
 		
-		controls.showRollButton();
-		controls.showTradeButton();
-		if (currPlayer.properties.size() > 0) {
-			controls.showSellBankButton();
-		}
+			controls.showRollButton();
+			controls.showTradeButton();
+			if (currPlayer.properties.size() > 0) {
+				controls.showSellBankButton();
+			}
 		
-		do {
-		menuAction(menu.getEvent());
-		event = waitForControlEvents(preRollEvents, 2);
-		menu.hideSaveButton();
+			do {
+				menuAction(menu.getEvent());
+				event = waitForControlEvents(preRollEvents, 3);
+				menu.hideSaveButton();
 
-			if (event == preRollEvents[0]){
-				controls.writeLine(tab+currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
-				controls.hideRollButton();
-				movePlayer(currPlayer,roll1+roll2); 
-			}
-			else if (event == preRollEvents[2]) {
-				sellToBank();
-			}
-			else {
-				tradeProperty(false);
-			}
-		} while (event != preRollEvents[0]);
-		
-		
-		controls.showEndTurnButton();
-		//getting charged that money
-		Tile tmp = board.tiles.get(currPlayer.tileIndex);
-		if(tmp.propertyName.equals("actiontile")){
-			controls.hidePurchaseButton();
-			actionTileFun();
-			//reget tmp because actionTileFun can move players
-			tmp = board.tiles.get(currPlayer.tileIndex);
-		}else if (tmp.propertyName.equals("Go to Hillman")) {
+				if (event == preRollEvents[0]){
+					controls.writeLine(tab+currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
+					controls.hideRollButton();
+					movePlayer(currPlayer,roll1+roll2); 
+				}
+				else if (event == preRollEvents[2]) {
+					sellToBank();
+				}else {
+					tradeProperty(false);
+				}
+			} while (event != preRollEvents[0]);
+			
+			controls.showEndTurnButton();
+			//getting charged that money
+			Tile tmp = board.tiles.get(currPlayer.tileIndex);
+			if(tmp.propertyName.equals("Action Tile")){
+				controls.hidePurchaseButton();
+				actionTileFun();
+				//reget tmp because actionTileFun can move players
+				tmp = board.tiles.get(currPlayer.tileIndex);
+			}else if (tmp.propertyName.equals("Go to Hillman")) {
 				goToJail();
 				tmp = board.tiles.get(currPlayer.tileIndex);
-		}		
-		if(tmp.owner != null || tmp.propertyValue>currPlayer.getMoney()){
-			controls.hidePurchaseButton();
-		}
-		else{
-			controls.showPurchaseButton();	
-		}
-		if(tmp.owner != null && tmp.owner != currPlayer && tmp.rent>0){
-			if (tmp.rent <= currPlayer.money) {
-				currPlayer.money -= tmp.rent;
-				tmp.owner.money+=tmp.rent;
-				board.updateMoney();
-				controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
+			}		
+			if(tmp.owner != null || tmp.propertyValue>currPlayer.getMoney()){
+				controls.hidePurchaseButton();
+			}else{
+				controls.showPurchaseButton();	
 			}
-			else if (currPlayer.properties.size() > 0) {
-				
-				boolean traded = false;
+			if(tmp.owner != null && tmp.owner != currPlayer && tmp.rent>0){
+				if (tmp.rent <= currPlayer.money) {
+					currPlayer.money -= tmp.rent;
+						tmp.owner.money+=tmp.rent;
+					board.updateMoney();
+					controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
+				}else if (currPlayer.properties.size() > 0) {
+					boolean traded = false;
 				do {
 					traded = tradeProperty(true);
 				}while (!traded);
@@ -708,27 +703,22 @@ public class oakOligarchy{
 				board.updateMoney();
 				controls.writeLine(tab+currPlayer.getName() + " could not afford the $" + Integer.toString(tmp.rent)
 				 	+ " rent and owes $" + Integer.toString(tmp.rent - currMoney) + " in rent to " + tmp.owner.getName());
-
-
 			}
 		}
-
 		do {
-				event = waitForControlEvents(postRollEvents,4);
-				if(event == postRollEvents[1]){
-					purchaseCurrentProperty();
-					controls.hidePurchaseButton();
-
-				}
-				else if (event == postRollEvents[2]) {
-					tradeProperty(false);
-				}
-				else if (event == postRollEvents[3]) {
-					sellToBank();
-				}
-			}while (event != postRollEvents[0] && event != postRollEvents[1]); //to make sure you can't double purchase a place
+			event = waitForControlEvents(postRollEvents,4);
+			if(event == postRollEvents[1]){
+				purchaseCurrentProperty();
+				controls.hidePurchaseButton();
+			}
+			else if (event == postRollEvents[2]) {
+				tradeProperty(false);
+			}
+			else if (event == postRollEvents[3]) {
+				sellToBank();
+			}
+		}while (event != postRollEvents[0] && event != postRollEvents[1]); //to make sure you can't double purchase a place
 			
-		
 		Tile tile = board.tiles.get(currPlayer.tileIndex);
 		if(tile.owner == null && tile.propertyValue>0){
 			auction(tile);
@@ -755,6 +745,7 @@ public class oakOligarchy{
 		controls.hideEndTurnButton();
 		menu.showSaveButton();
 
+	}
 	}
 
 	/**

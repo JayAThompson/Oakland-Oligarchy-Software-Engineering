@@ -16,7 +16,7 @@ import java.io.Serializable;
 
 public class Controls extends JPanel implements ActionListener,Serializable{
 	
-	public enum Event{ ROLL,PURCHASE,END_TURN,TRADE,NONE };	
+	public enum Event{ ROLL,PURCHASE,END_TURN,TRADE,SELL,NONE };	
 	public ArrayList<Player> players = new ArrayList<Player>();
 //	private ArrayList<JTextArea> propertyText = new ArrayList<JTextArea>();
 //	private ArrayList<JLabel> moneyLabels = new ArrayList<JLabel>();
