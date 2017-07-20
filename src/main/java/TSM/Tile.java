@@ -54,7 +54,9 @@ public class Tile{
 		this.owner=player;
 		try {
 			this.namePanel.setBackground((Color)Class.forName("java.awt.Color").getField(this.owner.color).get(null));
-		} catch (Exception e) { }
+		} catch (Exception e) {
+			this.namePanel.setBackground(null);
+				}
 	}
 	
 	// returns the owner of this tile
@@ -68,9 +70,15 @@ public class Tile{
 		players.remove(player);
 		drawMarkers();
 	}
-
+	
+	//Returns the name of the property
 	public String getPropertyName() {
 		return this.propertyName;
+	}
+	
+	//returns property value
+	public int getPropertyValue() {
+		return this.propertyValue;
 	}
 
 	// Redraws the marker panel, adding the appropriate player markers

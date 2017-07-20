@@ -418,6 +418,80 @@ public class oakOligarchy{
 		
 	}
 	
+	public static void sellToBank() {
+		JCheckBox ownedProperties[] = new JCheckBox[currPlayer.properties.size()];
+		JLabel bankPrice[] = new JLabel[currPlayer.properties.size()];
+		
+		JPanel boxes = new JPanel();
+		JPanel play1 = new JPanel(new GridLayout(currPlayer.properties.size() + 1,1));
+		JPanel bank = new JPanel(new GridLayout(currPlayer.properties.size() + 1,1));
+		
+
+		JLabel currPlayerName = new JLabel(currPlayer.getName() + ":");
+		play1.add(currPlayerName);
+		
+		JLabel bankName = new JLabel("Bank buyback price:");
+		bank.add(bankName);
+		
+		for (int i = 0; i < currPlayer.properties.size(); i++) {
+				ownedProperties[i] = new JCheckBox(currPlayer.properties.get(i).getPropertyName());
+				play1.add(ownedProperties[i]);
+				
+				bankPrice[i] = new JLabel(Integer.toString(currPlayer.properties.get(i).getPropertyValue() / 2));
+				bank.add(bankPrice[i]);
+			}
+			
+		boxes.add(bank, BorderLayout.EAST);
+		boxes.add(play1, BorderLayout.WEST);
+		
+		int cont = JOptionPane.showConfirmDialog(null, boxes, "Sell to Bank", JOptionPane.OK_CANCEL_OPTION);
+		if (cont == JOptionPane.CANCEL_OPTION) {
+			return;
+		}
+		
+		String confirmString = "The current sale is:\n";
+		Tile playerOneTrades[] = new Tile[ownedProperties.length];
+		
+		int payout = 0;
+		int j = 0;
+		
+		for (int i = 0; i < ownedProperties.length; i++) {
+			if (ownedProperties[i].isSelected()) {
+				confirmString = confirmString + currPlayer.properties.get(i).getPropertyName() + "\n";
+				payout += currPlayer.properties.get(i).getPropertyValue() / 2;
+				playerOneTrades[j] = currPlayer.properties.get(i);
+				j++;
+			}
+		}
+		
+		confirmString += "For:\n" + payout + "\nIs this okay?";
+		
+		cont = JOptionPane.showConfirmDialog(null, confirmString, "Confirm Trade?", JOptionPane.YES_NO_OPTION);
+		if (cont  == JOptionPane.NO_OPTION) {
+			return;
+		}
+		else {
+			for (int i = 0; i < ownedProperties.length; i++) {
+				if (playerOneTrades[i] == null) {
+					break;
+				}
+				
+				String replaceWith = ">" + playerOneTrades[i].getPropertyName() + "\n"; //one problem is here, probably to do with trading multiple properties and removal form the arraylist updating the index
+				currPlayer.setPropertyString(currPlayer.getPropertyString().replace(replaceWith, ""));
+				currPlayer.removeProperty(playerOneTrades[i].getPropertyName(), null);
+			}
+			
+			currPlayer.setMoney(currPlayer.getMoney() + payout);
+			board.boardCenter.drawProperties(players.indexOf(currPlayer));
+			board.boardCenter.updateMoneyLabels();
+		}
+		
+		if (currPlayer.properties.size() == 0) {
+			controls.hideSellBankButton();
+		}
+		
+	}
+	
 	
 	public static boolean playerLoss() {
 		if (currPlayer.getMoney() <= 0 && currPlayer.properties.size() == 0) {
@@ -440,14 +514,15 @@ public class oakOligarchy{
 	*
 	*/
 	private static void nextTurn(){
-		final Controls.Event preRollEvents[] = {Controls.Event.ROLL, Controls.Event.TRADE};
-		final Controls.Event postRollEvents[] = {Controls.Event.END_TURN, Controls.Event.PURCHASE, Controls.Event.TRADE};
-		final Controls.Event postPurchaseEvents[] = {Controls.Event.END_TURN, Controls.Event.TRADE};
+		final Controls.Event preRollEvents[] = {Controls.Event.ROLL, Controls.Event.TRADE, Controls.Event.SELL};
+		final Controls.Event postRollEvents[] = {Controls.Event.END_TURN, Controls.Event.PURCHASE, Controls.Event.TRADE, Controls.Event.SELL};
+		final Controls.Event postPurchaseEvents[] = {Controls.Event.END_TURN, Controls.Event.TRADE, Controls.Event.SELL};
 		int roll1 = rollDice();
 		int roll2 = rollDice();
 		Controls.Event event;
 		controls.hidePurchaseButton();
 		controls.hideEndTurnButton();
+		controls.hideSellBankButton();
 
 		currPlayerIndex = (currPlayerIndex+1)%players.size();
 		currPlayer = players.get(currPlayerIndex);
@@ -501,25 +576,32 @@ public class oakOligarchy{
 		
 		controls.showRollButton();
 		controls.showTradeButton();
+		if (currPlayer.properties.size() > 0) {
+			controls.showSellBankButton();
+		}
 		
 		do {
 		menuAction(menu.getEvent());
-		event = waitForControlEvents(preRollEvents, 2);
+		event = waitForControlEvents(preRollEvents, 3);
 			if (event == preRollEvents[0]){
 				controls.writeLine(tab+currPlayer.name + " rolled a " + Integer.toString(roll1) + " and a "+ Integer.toString(roll2));
 				controls.hideRollButton();
 				movePlayer(currPlayer,roll1+roll2); 
+			}
+			else if (event == preRollEvents[2]) {
+				sellToBank();
 			}
 			else {
 				tradeProperty(false);
 			}
 		} while (event != preRollEvents[0]);
 		
-		controls.showPurchaseButton();
+		
 		controls.showEndTurnButton();
 		//getting charged that money
 		Tile tmp = board.tiles.get(currPlayer.tileIndex);
 		if(tmp.propertyName.equals("actiontile")){
+			controls.hidePurchaseButton();
 			actionTileFun();
 			//reget tmp because actionTileFun can move players
 			tmp = board.tiles.get(currPlayer.tileIndex);
@@ -565,7 +647,7 @@ public class oakOligarchy{
 		}
 
 		do {
-				event = waitForControlEvents(postRollEvents,3);
+				event = waitForControlEvents(postRollEvents,4);
 				if(event == postRollEvents[1]){
 					purchaseCurrentProperty();
 					controls.hidePurchaseButton();
@@ -573,6 +655,9 @@ public class oakOligarchy{
 				}
 				else if (event == postRollEvents[2]) {
 					tradeProperty(false);
+				}
+				else if (event == postRollEvents[3]) {
+					sellToBank();
 				}
 			}while (event != postRollEvents[0] && event != postRollEvents[1]); //to make sure you can't double purchase a place
 			
@@ -584,9 +669,12 @@ public class oakOligarchy{
 		
 		if (event != postRollEvents[0]){ //to not overwrite an above end turn event
 			do{
-				event = waitForControlEvents(postPurchaseEvents, 2);
-				if (event != postPurchaseEvents[0]) {
+				event = waitForControlEvents(postPurchaseEvents, 3);
+				if (event == postPurchaseEvents[1]) {
 					tradeProperty(false);
+				}
+				else if (event == postPurchaseEvents[2]) {
+					sellToBank();
 				}
 				
 			} while (event  !=  postPurchaseEvents[0]);
