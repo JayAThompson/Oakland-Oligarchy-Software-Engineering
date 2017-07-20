@@ -48,9 +48,13 @@ public class Tile{
 		players.add(player);
 		drawMarkers();
 	}
+
 	//sets the owner of this tile
 	public void setOwner(Player player){
 		this.owner=player;
+		try {
+			this.namePanel.setBackground((Color)Class.forName("java.awt.Color").getField(this.owner.color).get(null));
+		} catch (Exception e) { }
 	}
 	
 	// returns the owner of this tile
@@ -58,12 +62,13 @@ public class Tile{
 		return this.owner;
 	}
 	
+
 	// Removes a player and draws their marker
 	public void removePlayer(Player player){
 		players.remove(player);
 		drawMarkers();
 	}
-	
+
 	public String getPropertyName() {
 		return this.propertyName;
 	}
