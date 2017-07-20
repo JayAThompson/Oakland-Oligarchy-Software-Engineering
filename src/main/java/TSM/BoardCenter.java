@@ -110,6 +110,12 @@ public class BoardCenter extends JPanel implements Serializable{
 		this.validate();
 		this.repaint();
 	}
+	/**
+	 * Removes a player who has lost's money label from the array.
+	 */
+	public void removeMoneyLabel(int i) {
+		moneyLabels.remove(i);
+	}
 	
 	/**
 	 * This method draws the list of player properties on the center of the gameboard
