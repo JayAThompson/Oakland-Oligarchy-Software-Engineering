@@ -219,29 +219,40 @@ public class oakOligarchy{
 	/**
 	 * Trades property with other players
 	 */
-	public static void tradeProperty() {
+	public static boolean tradeProperty(boolean rentTrade) {
 		String tradeOptions[] = new String[players.size() - 1];
+		Player tradeWith = null;
+		boolean hasTraded = false;
+		
 		int j = 0;
-		for (int i = 0; i <  players.size(); i++) {
-			if (!players.get(i).equals(currPlayer)) {
-				 tradeOptions[j] = players.get(i).getName();
-				 j++;
+		if (!rentTrade) {
+		
+			
+			for (int i = 0; i <  players.size(); i++) {
+				if (!players.get(i).equals(currPlayer)) {
+					 tradeOptions[j] = players.get(i).getName();
+					 j++;
+				}
+			}
+			String s = (String) JOptionPane.showInputDialog(
+					window,
+					"Who would you like to trade?",
+					"Trade Player",
+					JOptionPane.QUESTION_MESSAGE,
+					null,
+					tradeOptions,
+					tradeOptions[0]);
+					
+			
+			for (int i = 0; i < players.size(); i++) {
+				if (players.get(i).getName().equals(s)) {
+					tradeWith = players.get(i);
+				}
 			}
 		}
-		String s = (String) JOptionPane.showInputDialog(
-                window,
-                "Who would you like to trade?",
-                "Trade Player",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                tradeOptions,
-                tradeOptions[0]);
-				
-		Player tradeWith = null;
-		for (int i = 0; i < players.size(); i++) {
-			if (players.get(i).getName().equals(s)) {
-				tradeWith = players.get(i);
-			}
+		
+		else {
+			tradeWith = board.tiles.get(currPlayer.tileIndex).getOwner();
 		}
 		
 		JCheckBox tradeInitiator[] = new JCheckBox[currPlayer.properties.size()];
@@ -249,7 +260,7 @@ public class oakOligarchy{
 		try {
 			tradeRecipient = new JCheckBox[tradeWith.properties.size()];
 		} catch(NullPointerException npe) {
-			return;
+			return false;
 		}
 		JPanel boxes = new JPanel();
 		JPanel play1 = new JPanel(new GridLayout(currPlayer.properties.size() + 3,1));
@@ -288,7 +299,7 @@ public class oakOligarchy{
 		
 		int cont = JOptionPane.showConfirmDialog(null, boxes, "Trade", JOptionPane.OK_CANCEL_OPTION);
 		if (cont == JOptionPane.CANCEL_OPTION) {
-			return;
+			return false;
 		}
 		String confirmString = "The current trade is:\n";
 		Tile playerOneTrades[] = new Tile[tradeInitiator.length];
@@ -324,7 +335,7 @@ public class oakOligarchy{
 		confirmString = confirmString + tradeWith.getName() + " is this okay?";
 		cont = JOptionPane.showConfirmDialog(null, confirmString, "Confirm Trade?", JOptionPane.YES_NO_OPTION);
 		if (cont  == JOptionPane.NO_OPTION) {
-			return;
+			return false;
 		}
 		else {
 			for (int i = 0; i < tradeInitiator.length; i++) {
@@ -336,6 +347,9 @@ public class oakOligarchy{
 				tradeWith.setPropertyString(tradeWith.getPropertyString() + replaceWith);
 				currPlayer.setPropertyString(currPlayer.getPropertyString().replace(replaceWith, ""));
 				currPlayer.removeProperty(playerOneTrades[i].getPropertyName(), tradeWith);
+			}
+			if (playerOneTrades[0] != null) {
+				hasTraded = true;
 			}
 			currPlayer.setMoney(currPlayer.getMoney() + money2 - money1);
 			
@@ -357,7 +371,7 @@ public class oakOligarchy{
 			board.boardCenter.updateMoneyLabels();
 			
 		}
-	
+		return hasTraded;
 	}
 	
 	/**
@@ -381,12 +395,15 @@ public class oakOligarchy{
 			
 		}
 		Player winner = players.get(index);
-		JOptionPane.showMessageDialog(null, "You win, " + winner.getName() + ", with a bid of " + maxVal, "Auction", JOptionPane.DEFAULT_OPTION);
-		winner.setMoney(winner.getMoney() - maxVal);
-		winner.properties.add(tile);
-		winner.setPropertyString(winner.getPropertyString() + ">" + tile.getPropertyName() + "\n");
-		board.boardCenter.drawProperties(index);
-		board.boardCenter.updateMoneyLabels();
+		if (maxVal > 0) {
+			JOptionPane.showMessageDialog(null, "You win, " + winner.getName() + ", with a bid of " + maxVal, "Auction", JOptionPane.DEFAULT_OPTION);
+			tile.setOwner(winner);
+			winner.setMoney(winner.getMoney() - maxVal);
+			winner.properties.add(tile);
+			winner.setPropertyString(winner.getPropertyString() + ">" + tile.getPropertyName() + "\n");
+			board.boardCenter.drawProperties(index);
+			board.boardCenter.updateMoneyLabels();
+		}
 		
 		
 	}
@@ -398,6 +415,7 @@ public class oakOligarchy{
 			currPlayer.setPropertyString("Lost");
 			board.boardCenter.drawProperties(currPlayerIndex);
 			board.boardCenter.removeMoneyLabel(currPlayerIndex);
+			
 			players.remove(currPlayer);
 			
 			return true;
@@ -436,7 +454,7 @@ public class oakOligarchy{
 				movePlayer(currPlayer,roll1+roll2); 
 			}
 			else {
-				tradeProperty();
+				tradeProperty(false);
 			}
 		} while (event != preRollEvents[0]);
 		
@@ -462,6 +480,13 @@ public class oakOligarchy{
 				board.updateMoney();
 				controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
 			}
+			else if (currPlayer.properties.size() > 0) {
+				
+				boolean traded = false;
+				do {
+					traded = tradeProperty(true);
+				}while (!traded);
+			}
 			else {
 				/*
 				 * TODO Allow player to trade properties to cover the rent
@@ -485,7 +510,7 @@ public class oakOligarchy{
 				
 			}
 			else if (event == postRollEvents[2]) {
-				tradeProperty();
+				tradeProperty(false);
 			}
 		}while (event != postRollEvents[0] && event != postRollEvents[1]); //to make sure you can't double purchase a place
 		
@@ -498,7 +523,7 @@ public class oakOligarchy{
 			do{
 				event = waitForControlEvents(postPurchaseEvents, 2);
 				if (event != postPurchaseEvents[0]) {
-					tradeProperty();
+					tradeProperty(false);
 				}
 				
 			} while (event  !=  postPurchaseEvents[0]);

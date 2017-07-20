@@ -48,9 +48,14 @@ public class Tile{
 		players.add(player);
 		drawMarkers();
 	}
-	
+	//sets the owner of this tile
 	public void setOwner(Player player){
 		this.owner=player;
+	}
+	
+	// returns the owner of this tile
+	public Player getOwner() {
+		return this.owner;
 	}
 	
 	// Removes a player and draws their marker
