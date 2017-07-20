@@ -49,21 +49,36 @@ public class Tile{
 		drawMarkers();
 	}
 
+	//sets the owner of this tile
 	public void setOwner(Player player){
 		this.owner=player;
 		try {
 			this.namePanel.setBackground((Color)Class.forName("java.awt.Color").getField(this.owner.color).get(null));
-		} catch (Exception e) { }
+		} catch (Exception e) {
+			this.namePanel.setBackground(null);
+				}
 	}
+	
+	// returns the owner of this tile
+	public Player getOwner() {
+		return this.owner;
+	}
+	
 
 	// Removes a player and draws their marker
 	public void removePlayer(Player player){
 		players.remove(player);
 		drawMarkers();
 	}
-
+	
+	//Returns the name of the property
 	public String getPropertyName() {
 		return this.propertyName;
+	}
+	
+	//returns property value
+	public int getPropertyValue() {
+		return this.propertyValue;
 	}
 
 	// Redraws the marker panel, adding the appropriate player markers
