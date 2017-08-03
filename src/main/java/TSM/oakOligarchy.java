@@ -8,6 +8,9 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.io.*;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 
 public class oakOligarchy{
@@ -828,19 +831,85 @@ public class oakOligarchy{
 		//tmp.;
 	}
 	
+	private static long toLong(byte[] bytes, int index){
+		long result = 0;
+   	 	for (int i = 0; i < 8; i++) {
+   	     	result <<= 8;
+			if(bytes[i+index-8]!=0){
+   	     		result |= (bytes[i+index-8] & 0xFF);
+			}
+   		 }
+    	return result;
+	}
+	
+	private static long computeChecksum(byte[] bytes){
+		long checksum = 0;
+		System.out.println(bytes.length);
+		for(int i=0;i<bytes.length;i++){
+			if(i%8==0 && i !=0){
+			checksum ^=toLong(bytes,i);
+			}
+		}
+		return checksum;
+	}
+	
+	public static byte[] serialize(Object obj) throws IOException {
+        try(ByteArrayOutputStream b = new ByteArrayOutputStream()){
+            try(ObjectOutputStream o = new ObjectOutputStream(b)){
+                o.writeObject(obj);
+            }
+            return b.toByteArray();
+        }
+    }
+
+    public static Object deserialize(byte[] bytes) throws IOException, ClassNotFoundException {
+        try(ByteArrayInputStream b = new ByteArrayInputStream(bytes)){
+            try(ObjectInputStream o = new ObjectInputStream(b)){
+                return o.readObject();
+            }
+        }
+    }
+	
+	
 	/**
 	*this method saves the game by putting the important objects in an object array then serializing them all
 	*/	
 	private static void saveGame(){
 		int rVal;
+		long checksum;
 		FileOutputStream fout = null;
-		ObjectOutputStream oos = null;
+		//ObjectOutputStream oos = null;
+		byte[] bytes,my_long;
 		Object[] gameStuffs = new Object[5];
 		gameStuffs[0]=board;
 		gameStuffs[1]=menu;
 		gameStuffs[2]=controls;
 		gameStuffs[3]=currPlayer;
 		gameStuffs[4]=currPlayerIndex;
+		
+		my_long = new byte[8];
+		
+		try{
+		bytes = serialize(gameStuffs);
+		}catch(IOException e){
+			//return 0;
+			JOptionPane.showMessageDialog(null, "file not saved", "File error", JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}
+		
+		
+		
+		checksum = computeChecksum(bytes);
+		my_long[0] = (byte) ((checksum >> 56) & 0xFF);
+		my_long[1] = (byte) ((checksum >> 48) & 0xFF);
+		my_long[2] = (byte) ((checksum >> 40) & 0xFF);
+		my_long[3] = (byte) ((checksum >> 32) & 0xFF);
+		my_long[4] = (byte) ((checksum >> 24) & 0xFF);
+		my_long[5] = (byte) ((checksum >> 16) & 0xFF);
+		my_long[6] = (byte) ((checksum >> 8) & 0xFF);
+		my_long[7] = (byte) ((checksum >> 0) & 0xFF);
+		System.out.println(checksum);
+		
 		
 		JFileChooser open = new JFileChooser();
 		rVal = open.showSaveDialog(window);
@@ -851,11 +920,12 @@ public class oakOligarchy{
 			}else{
 				return;
 			}
-			oos = new ObjectOutputStream(fout);
-			oos.writeObject(gameStuffs);
+			fout.write(bytes);
+			fout.write(my_long);
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "file not saved", "File error", JOptionPane.INFORMATION_MESSAGE);
 		} finally {
+			//fout.write(checksum);
 			if (fout != null) {
 				try {
 					fout.close();
@@ -863,13 +933,7 @@ public class oakOligarchy{
 					JOptionPane.showMessageDialog(null, "file not saved", "File error", JOptionPane.INFORMATION_MESSAGE);
 				}
 			}
-			if (oos != null) {
-				try {
-					oos.close();
-				} catch (Exception e) {
-						JOptionPane.showMessageDialog(null, "file not saved", "File error", JOptionPane.INFORMATION_MESSAGE);
-				}
-			}
+			
 		}
 		controls.writeLine("****** game saved ******");
 		//window.revalidate();
@@ -881,22 +945,26 @@ public class oakOligarchy{
 	*/
 	private static void loadGame(){
 		int rVal;
+		long checksum,read_check;
 		FileInputStream fin = null;
-		ObjectInputStream ois = null;
-		Object[] gameStuffs = new Object[5];
-
+		//ObjectInputStream ois = null;
+		Object[] gameStuffs;
+		byte[] bytes,o_bytes,l_bytes;
 		JFileChooser open = new JFileChooser();
 		rVal = open.showOpenDialog(window);
 		
 		try {
+			File file;
 			if(rVal ==JFileChooser.APPROVE_OPTION){
-				fin = new FileInputStream(open.getSelectedFile().getCanonicalPath());
+				file = new File(open.getSelectedFile().getCanonicalPath());
+				
 			}else{
 				return;
 			}
-			ois = new ObjectInputStream(fin);
-			gameStuffs = (Object[]) ois.readObject();
-
+			fin = new FileInputStream(file);
+			bytes = new byte[(int)file.length()];
+			fin.read(bytes);
+			
 		} catch (Exception ex) {
 			JOptionPane.showMessageDialog(null, "Corrupted game file", "File error", JOptionPane.INFORMATION_MESSAGE);
 			return;
@@ -910,17 +978,26 @@ public class oakOligarchy{
 					return;
 				}
 			}
-
-			if (ois != null) {
-				try {
-					ois.close();
-				} catch (IOException e) {
-					//e.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Corrupted game file", "File error", JOptionPane.INFORMATION_MESSAGE);
-					return;
-				}
-			}
-
+		}
+		o_bytes = new byte[bytes.length-8];
+		read_check = toLong(bytes,bytes.length);
+		for(int i=0;i<o_bytes.length;i++)
+			o_bytes[i] = bytes[i];
+		
+		checksum = computeChecksum(o_bytes);
+		
+		System.out.println(checksum);
+		System.out.println(read_check^checksum);
+		if(read_check!=checksum){
+				JOptionPane.showMessageDialog(null, "Corrupted game file\nWere you mucking about with my file?", "File error", JOptionPane.INFORMATION_MESSAGE);
+			return;
+		}
+		
+		try{
+			gameStuffs =(Object[]) deserialize(o_bytes);
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null, "Corrupted game file", "File error", JOptionPane.INFORMATION_MESSAGE);
+			return;
 		}
 		
 		window.dispose();

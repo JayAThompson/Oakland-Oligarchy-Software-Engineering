@@ -8,14 +8,15 @@ import java.io.Serializable;
 
 public class Player implements Serializable{
 
-	String name;
+	public String name;
 	public String propertyString;
 	public int money;
-	String color;
+	public String color;
 	public int tileIndex;
 	public ArrayList<Tile> properties;
 	private boolean inJail;
 	private int jailedTurns;
+
 	public boolean buses[] = {false, false, false, false};
 	
 	/*this is only to be called if the player is on the tile*/
@@ -208,4 +209,5 @@ public class Player implements Serializable{
 	public int getRemainingJailedTurns() {
 		return 3 - this.jailedTurns;
 	}
+
 }
