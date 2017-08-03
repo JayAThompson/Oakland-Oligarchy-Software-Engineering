@@ -16,7 +16,8 @@ public class Player implements Serializable{
 	public ArrayList<Tile> properties;
 	private boolean inJail;
 	private int jailedTurns;
-
+	public boolean buses[] = {false, false, false, false};
+	
 	/*this is only to be called if the player is on the tile*/
 	public void purchaseProperty(Tile tile){
 		this.money -= tile.propertyValue;
@@ -30,6 +31,8 @@ public class Player implements Serializable{
 			*/
 			propertyString+=">"+tmp.propertyName+"\n";
 		}
+		
+		addBus(tile.propertyName);
 	}
 
 		/**
@@ -109,6 +112,8 @@ public class Player implements Serializable{
 				break;
 			}
 		}
+		removeBus(propName);
+		
 	}
 	/**
 	 *Remove property from the property array list
@@ -119,8 +124,54 @@ public class Player implements Serializable{
 		Tile theProp = properties.get(properties.indexOf(property));
 		theProp.setOwner(newOwner);
 		properties.remove(property);
+		
+		removeBus(property.propertyName);
 	}
-
+	
+	/**
+	 * adds a bus to the array of owned busses
+	 */
+	public void addBus(String name) {
+		switch(name) {
+			case "61A":
+				buses[0] = true;
+				break;
+			case "61B":
+				buses[1] = true;
+				break;
+			case "61C":
+				buses[2] = true;
+				break;
+			case "61D":
+				buses[3] = true;
+				break;
+			default:
+				break;
+		}
+	}
+	
+	/**
+	 * removes a bus to the array of owned busses
+	 */
+	public void removeBus(String name) {
+		switch(name) {
+			case "61A":
+				buses[0] = false;
+				break;
+			case "61B":
+				buses[1] = false;
+				break;
+			case "61C":
+				buses[2] = false;
+				break;
+			case "61D":
+				buses[3] = false;
+				break;
+			default:
+				break;
+		}
+	}
+	
 	/**
 	 * Get value of jail flag
 	 * @return value of jail flag
