@@ -12,17 +12,19 @@ import java.io.Serializable;
 
 
 public class Tile implements Serializable{
+	
 	int rent = 100;
 
-	boolean isActionTile;
-	String propertyName;
+	public boolean isActionTile;
+	public String propertyName;
 	//String pr;
-	int propertyValue;
-	Player owner = null;
-	int tileIndex;
+	public int propertyValue;
+	public Player owner = null;
+	public int tileIndex;
 	//String players;
 	ArrayList<Player> players;
 	JPanel namePanel,markerPanel;
+
 
 	/*
 	 * Create a new tile object from a JPanel object, property name, and property value
