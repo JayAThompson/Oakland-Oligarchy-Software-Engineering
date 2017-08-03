@@ -11,13 +11,15 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 import javax.swing.text.DefaultCaret;
-import java.util.ArrayList;
+import java.util.*;
 import java.io.Serializable;
 
 public class Controls extends JPanel implements ActionListener,Serializable{
 	
 	public enum Event{ ROLL,PURCHASE,END_TURN,TRADE,SELL,NONE };	
 	public ArrayList<Player> players = new ArrayList<Player>();
+	public ArrayList<String> responses = new ArrayList<String>();
+	
 //	private ArrayList<JTextArea> propertyText = new ArrayList<JTextArea>();
 //	private ArrayList<JLabel> moneyLabels = new ArrayList<JLabel>();
 	JButton rollButton,purchaseButton,endTurnButton,tradeButton, sellToBankButton;
@@ -228,10 +230,10 @@ public class Controls extends JPanel implements ActionListener,Serializable{
 	 */
 	public void collectPlayerInfo(){
 		int numberOfPlayers=0;
-
+		String[] colorNames = {"black", "blue", "cyan", "gray", "green", "magenta", "orange", "pink", "red", "yellow"};
 		playerDataFlag=false;
 		//adding the prompt for the user
-		JLabel prompt = new JLabel("<html><body style='text-align=center; width: 200 px'>Please enter the names of the players to start the game <br>(minium of two players)");
+		JLabel prompt = new JLabel("<html><body style='text-align=center; width: 200 px'>Please enter the names of the players and choose unique colors to start the game <br>(minium of two players)");
 		//prompt.setBackground(new Color(0,0,0,0));
 		this.add(Box.createRigidArea(new Dimension(0,10)));
 		JSeparator seperator = new JSeparator(SwingConstants.HORIZONTAL);
@@ -248,37 +250,69 @@ public class Controls extends JPanel implements ActionListener,Serializable{
 		p1Field.setPreferredSize(new Dimension(285,30));
 		p1Field.setMaximumSize( p1Field.getPreferredSize() );
 		p1Field.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
+		
+		JComboBox p1Colors = new JComboBox(colorNames);
+		p1Colors.setSelectedIndex(9);
+		p1Colors.setPreferredSize(new Dimension(285,30));
+		p1Colors.setMaximumSize(p1Colors.getPreferredSize());
 
 		JTextField p2Field = new JTextField();
 		p2Field.setPreferredSize(new Dimension(285,30));
 		p2Field.setMaximumSize( p1Field.getPreferredSize() );
 		p2Field.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
 
+		JComboBox p2Colors = new JComboBox(colorNames);
+		p2Colors.setSelectedIndex(9);
+		p2Colors.setPreferredSize(new Dimension(285,30));
+		p2Colors.setMaximumSize(p2Colors.getPreferredSize());
+
 		JTextField p3Field = new JTextField();
 		p3Field.setPreferredSize(new Dimension(285,30));
 		p3Field.setMaximumSize( p1Field.getPreferredSize() );
 		p3Field.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
+		
+		JComboBox p3Colors = new JComboBox(colorNames);
+		p3Colors.setSelectedIndex(9);
+		p3Colors.setPreferredSize(new Dimension(285,30));
+		p3Colors.setMaximumSize(p3Colors.getPreferredSize());
 
 		JTextField p4Field = new JTextField();
 		p4Field.setPreferredSize(new Dimension(285,30));
 		p4Field.setMaximumSize( p1Field.getPreferredSize() );
 		p4Field.setDocument(new JTextFieldLimit(MAX_NAME_LEN));
+		
+		JComboBox p4Colors = new JComboBox(colorNames);
+		p4Colors.setSelectedIndex(9);
+		p4Colors.setPreferredSize(new Dimension(285,30));
+		p4Colors.setMaximumSize(p4Colors.getPreferredSize());
 
 		this.add(new JLabel("Player 1:"));
 		this.add(p1Field);
 		this.add(Box.createRigidArea(new Dimension(0,10)));
 
+		this.add(new JLabel("P1 Color:"));
+		this.add(p1Colors);
+		
 		this.add(new JLabel("Player 2:"));
 		this.add(p2Field);
 		this.add(Box.createRigidArea(new Dimension(0,10)));
 
+		this.add(new JLabel("P2 Color:"));
+		this.add(p2Colors);
+		
 		this.add(new JLabel("Player 3:"));
 		this.add(p3Field);
 		this.add(Box.createRigidArea(new Dimension(0,10)));
-
+		
+		this.add(new JLabel("P3 Color:"));
+		this.add(p3Colors);
+		
 		this.add(new JLabel("Player 4:"));
 		this.add(p4Field);
 		this.add(Box.createRigidArea(new Dimension(0,10)));
+		
+		this.add(new JLabel("P4 Color:"));
+		this.add(p4Colors);
 
 		//adding a button that alows to collect the user names
 		JSeparator seperator2 = new JSeparator(SwingConstants.HORIZONTAL);
@@ -291,22 +325,38 @@ public class Controls extends JPanel implements ActionListener,Serializable{
 		submitButton.addActionListener(new ActionListener() {
   			public void actionPerformed(ActionEvent e) {
 				int count=0;
-				if(!p1Field.getText().trim().equals("")){
+
+				String p1col = (String)p1Colors.getSelectedItem();
+				String p2col = (String)p2Colors.getSelectedItem();
+				String p3col = (String)p3Colors.getSelectedItem();
+				String p4col = (String)p4Colors.getSelectedItem();
+				
+				responses.add(p1col);
+				responses.add(p2col);
+				responses.add(p3col);
+				responses.add(p4col);
+				
+				int p1val = Collections.frequency(responses, p1col);
+				int p2val = Collections.frequency(responses, p2col);
+				int p3val = Collections.frequency(responses, p3col);
+				int p4val = Collections.frequency(responses, p4col);
+				
+				if(!p1Field.getText().trim().equals("") && p1val == 1){
 					count++;
-					players.add(new Player(p1Field.getText(),START_MONEY,"yellow"));
+					players.add(new Player(p1Field.getText(),START_MONEY, p1col));
 
 				}
-				if(!p2Field.getText().trim().equals("")){
+				if(!p2Field.getText().trim().equals("") && p2val == 1){
 					count++;
-					players.add(new Player(p2Field.getText(),START_MONEY,"green"));
+					players.add(new Player(p2Field.getText(),START_MONEY, p2col));
 
 				}
-				if(!p3Field.getText().trim().equals("")){
-					players.add(new Player(p3Field.getText(),START_MONEY,"red"));
+				if(!p3Field.getText().trim().equals("") && p3val == 1){
+					players.add(new Player(p3Field.getText(),START_MONEY, p3col));
 					count++;
 				}
-				if(!p4Field.getText().trim().equals("")){
-					players.add(new Player(p4Field.getText(),START_MONEY,"cyan"));
+				if(!p4Field.getText().trim().equals("") && p4val == 1){
+					players.add(new Player(p4Field.getText(),START_MONEY, p4col));
 					count++;
 				}
 				if(count<2){
