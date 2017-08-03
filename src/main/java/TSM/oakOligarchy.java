@@ -417,11 +417,15 @@ public class oakOligarchy{
 				if (playerOneTrades[i] == null) {
 					break;
 				}
+				
 				tradeWith.properties.add(playerOneTrades[i]);
 				String replaceWith = ">" + playerOneTrades[i].getPropertyName() + "\n"; //one problem is here, probably to do with trading multiple properties and removal form the arraylist updating the index
 				tradeWith.setPropertyString(tradeWith.getPropertyString() + replaceWith);
+				tradeWith.addBus(playerOneTrades[i].propertyName);
+				currPlayer.removeBus(playerOneTrades[i].propertyName);
 				currPlayer.setPropertyString(currPlayer.getPropertyString().replace(replaceWith, ""));
 				currPlayer.removeProperty(playerOneTrades[i].getPropertyName(), tradeWith);
+				
 			}
 			if (playerOneTrades.length>0 && playerOneTrades[0] != null) {
 				hasTraded = true;
@@ -436,6 +440,8 @@ public class oakOligarchy{
 				currPlayer.properties.add(playerTwoTrades[i]);
 				String replaceWith = ">" + playerTwoTrades[i].getPropertyName() + "\n";
 				currPlayer.setPropertyString(currPlayer.getPropertyString() + replaceWith);
+				currPlayer.addBus(playerTwoTrades[i].propertyName);
+				tradeWith.removeBus(playerTwoTrades[i].propertyName);
 				tradeWith.setPropertyString(tradeWith.getPropertyString().replace(replaceWith, ""));
 				tradeWith.removeProperty(playerTwoTrades[i].getPropertyName(), currPlayer);
 
@@ -476,6 +482,7 @@ public class oakOligarchy{
 			winner.setMoney(winner.getMoney() - maxVal);
 			winner.properties.add(tile);
 			winner.setPropertyString(winner.getPropertyString() + ">" + tile.getPropertyName() + "\n");
+			winner.addBus(tile.propertyName);
 			board.boardCenter.drawProperties(index);
 			board.boardCenter.updateMoneyLabels();
 		}
@@ -544,6 +551,7 @@ public class oakOligarchy{
 				String replaceWith = ">" + playerOneTrades[i].getPropertyName() + "\n"; //one problem is here, probably to do with trading multiple properties and removal form the arraylist updating the index
 				currPlayer.setPropertyString(currPlayer.getPropertyString().replace(replaceWith, ""));
 				currPlayer.removeProperty(playerOneTrades[i].getPropertyName(), null);
+				currPlayer.removeBus(playerOneTrades[i].propertyName);
 			}
 			
 			currPlayer.setMoney(currPlayer.getMoney() + payout);
@@ -684,8 +692,21 @@ public class oakOligarchy{
 			}
 			if(tmp.owner != null && tmp.owner != currPlayer && tmp.rent>0){
 				if (tmp.rent <= currPlayer.money) {
-					currPlayer.money -= tmp.rent;
-						tmp.owner.money+=tmp.rent;
+					
+					if (tmp.propertyName.equals("61A") || tmp.propertyName.equals("61B") || tmp.propertyName.equals("61C") || tmp.propertyName.equals("61D")) {
+						int num = 0;
+						for (int k = 0; k < tmp.owner.buses.length; k++) {
+							if (tmp.owner.buses[k] == true) {
+								num++;
+							}
+						}
+						currPlayer.money -= tmp.rent * Math.pow(2, num);
+						tmp.owner.money += tmp.rent * Math.pow(2, num);	
+					}
+					else {	
+						currPlayer.money -= tmp.rent;
+						tmp.owner.money+=tmp.rent; 
+					}
 					board.updateMoney();
 					controls.writeLine(tab+currPlayer.name + " paid $" + Integer.toString(tmp.rent) + " in rent to " + tmp.owner.name);
 				}else if (currPlayer.properties.size() > 0) {
@@ -759,15 +780,30 @@ public class oakOligarchy{
 	private static boolean winnerExists() {
 		int loserCount = 0;
 		Player winner = null;
+		boolean busWin = false;
 		for (Player p : players) {
 			if (p.getMoney() == 0 && p.properties.size() == 0) {
 				loserCount++;
 			} else {
 				winner = p;
 			}
+			
+			 int sum = 0;
+			 for (int i = 0; i < p.buses.length; i++) {
+				 if (p.buses[i] == true) {
+					 sum++;
+				 }
+			 }
+			 if (sum == 4) {
+				 winner = p;
+				 busWin = true;
+				 controls.writeLine(winner.getName() + " has achieved a transit monopoly!");
+			 }
 		}
-
-		if (loserCount == players.size() - 1) {
+		
+		
+		
+		if (loserCount == players.size() - 1 || busWin == true) {
 			menu.stopClock();
 			controls.hideRollButton();
 			controls.writeLine("============ GAME OVER ============");
@@ -779,6 +815,7 @@ public class oakOligarchy{
 			return false;
 		}
 	}
+	
 
 	/**
 	*This method creates a new game. it does this by disposing all the objects and recalling the main constructor

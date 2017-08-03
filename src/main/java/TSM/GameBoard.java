@@ -19,12 +19,12 @@ public class GameBoard extends JPanel implements Serializable{
 															 {"Action Tile","0","0"},
 															 {"Primanti Bros.","5000","500"},
 															 {"Action Tile","0","0"},
-															 {"Panera Bread","3500","350"},
+															 {"61A","6000","600"},
 															 {"McDonald's","1250","125"},
 															 {"Sorrento's Pizza","750","75"},
 															 {"Go to Hillman","0","0"},
 															 {"Panther Central","3500","350"},
-															 {"Benedum Hall","8000","800"},
+															 {"61B","6000","600"},
 															 {"Action Tile","0","0"},
 															 {"Litchfield Towers","5000","500"},
 															 {"Action Tile","0","0"},
@@ -35,7 +35,7 @@ public class GameBoard extends JPanel implements Serializable{
 															 {"Schenley Plaza","10000","1000"},
 															 {"Carnegie Library","15000","1500"},
 															 {"Action Tile","0","0"},
-															 {"Museum of Art","20000","2000"},
+															 {"61C","6000","600"},
 															 {"Dippy the Diplodocus","25000","2500"},
 															 {"Action Tile","0","0"},
 															 {"Phipps Conservatory","20000","2000"},
@@ -48,7 +48,7 @@ public class GameBoard extends JPanel implements Serializable{
 															 {"The Original Hot Dog Shop","500","50"},
 															 {"Action Tile","0","0"},
 															 {"Papa D's","750","75"},
-															 {"Action Tile","0","0"}};
+															 {"61D","6000","600"}};
 
 	public ArrayList<Tile> tiles;
 
